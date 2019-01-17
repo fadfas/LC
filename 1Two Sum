@@ -1,0 +1,39 @@
+class Solution {
+public:
+	vector<int> twoSum(vector<int>& nums, int target) {
+		unordered_map<int, int> hash; // 分别存数值机器下表
+
+		for (int i = 0; i < nums.size(); ++i) {
+			int numToFind = target - nums[i];
+
+			if (hash.find(numToFind) != hash.end()) {
+				return { hash[numToFind],i };
+			}
+
+			hash[nums[i]] = i;
+		}
+
+		return {}; //学习这种简单的返回vector的方法
+
+	}
+};
+
+//map:红黑树实现，内部有序
+//unordered_map:内部实现了哈希表，故查找速度快，但内部元素无序
+//遍历时，二者都与输入顺序不一定相同。
+//二者底层实现不同，但外部使用函数一样
+eg: 
+unordered_map<int, string> myMap = { { 5, "张大" },{ 6, "李五" } };//使用{}赋值
+myMap[2] = "李四";  //使用[ ]进行单个插入，若已存在键值2，则赋值修改，若无则插入。
+myMap.insert(pair<int, string>(3, "陈二"));//使用insert和pair插入
+auto iter = myMap.begin();//auto自动识别为迭代器类型unordered_map<int,string>::iterator
+while (iter != myMap.end())
+{
+	cout << iter->first << "," << iter->second << endl;
+	++iter;
+}
+auto iterator = myMap.find(2);//find()返回一个指向2的迭代器
+=====================================================================
+1. Two Sum
+Given an array of integers, return indices of the two numbers such that they add up to a specific target.
+You may assume that each input would have exactly one solution, and you may not use the same element twice.
