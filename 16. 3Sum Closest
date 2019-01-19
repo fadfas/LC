@@ -1,0 +1,32 @@
+int threeSumClosest(vector<int>& nums, int target) {
+	int result = nums[0] + nums[1] + nums[2];
+	//int result = INT_MIN;此处不可以用INT_MIN或者0x8000000，因为abs函数对其不起作用
+	if (nums.size()<3) {
+		return result;
+	}
+	sort(nums.begin(), nums.end());
+	for (int i = 0; i<nums.size() - 2; ++i) {
+		int low = i + 1, high = nums.size() - 1;
+		while (low<high) {
+			int sum = nums[i] + nums[low] + nums[high];
+			if (abs(sum - target)<abs(result - target)) {  //记住这个abs函数
+				result = sum;
+			}
+			if (sum>target) {
+				while (low<high&&nums[high] == nums[high - 1]) --high;  //此处为一点点优化，因为数组已经排序，相等的数字跳过即可
+				--high;
+			}
+			else if (sum<target) {
+				while (low<high&&nums[low] == nums[low + 1]) ++low;
+				++low;
+			}
+			else {
+				return target;
+			}
+		}
+	}
+	return result;
+}
+===============================================================
+16. 3Sum Closest
+Given an array nums of n integers and an integer target, find three integers in nums such that the sum is closest to target.Return the sum of the three integers.You may assume that each input would have exactly one solution.
