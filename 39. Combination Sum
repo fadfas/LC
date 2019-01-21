@@ -1,0 +1,43 @@
+class Solution {
+public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        vector<vector<int>> result={};
+        if(candidates.empty()){
+            return result;
+        }
+        vector<int> temp={};
+        combinationSumRecursively(candidates,target,result,temp,0);
+        return result;
+    }
+private:
+    void combinationSumRecursively(vector<int>& candidates,
+                                   int target,
+                                   vector<vector<int>>& result,
+                                   vector<int>& temp,
+                                   int start
+                                  ){
+        if(target==0){
+            result.push_back(temp);
+            return;
+        }
+        
+        for(int i=start;i<candidates.size()&&target>0;++i){//注意剪枝！！！
+            temp.push_back(candidates[i]);
+            combinationSumRecursively(candidates,target-candidates[i],result,temp,i);//注意最后一个参数是i，
+                                    //不是start，否则输出结果有[2,2,3]和[2,3,2]和[3,2,2]这种重复的情况
+            temp.pop_back(); //记住这个函数，另外别忘了backtraking回溯方法，每一轮迭代回溯时，要pop_back()，
+                             //即删除最后一步
+        }
+        
+    }
+};
+===========================================================
+39. Combination Sum
+Given a set of candidate numbers (candidates) (without duplicates) and a target number (target), find all unique combinations in candidates where the candidate numbers sums to target.
+
+The same repeated number may be chosen from candidates unlimited number of times.
+
+Note:
+
+All numbers (including target) will be positive integers.
+The solution set must not contain duplicate combinations.
