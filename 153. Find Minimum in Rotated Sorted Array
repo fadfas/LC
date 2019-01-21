@@ -1,0 +1,38 @@
+class Solution {
+public:
+    int findMin(vector<int>& nums) {
+       if(nums.empty()){
+           return -1;
+       } 
+        int left=0,right=nums.size()-1;
+        while(left<right){
+            if(nums[left]<nums[right]){  //不可能出现 7 8 0 1 2 3 4
+                                         //          i     i     i  
+                                         //         left  mid   right
+                                         //        然后选择了mid right这段的情况
+                                         //这行代码是在套用二分查找寻找左边的的模板后，添加的一个优化点
+                return nums[left];
+            }
+            
+            int mid=left+((right-left)>>1);//务必要加上两层括号
+            if(nums[mid]>nums[right]){
+                left=mid+1;
+            }else{
+                right=mid; //为何此处不是mid-1? 解释：nums[mid]在此种情况下，有可能是最终的结果，因此不可以跳过
+            }
+        }
+        return nums[left];
+    }
+};
+==========================================================
+二分查找，非常好的一个文章！！！！ 
+https://segmentfault.com/a/1190000016825704
+
+153. Find Minimum in Rotated Sorted Array
+Suppose an array sorted in ascending order is rotated at some pivot unknown to you beforehand.
+
+(i.e.,  [0,1,2,4,5,6,7] might become  [4,5,6,7,0,1,2]).
+
+Find the minimum element.
+
+You may assume no duplicate exists in the array.
