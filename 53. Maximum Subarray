@@ -1,0 +1,24 @@
+class Solution {
+public:
+    //this is a optimization problem, which can be usually solved by DP
+    int maxSubArray(vector<int>& nums) {
+        if(nums.empty()){
+            return -1;
+        }
+        int result=nums[0];
+        int imax=nums[0];
+        for(int i=1;i<nums.size();++i){
+            //result=max(nums[i],nums[i]+result); 这个是错误的写法，只要之前的和是负的，就抛弃掉
+            //result=result>0?result+nums[i]:nums[i];  //也不能只写一个这个，因为
+                                                        //[-2,1,-3,4,-1,2,1,-5,4] 当imax=4+-1+2+1=6时，
+                                                        //下一个数字-5也会被求和到result中
+            imax=imax>0?imax+nums[i]:nums[i];
+            result=max(result,imax);
+        }
+        return result;
+    }
+};
+
+==============================================================================
+53. Maximum Subarray
+Given an integer array nums, find the contiguous subarray (containing at least one number) which has the largest sum and return its sum.
