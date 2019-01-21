@@ -1,0 +1,43 @@
+class Solution {
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+        if(nums.empty()){
+            return {-1,-1};
+        }
+        vector<int> result={};
+        
+        int left=0,right=nums.size()-1;
+        while(left<right){
+            int mid=left+((right-left)>>1);
+            if(nums[mid]<target){
+                left=mid+1;
+            }else{
+                right=mid;
+            }
+        }
+        if(nums[left]!=target){
+            return {-1,-1};
+        }else{
+            result.push_back(left);
+        }
+        
+        right=nums.size()-1;  //left保持不变就可以了
+        while(left<right){
+            int mid=left+((right-left)>>1)+1; //背下来这个写法
+            if(nums[mid]>target){
+                right=mid-1;
+            }else{
+                left=mid;
+            }
+        }
+        result.push_back(right);
+        return result;
+    }
+};
+==================================================
+34. Find First and Last Position of Element in Sorted Array
+Given an array of integers nums sorted in ascending order, find the starting and ending position of a given target value.
+
+Your algorithm's runtime complexity must be in the order of O(log n).
+
+If the target is not found in the array, return [-1, -1].
