@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        if(nums.empty()){
+            return -1;
+        }
+        int result=nums[0];  //学会这种初始化方式（即初始化为数组中的第一个数，而不是初始化为0）
+        int imax=nums[0],imin=nums[0]; ////学会这种初始化方式（即初始化为数组中的第一个数，而不是初始化为1或者-1，省的思                                         //考各种情况了）
+        for(int i=1;i<nums.size();++i){
+            if(nums[i]<0){
+                swap(imax,imin);  //学会使用这个函数！
+            }
+            imax=max(nums[i],imax*nums[i]);
+            imin=min(nums[i],imin*nums[i]);
+            
+            result=max(result,imax);
+        }
+        return result;
+        
+    }
+};
+
+============================================================
+152. Maximum Product Subarray
+Given an integer array nums, find the contiguous subarray within an array (containing at least one number) which has the largest product.
