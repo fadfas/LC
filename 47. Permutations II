@@ -1,0 +1,24 @@
+class Solution {
+public:
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        set<vector<int>> result={};  
+        if(nums.empty()){
+            return {};
+        }
+        permuteUniqueRecursively(nums, 0, result);
+        return vector<vector<int>> (result.begin(), result.end());//学习set转vector方法！！！
+    }
+    void permuteUniqueRecursively(vector<int> &nums, int start, set<vector<int>> &result) {
+        if (start == nums.size()) 
+            result.insert(nums);
+        for (int i = start; i < nums.size(); ++i) {
+            if (i != start && nums[i] == nums[start]) continue;//并不能完全排除掉重复的情况
+            swap(nums[i], nums[start]);
+            permuteUniqueRecursively(nums, start + 1, result);
+            swap(nums[i], nums[start]);
+        }
+    }
+};
+===================================================
+47. Permutations II
+Given a collection of numbers that might contain duplicates, return all possible unique permutations.
