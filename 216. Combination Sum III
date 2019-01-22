@@ -1,0 +1,37 @@
+class Solution {
+public:
+    vector<vector<int>> combinationSum3(int k, int n) {
+        vector<vector<int>> result={};
+        vector<int> temp={};
+        combinationSum3Recursively(result,temp,n,k,1);
+        return result;
+    }
+private:
+    void combinationSum3Recursively(vector<vector<int>>& result,
+                                    vector<int>& temp,
+                                    int n,
+                                    int k,
+                                    int start
+                                   ){
+        if(n==0&&k==0){
+            result.push_back(temp);
+            return;
+        }
+        if(k==0){
+            return;
+        }
+        for(int i=start;i<10&&i<=n;++i){
+            temp.push_back(i);
+            combinationSum3Recursively(result,temp,n-i,k-1,i+1);
+            temp.pop_back();
+        }
+    }
+};
+======================================================
+216. Combination Sum III
+Find all possible combinations of k numbers that add up to a number n, given that only numbers from 1 to 9 can be used and each combination should be a unique set of numbers.
+
+Note:
+
+All numbers will be positive integers.
+The solution set must not contain duplicate combinations.
