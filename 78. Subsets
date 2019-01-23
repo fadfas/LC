@@ -1,0 +1,82 @@
+class Solution {  //一共有三种方法！！
+public:
+    vector<vector<int>> subsets(vector<int>& nums) {
+        if(nums.empty()){
+            return {};
+        }
+        vector<vector<int>> result;
+        vector<int> temp;
+        subsetsRecursively(nums,result,temp,0);
+        return result;
+    }
+private:
+    void subsetsRecursively(vector<int>& nums,vector<vector<int>>& result,vector<int>& temp,int start){
+        result.push_back(temp);
+        for(int i=start;i<nums.size();++i){  //要搞明白这一块儿的逻辑顺序
+            temp.push_back(nums[i]);
+            subsetsRecursively(nums,result,temp,i+1);
+            temp.pop_back();
+        }
+    }
+    
+};
+
+
+class Solution {
+public:
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<vector<int>> result={{}};
+        for(auto each: nums){
+            int size=result.size();
+            for(int i=0;i<size;++i){
+                result.push_back(result[i]);
+                result.back().push_back(each);  //学会用vector的back()函数！！！！
+            }
+        }
+        return result;
+    }
+};
+
+class Solution {
+public:
+    vector<vector<int>> subsets(vector<int>& nums) {
+        int size=pow(2,nums.size());//注意不是2^nums.size()!!!!!,也不是power
+        vector<vector<int>> result;
+        for(int i=0;i<size;++i){
+            result.push_back(sub(nums,i));
+        }
+        return result;
+    }
+private:
+    vector<int> sub(vector<int>& num,int bit){
+        vector<int> eachResult={};
+        int i=0;
+        while(bit){
+            if(bit&1){
+                eachResult.push_back(num[i]);
+            }
+            ++i;
+            bit=bit>>1;//不要只写bit>>1，这样没有赋值！！！！
+        }
+        return eachResult;
+    }
+};
+=============================================================
+subsets([1,2,3,4]) = []
+                     // push(1)
+                     [1, subsets([2,3,4])] // if push N times in subsets([2,3,4]), the pop times is also N, so vec is also [1] after backtrack.
+                     // pop(), push(2)
+                     [2, subsets([3,4])]
+                     // pop(), push(3)
+                     [3, subsets([4])]
+                     // pop(), push(4)
+                     [4, subsets([])]
+                     // pop()
+                     
+非常好的解释了生成过程，也就是这种递归/回溯的方法，每调用一次递归函数，起结果我们可以暂时用subsets([2,3,4])这种形式来表示，以便
+分析过程
+
+78. Subsets
+Given a set of distinct integers, nums, return all possible subsets (the power set).
+
+Note: The solution set must not contain duplicate subsets.
