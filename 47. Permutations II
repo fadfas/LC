@@ -12,7 +12,7 @@ public:
         if (start == nums.size()) 
             result.insert(nums);
         for (int i = start; i < nums.size(); ++i) {
-            if (i != start && nums[i] == nums[start]) continue;//并不能完全排除掉重复的情况
+            if (i != start && nums[i] == nums[start]) continue;//并不能完全排除掉重复的情况 详见附纸
             swap(nums[i], nums[start]);
             permuteUniqueRecursively(nums, start + 1, result);
             swap(nums[i], nums[start]);
