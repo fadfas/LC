@@ -1,0 +1,35 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {//此程序用的循环的方法去中序遍历二叉树
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> result={};
+        if(!root){
+            return result;
+        }
+        stack<TreeNode*> nodeStack;
+        TreeNode* pCurrent=root;
+        while(!nodeStack.empty()||pCurrent){
+            if(pCurrent){
+                nodeStack.push(pCurrent);//学习stack的成员函数push()
+                pCurrent=pCurrent->left;
+            }else{
+                pCurrent=nodeStack.top();
+                result.push_back(pCurrent->val);
+                nodeStack.pop();
+                pCurrent=pCurrent->right;
+            }
+        }
+        return result;
+    }
+};
+========================================================
+94. Binary Tree Inorder Traversal
+Given a binary tree, return the inorder traversal of its nodes' values.
