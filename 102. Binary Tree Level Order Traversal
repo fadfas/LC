@@ -30,9 +30,9 @@ public:
             }else{
                 
                 result.push_back(curVec);//这行得在下面的if语句前执行，要不最后一行数据会被丢弃
-                curVec.clear();  //学会使用clear()函数
+                curVec.clear();  //学会使用clear()函数,请空前务必确认数据是否需要输出
                 if(nodesQueue.empty()){
-                    break;
+                    break;//跳出循环也是，跳出前确认数据是否需要输出
                 }
                 nodesQueue.push(nullptr);
                 
