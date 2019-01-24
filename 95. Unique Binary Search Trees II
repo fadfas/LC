@@ -1,0 +1,52 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {   //本程序使用了动态规划的自顶向下的方法，同时使用了cache
+public:             //小问题：很多节点比不是deep copy的，因此树与树之间盘根错节
+    vector<TreeNode*> generateTrees(int n) {
+        if(n==0){
+            return {};
+        }
+        vector<TreeNode*>** cache=new vector<TreeNode*>*[n+1];  //二维数组的声明及定义！！
+        for(int i=0;i<n+1;++i){
+            cache[i]=new vector<TreeNode*>[n+1];
+        }
+        return generateTreesRecursively(cache,1,n);
+    }
+    
+private:
+    vector<TreeNode*> generateTreesRecursively(vector<TreeNode*>** cache,int start,int end){
+        if(start>end){
+            return {nullptr};
+        }
+        if(!cache[start][end].empty()){
+            return cache[start][end];
+        }
+        vector<TreeNode*> result={};
+        for(int i=start;i<=end;++i){
+            vector<TreeNode*> leftTrees=generateTreesRecursively(cache,start,i-1);
+            vector<TreeNode*> rightTrees=generateTreesRecursively(cache,i+1,end);
+            
+            for(auto left:leftTrees){
+                for(auto right:rightTrees){
+                    TreeNode* root=new TreeNode(i);  //这是左子树集合和右字数集合的笛卡尔积运算
+                    root->left=left;
+                    root->right=right;
+                    result.push_back(root);
+                }
+            }
+            
+        }
+        cache[start][end]=result;
+        return result;
+    }
+};
+============================================================
+95. Unique Binary Search Trees II
+Given an integer n, generate all structurally unique BST's (binary search trees) that store values 1 ... n.
