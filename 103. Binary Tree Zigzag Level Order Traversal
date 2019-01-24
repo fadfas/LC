@@ -1,0 +1,53 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int>> result={};
+        if(!root){
+            return result;
+        }
+        stack<TreeNode*> levels[2];//数组的声明方式
+        levels[0].push(root);
+        int current=0;
+        vector<int> curLevel={};
+        TreeNode* pNode=nullptr;
+        while(!levels[0].empty()||!levels[1].empty()){
+            pNode=levels[current].top();
+            levels[current].pop();
+            curLevel.push_back(pNode->val);
+            if(current==0){
+                if(pNode->left){
+                    levels[1-current].push(pNode->left);
+                }
+                if(pNode->right){
+                    levels[1-current].push(pNode->right);
+                }
+            }else{
+                if(pNode->right){
+                    levels[1-current].push(pNode->right);
+                }
+                if(pNode->left){
+                    levels[1-current].push(pNode->left);
+                }
+            }
+            
+            if(levels[current].empty()){
+                current=1-current;
+                result.push_back(curLevel);
+                curLevel.clear();
+            }
+        }
+        return result;
+    }
+};
+============================================
+103. Binary Tree Zigzag Level Order Traversal
+Given a binary tree, return the zigzag level order traversal of its nodes' values. (ie, from left to right, then right to left for the next level and alternate between).
