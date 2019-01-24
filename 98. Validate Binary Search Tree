@@ -1,0 +1,82 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {  //循环的方法！！
+public:
+    bool isValidBST(TreeNode* root) {
+        //if(root==nullptr){  空树也是一个二叉搜索树！！
+        //    return true;
+        //}
+        TreeNode* pCurrent=root;
+        TreeNode* pPre=nullptr;
+        stack<TreeNode*> nodeStack;
+        while(pCurrent||!nodeStack.empty()){
+            if(pCurrent){
+                nodeStack.push(pCurrent);
+                pCurrent=pCurrent->left;
+            }else{
+                pCurrent=nodeStack.top();
+                nodeStack.pop();
+                if(pPre!=nullptr&&(pCurrent->val<=pPre->val)){
+                    return false;
+                }
+                pPre=pCurrent;
+                pCurrent=pCurrent->right;
+            }
+        }
+        return true;
+    }
+};
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {  //递归的方法！！
+public:
+    bool isValidBST(TreeNode* root) {
+        if(root==nullptr){
+            return true;
+        }
+        TreeNode* pPre=nullptr;//当被调用函数的后两个参数是引用类型时
+        bool isValid=true;   //不可以不定义pPre和isValid，然后下一行调用参数时，(root,nullptr,true)
+        return isValidBSTRecursively(root,pPre,isValid);  
+    }
+private:
+    bool isValidBSTRecursively(TreeNode* pNode,TreeNode*& pPre,bool& isValid){
+        if(pNode==nullptr){
+            return true;
+        }
+        
+        isValid=isValidBSTRecursively(pNode->left,pPre,isValid);
+        if(pPre&&pPre->val>=pNode->val){
+            isValid=false;
+        }
+        pPre=pNode;
+        if(isValid){
+            isValid=isValidBSTRecursively(pNode->right,pPre,isValid);
+        }
+        
+        return isValid;
+    }
+};
+=================================================
+98. Validate Binary Search Tree
+Given a binary tree, determine if it is a valid binary search tree (BST).
+
+Assume a BST is defined as follows:
+
+The left subtree of a node contains only nodes with keys less than the node's key.
+The right subtree of a node contains only nodes with keys greater than the node's key.
+Both the left and right subtrees must also be binary search trees.
