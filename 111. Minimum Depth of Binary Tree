@@ -1,0 +1,72 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {  //本程序用的dfs解法，另外注意叶节点的定义，对于严重不平衡的树不好用
+public:
+    int minDepth(TreeNode* root) {
+        if(!root){
+            return 0;
+        }
+        return minDepthCore(root);
+    }
+    int minDepthCore(TreeNode* pNode){
+        if(!pNode){
+            return 0;
+        }
+        if(!pNode->left){
+            return minDepthCore(pNode->right)+1;
+        }
+        if(!pNode->right){
+            return minDepthCore(pNode->left)+1;
+        }
+        return min(minDepthCore(pNode->left),minDepthCore(pNode->right))+1;
+    }
+};
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {  //使用BFS解法
+public:
+    int minDepth(TreeNode* root) {
+        if(!root){
+            return 0;
+        }
+        queue<TreeNode*> nodeQueue;
+        int depth=0;
+        nodeQueue.push(root);
+        while(!nodeQueue.empty()){
+            ++depth;
+            int count=nodeQueue.size();
+            for(int i=0;i<count;++i){
+                TreeNode* pNode=nodeQueue.front();
+                nodeQueue.pop();
+                if(!pNode->left&&!pNode->right){
+                    return depth;
+                }
+                if(pNode->left)
+                    nodeQueue.push(pNode->left);
+                if(pNode->right)
+                    nodeQueue.push(pNode->right);
+            }
+        }
+        return -1;  //仅仅是用来通过编译器检查的，实际上不会跑到这一行代码，另外也别忘了写这行代码
+    }
+};
+=============================================
+111. Minimum Depth of Binary Tree
+Given a binary tree, find its minimum depth.
+
+The minimum depth is the number of nodes along the shortest path from the root node down to the nearest leaf node.
