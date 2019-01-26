@@ -1,0 +1,36 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {  //使用了DFS的方法！！！！！
+public:
+    vector<vector<int>> levelOrderBottom(TreeNode* root) {
+        vector<vector<int>> result={};
+        if(!root){
+            return result;
+        }
+        levelOrderBottomCore(root,result,1);
+        reverse(result.begin(),result.end());
+        return result;
+    }
+private:
+    void levelOrderBottomCore(TreeNode* pNode,vector<vector<int>>& result,int depth){
+        if(!pNode){
+            return;
+        }
+        if(depth>result.size()){
+            result.push_back({});
+        }
+        result[depth-1].push_back(pNode->val);
+        levelOrderBottomCore(pNode->left,result,depth+1);
+        levelOrderBottomCore(pNode->right,result,depth+1);
+    }
+};
+==========================================================
+107. Binary Tree Level Order Traversal II
+Given a binary tree, return the bottom-up level order traversal of its nodes' values. (ie, from left to right, level by level from leaf to root).
