@@ -1,0 +1,19 @@
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        unordered_map<string,vector<string>> resultMap;
+        vector<vector<string>> resultVec={};
+        for(auto each:strs){
+            string copyStr=each;
+            sort(copyStr.begin(),copyStr.end());//string也可以用sort排序！！！
+            resultMap[copyStr].push_back(each);
+        }
+        for(auto each:resultMap){
+            resultVec.push_back(each.second);//对于auto遍历，each取value使用.运算获得
+        }
+        return resultVec;
+    }
+};
+======================================================
+49. Group Anagrams
+Given an array of strings, group anagrams together.
