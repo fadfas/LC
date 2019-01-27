@@ -1,0 +1,64 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {  //对于理解递归非常有意义的题目！！！
+public:
+    void flatten(TreeNode* root) {
+        if(!root){
+            return;
+        }
+        TreeNode* pPre=nullptr;
+        flattenCore(root,pPre);
+    }
+private:
+    void flattenCore(TreeNode* pNode,TreeNode*& pPre){
+        if(!pNode){
+            return;
+        }
+        flattenCore(pNode->right,pPre);
+        flattenCore(pNode->left,pPre);
+        pNode->right=pPre;
+        pNode->left=nullptr;
+        pPre=pNode;
+    }
+};
+==============================================
+原理解释：
+【FLAG_TO】的解释：
+As you can see, the problem asks for a linkedlist-alike result. To build a linked list recursively, let's say we have reached recursion depth d, we need to set the current node cur 's next attribute as the return value of recursion call d+1. And we return cur, which will be used in d-1 recursion. Pretty much like that.
+After flatten(root.right), we have processed the right branch of the current node, and the current prev is the head of root of the right branch. For now, we want to know which node is the precedent node of prev, and we will set this particular node's next attribute as prev. As per the problem, this particular node is actually the rightmost node of the left branch.
+
+Next, let's say why we can actually get it. So now we go to the next line, which is flatten(root.left). When we go deeper and deeper in the recursion, we are actually going right because we go right before we go left. A small remark here, the traversal order of the code snippet is actually right->left->cur, not post-order, more like reversed post order if you like. As we are going right, we will stop when we cannot go right furthermore. Then we set right or next attribute of the current node as prev, which is exactly what we want.
+
+Now let's go back to the original function call layer, we have done flatten(root.right) and flatten(root.right). The remaining is easy, we set the root node's next node as prev, which is the head of the left branch. Done!
+【msreekan】的解释（另一种解法，遍历顺序不同）：
+The concise solution posted above does compel us to further investigate that sub-structure to this problem.
+
+Below solution is similar, but it does actually involve a preorder traversal, so might be a bit easier to grasp. Flattening of a tree basically involves three steps:
+
+Set present right sub-tree as the right sub-tree of the last visited node (prev) on the left.
+Set present left sub-tree as the new right sub-tree.
+Set left sub-tree to NULL.
+Now recursively repeat the above three steps:
+void rflatten(struct TreeNode *root, struct TreeNode **prev)
+{
+   /* Return if the root is invalid */
+   if (!root) return;
+
+   *prev = root; // tracks the last visited node on the left
+   rflatten(root->left, prev);
+
+   (*prev)->right = root->right; // Step 1
+   root->right = (root->left) ? root->left : root->right; // Step 2
+   root->left = NULL; // Step 3
+
+   rflatten((*prev)->right, prev);
+}
+114. Flatten Binary Tree to Linked List
+Given a binary tree, flatten it to a linked list in-place.
