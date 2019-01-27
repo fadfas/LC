@@ -1,0 +1,48 @@
+/**
+ * Definition for binary tree with next pointer.
+ * struct TreeLinkNode {
+ *  int val;
+ *  TreeLinkNode *left, *right, *next;
+ *  TreeLinkNode(int x) : val(x), left(NULL), right(NULL), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void connect(TreeLinkNode *root) {
+        if(!root){
+            return;
+        }
+        TreeLinkNode* pHead=root;
+        TreeLinkNode* pCur=nullptr;
+        TreeLinkNode* pPre=nullptr;
+        while(pHead){ //学会寻找这种循环没有完成的代表性变量
+            pCur=pHead;
+            pHead=nullptr;
+            pPre=nullptr;
+            while(pCur){ //学会寻找这种循环没有完成的代表性变量
+                if(pCur->left){
+                    if(pPre){
+                        pPre->next=pCur->left;
+                    }else{
+                        pHead=pCur->left;
+                    }
+                    pPre=pCur->left;
+                }
+                if(pCur->right){
+                    if(pPre){
+                        pPre->next=pCur->right;
+                    }else{
+                        pHead=pCur->right;
+                    }
+                    pPre=pCur->right;
+                }
+                pCur=pCur->next;
+            }
+        }
+    }
+};
+=============================================================
+117. Populating Next Right Pointers in Each Node II
+Populate each next pointer to point to its next right node. If there is no next right node, the next pointer should be set to NULL.
+
+Initially, all next pointers are set to NULL.
