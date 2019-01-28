@@ -1,0 +1,46 @@
+class Solution {
+public:
+    vector<string> findRepeatedDnaSequences(string s) {
+        if(s.size()<10){
+            return {};
+        }
+        unordered_map<int,int> codeCount;
+        vector<string> result={};
+        int strHashCode=0;
+        for(int i=0;i<9;++i){
+            strHashCode=((strHashCode<<2)|(convert(s[i])));//另外与或非亦或的优先级很低，都用括号明确顺序
+        }
+        for(int i=9;i<s.size();++i){
+            strHashCode=(((strHashCode<<2)& 0xfffff)|(convert(s[i])));//因为只要保留最后的10个
+                                                            //strHashCode位，因此要& 0xfffff
+            if(codeCount.find(strHashCode)!=codeCount.end()){
+                if(codeCount[strHashCode]==1){
+                    result.push_back(s.substr(i-9,10));//string的subStr函数学习！！！
+                    codeCount[strHashCode]++;//别忘了，进入到此块，也代表又找到了，所以别忘了++
+                }else{
+                    codeCount[strHashCode]++;
+                }         
+            }else{
+                codeCount[strHashCode]=1;
+            }
+        }
+        return result;
+    }
+private:
+    int convert(char ch){
+        if(ch=='A')
+            return 0;
+        if(ch=='C')
+            return 1;
+        if(ch=='G')
+            return 2;
+        if(ch=='T')
+            return 3;
+        return -1;
+    }
+};
+==========================================
+187. Repeated DNA Sequences
+All DNA is composed of a series of nucleotides abbreviated as A, C, G, and T, for example: "ACGAATTCCG". When studying DNA, it is sometimes useful to identify repeated sequences within the DNA.
+
+Write a function to find all the 10-letter-long sequences (substrings) that occur more than once in a DNA molecule.
