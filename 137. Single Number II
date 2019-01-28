@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int len=nums.size();
+        int high=0,low=0;
+        for(int i = 0; i < len; i++){
+            low = (low ^ nums[i]) & ~high;
+            high = (high ^ nums[i]) & ~low;
+        }
+        return low;
+    }
+};
+=========================================
+137. Single Number II
+Given a non-empty array of integers, every element appears three times except for one, which appears exactly once. Find that single one.
+
+Note:
+
+Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory?
