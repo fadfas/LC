@@ -1,0 +1,25 @@
+class Solution {
+public:
+    vector<int> singleNumber(vector<int>& nums) {
+        int twoNumsXOR=0;
+        for(int i=0;i<nums.size();++i){
+            twoNumsXOR^=nums[i];
+        }
+        int index=1;
+        while((twoNumsXOR&index)==0){  //&这个运算符的优先级低，务必要加上括号！！！！！！
+            index=index<<1;
+        }
+        vector<int> result={0,0};
+        for(int i=0;i<nums.size();++i){
+            if((nums[i]&index)==0){//&这个运算符的优先级低，务必要加上括号！！！！！！
+                result[0]^=nums[i];
+            }else{
+                result[1]^=nums[i];
+            }
+        }
+        return result;
+    }
+};
+======================================================
+260. Single Number III
+Given an array of numbers nums, in which exactly two elements appear only once and all the other elements appear exactly twice. Find the two elements that appear only once.
