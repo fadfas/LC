@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int longestValidParentheses(string s) {
+        if(s.size()<2){
+            return 0;
+        }
+        int dp[s.size()]={0};
+        int open=0,max=0;
+        for(int i=0;i<s.size();++i){
+            if(s[i]=='(')
+                ++open;
+            if(s[i]==')'&&open){
+                dp[i]=2+dp[i-1];
+                if(i-dp[i]>0){
+                    dp[i]+=dp[i-dp[i]];  //下面例子中的2+4就代表此行程序
+                }
+                --open;
+            }
+            if(dp[i]>max){
+                max=dp[i];
+            }
+        }
+        return max;
+    }
+};
+========================================
+eg:
+     0 1 2 3 4  5  6 7 8 9
+open ( ( ) ) (  )  ) ) ( )
+dp   0 0 2 4 0 2+4 0 0 0 2
+32. Longest Valid Parentheses
+Given a string containing just the characters '(' and ')', find the length of the longest valid (well-formed) parentheses substring.
