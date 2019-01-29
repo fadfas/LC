@@ -1,0 +1,42 @@
+class Solution {
+public:
+	bool isMatch(string s, string p) {
+		if ((p.size() == 0) && (s.size() != 0)) {
+			return false;
+		}
+		return matchCore((const char*)s.c_str(), (const char*)p.c_str());
+	}
+private:
+	bool matchCore(const char* str, const char* pattern) {
+		if ((*str) == '\0' && (*pattern) == '\0') {
+			return true;
+		}
+
+		if ((*str) != '\0' && (*pattern) == '\0') {
+			return false;
+		}
+
+		//if ((*str) == '\0' && (*pattern) != '\0') {
+		//	return false;
+		//}   此段代码我考虑的排除情况是字符串已经结束了"ab",但是正则未结束"abc"，但是未考虑到"",".*"的模式
+
+		if ((*(pattern + 1)) == '*') {
+			if ((*str) == (*pattern) || (*pattern) == '.' && (*str != '\0')) {
+				return matchCore(str, pattern + 2) || matchCore(str + 1, pattern) || matchCore(str + 1, pattern + 2);
+			}
+			else
+			{
+				return matchCore(str, pattern + 2);
+			}
+		}
+
+		if ((*str) == (*pattern) || (*pattern) == '.' && (*str != '\0')) {
+			return matchCore(str + 1, pattern + 1);
+		}
+
+		return false;
+	}
+};
+===================================================
+10. Regular Expression Matching
+Given an input string (s) and a pattern (p), implement regular expression matching with support for '.' and '*'.
