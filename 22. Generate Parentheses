@@ -1,0 +1,27 @@
+class Solution {
+public:
+    vector<string> generateParenthesis(int n) {
+        if(n<1)
+            return {};
+        vector<string> result;
+        string str="";
+        core(result,str,0,0,n);
+        return result;
+    }
+private:
+    void core(vector<string>& result,string str,int open,int close,int n){
+        if(str.size()==2*n){
+            result.push_back(str);
+            return;
+        }
+        if(open<n){
+            core(result,str+"(",open+1,close,n);
+        }
+        if(open>close){
+            core(result,str+")",open,close+1,n);
+        }
+    }
+};
+============================================
+22. Generate Parentheses
+Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
