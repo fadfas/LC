@@ -1,0 +1,38 @@
+class Solution {
+public:
+    int minDistance(string word1, string word2) {
+        if(word1.size()<word2.size()){
+            return minDistance(word2,word1);
+        }
+        int m=word1.size(),n=word2.size();
+        int* dp=new int[n+1]; //注意是n+1，因为每个字符串，还有一个空串的状态
+        memset(dp,0,sizeof(dp));
+        dp[0]=0;
+        for(int j=1;j<=n;++j){
+            dp[j]=j;
+        }
+        for(int i=1;i<=m;++i){
+            int upLeft=dp[0];  //学会如何保存左上角的那个数
+            dp[0]=i;
+            for(int j=1;j<=n;++j){
+                int tempUpLeft=dp[j];
+                if(word1[i-1]==word2[j-1]){
+                    dp[j]=upLeft;
+                }else{
+                    dp[j]=min(dp[j],min(dp[j-1],upLeft))+1;
+                }
+                upLeft=tempUpLeft;
+            }
+        }
+        return dp[n];
+    }
+};
+==============================================
+72. Edit Distance
+Given two words word1 and word2, find the minimum number of operations required to convert word1 to word2.
+
+You have the following 3 operations permitted on a word:
+
+Insert a character
+Delete a character
+Replace a character
