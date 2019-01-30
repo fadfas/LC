@@ -28,6 +28,7 @@ public:
     }
 };
 ==============================================
+参考：https://leetcode.com/problems/edit-distance/discuss/25846/20ms-Detailed-Explained-C%2B%2B-Solutions-(O(n)-Space)
 72. Edit Distance
 Given two words word1 and word2, find the minimum number of operations required to convert word1 to word2.
 
