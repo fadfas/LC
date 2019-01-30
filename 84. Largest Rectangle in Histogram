@@ -1,0 +1,30 @@
+class Solution {//网上很多讲解都是错误的，详细过程见附纸
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        if(heights.size()==1){
+            return heights[0];
+        }
+        heights.push_back(0);
+        int n=heights.size();
+        int result=0;
+        stack<int> ascStack;
+        int i=0;
+        while(i<n){
+            if(ascStack.empty()||heights[i]>=heights[ascStack.top()]){//似乎有没有等于号都一样
+                ascStack.push(i);
+                ++i;
+            }else{
+                int h=heights[ascStack.top()];
+                ascStack.pop();
+                int left=ascStack.empty()?-1:ascStack.top();
+                result=max(result,h*(i-left-1));
+            }
+        }
+        return result;
+    }
+};
+=============================================
+可以参考https://chuansongme.com/n/390896436960  但是图示中，黄色的框框应该是画错了，应该多包含其左侧两个条
+84. Largest Rectangle in Histogram
+Given n non-negative integers representing the histogram's bar height where the width of
+each bar is 1, find the area of largest rectangle in the histogram.
