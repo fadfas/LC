@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int maximalSquare(vector<vector<char>>& matrix) {
+        if(matrix.empty()){
+            return 0;
+        }
+        int row=matrix.size();
+        int col=matrix[0].size();
+        int* dp=new int[col];
+        int maxL=0;
+        int pre=0;
+        for(int i=0;i<row;++i){
+            for(int j=0;j<col;++j){
+                if(!i||!j||matrix[i][j]=='0'){
+                    pre=dp[j];
+                    dp[j]=matrix[i][j]-'0';//注意不要直接赋值为0，因为对于i,j==0的情况，是需要判断的
+                                        //另外这一行也完成了动态规划的边界情况的处理
+                    maxL=max(maxL,dp[j]);//只要dp数组有更新，就要看看是否需要更新maxL
+                }else{
+                    int temp=dp[j];
+                    dp[j]=min(dp[j-1],min(dp[j],pre))+1;
+                    pre=temp;
+                    maxL=max(maxL,dp[j]);
+                }
+            }
+        }
+        return maxL*maxL;
+    }
+};
+===========================================
+221. Maximal Square
+Given a 2D binary matrix filled with 0's and 1's, find the largest square containing only 1's and return its area.
