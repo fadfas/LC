@@ -1,0 +1,25 @@
+class Solution {//很经典的DP问题，并且参考的链接对于DP的最优子结构以及重叠子问题讲解的也很好，以及
+    //DP的自顶向下（带记忆）和自底向上的方法的讲解
+    //另外最优子结构是指大问题的【最优解】包含了子问题的【最优解】，侧重于解
+    //而重叠子问题，则侧重于两个子问题，他们【各自的子问题】包含重叠/重复的部分
+    //可以看看算法课程打印的PPT（第15章）
+public:
+    int minimumTotal(vector<vector<int>>& triangle) {
+        if(triangle.empty()){
+            return -1;
+        }
+        int n=triangle.size();
+        vector<int> result(triangle.back());//学习这种初始化方法以及back函数
+        for(int row=n-2;row>=0;--row){
+            for(int i=0;i<triangle[row].size();++i){
+                result[i]=min(result[i],result[i+1])+triangle[row][i];
+            }
+        }
+        return result[0];
+    }
+};
+
+==================================================
+120. Triangle
+Given a triangle, find the minimum path sum from top to bottom. Each step you may move to adjacent numbers on the row below.
+https://leetcode.com/problems/triangle/discuss/38730/DP-Solution-for-Triangle
