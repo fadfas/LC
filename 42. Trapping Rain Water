@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        if(height.size()<3){
+            return 0;
+        }
+        int l=0,r=height.size()-1;
+        int result=0;
+        while(l<r){
+            int minLR=min(height[l],height[r]);
+            if(minLR==height[l]){
+                ++l;
+                while(l<r&&minLR>=height[l]){  //别忘了在这个while中也要控制了l<r
+                    result+=minLR-height[l];
+                    ++l;
+                }
+            }else{
+                --r;
+                while(l<r&&minLR>=height[r]){
+                    result+=minLR-height[r];
+                    --r;
+                }
+            }
+        }
+        return result;
+    }
+};
+===============================================
+参考：https://www.cnblogs.com/grandyang/p/4402392.html
+42. Trapping Rain Water
+Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it is able to trap after raining.
