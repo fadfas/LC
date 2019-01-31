@@ -1,4 +1,4 @@
-class Solution {//这个方法好一些~
+class Solution {
 public:
     int maximalRectangle(vector<vector<char>>& matrix) {
         if(matrix.empty())
@@ -7,15 +7,15 @@ public:
         int col=matrix[0].size();
         int* height=new int[col+1];
         fill_n(height,col+1,0);//重置为0还是很有必要的，不同编译器，不同语言，初始值不一定都。
-        stack<int> ascStack;
         int maxArea=0;
         for(int i=0;i<row;++i){
+            stack<int> ascStack;//注意每一行处理后，stack要清空
             for(int j=0;j<col+1;++j){
                 if(j<col){
                     if(matrix[i][j]=='1'){
                         height[j]++;
                     }else{
-                        height[0];
+                        height[j]=0;
                     }
                 }
                 
