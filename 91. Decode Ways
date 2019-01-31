@@ -1,0 +1,40 @@
+class Solution {//此题我的动态方程为f(i)=f(i-1)+g(i,i-1)*f(i-2)，f(i)意味着截止到第i个数字的不同翻译的数目
+public:
+    int numDecodings(string s) {
+        if(s.empty()||s[0]=='0'){
+            return 0;
+        }
+        int len=s.size();
+        int* counts=new int[len];
+        fill_n(counts,len,0);
+        for(int i=0;i<len;++i){
+            if((i<len-1)&&(s[i+1]=='0')){//本题与剑指offer的不同在于数字0不能单独翻译，因此要注意一下
+                continue;
+            }
+            int count=0;
+            if(i==0){
+                count=1;
+            }else{
+                count=counts[i-1];
+            }
+            
+            if(i>0){
+                int digit1=s[i-1]-'0';
+                int digit2=s[i]-'0';
+                int num=10*digit1+digit2;
+                if(num>=10&&num<=26){
+                    if(i==1){
+                        count+=1;
+                    }else{
+                        count+=counts[i-2];
+                    }
+                }
+            }
+            counts[i]=count;
+        }
+        return counts[len-1];
+    }
+};
+=============================
+91. Decode Ways
+A message containing letters from A-Z is being encoded to numbers using the following mapping:
