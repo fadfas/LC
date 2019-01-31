@@ -1,0 +1,82 @@
+class Solution {//这个方法好一些~
+public:
+    int maximalRectangle(vector<vector<char>>& matrix) {
+        if(matrix.empty())
+            return 0;
+        int row=matrix.size();
+        int col=matrix[0].size();
+        int* height=new int[col+1];
+        fill_n(height,col+1,0);//重置为0还是很有必要的，不同编译器，不同语言，初始值不一定都。
+        stack<int> ascStack;
+        int maxArea=0;
+        for(int i=0;i<row;++i){
+            for(int j=0;j<col+1;++j){
+                if(j<col){
+                    if(matrix[i][j]=='1'){
+                        height[j]++;
+                    }else{
+                        height[0];
+                    }
+                }
+                
+                while(!ascStack.empty()&&height[ascStack.top()]>height[j]){
+                    int h=height[ascStack.top()];
+                    ascStack.pop();
+                    int left=ascStack.empty()?-1:ascStack.top();
+                    maxArea=max(maxArea,h*(j-left-1));
+                }
+                ascStack.push(j);
+            }
+        }
+        return maxArea;
+    }
+};
+
+class Solution {//动态规划方法，有点儿难以理解
+public:
+    int maximalRectangle(vector<vector<char>>& matrix) {
+        if(matrix.empty()){
+            return 0;
+        }
+        int m=matrix.size();
+        int n=matrix[0].size();
+        int maxArea=0;
+        int left[n],right[n],height[n];  //注意下面的fill_n(right,n,n)，不是赋值为0
+        fill_n(left,n,0),fill_n(right,n,n),fill_n(height,n,0);//fill_n函数的使用！！还有fill()函数的使用
+        for(int i=0;i<m;++i){
+            int curLeft=0,curRight=n;  //注意不是n-1
+            for(int j=0;j<n;++j){
+                if(matrix[i][j]=='1')
+                    height[j]++;
+                else
+                    height[j]=0;
+            }
+            for(int j=0;j<n;++j){
+                if(matrix[i][j]=='1'){
+                    left[j]=max(left[j],curLeft);  //当一开始搞不清left[j],curLeft的运行机理的时候
+                                    //可以先默认left[j]起到了什么作用，然后完整的运行一圈，如果
+                                    //left[j]此时依然起到了相同的作用，那就证明自己的猜测是合理的
+                                    //当然也要再验证一下第一遍是否有效
+                }else{
+                    left[j]=0;
+                    curLeft=j+1;
+                }
+            }
+            for(int j=n-1;j>=0;--j){  //这种递减的，别忘了是--j！！！别顺手写成++j了
+                if(matrix[i][j]=='1'){
+                    right[j]=min(right[j],curRight);
+                }else{
+                    right[j]=n;   //不是=0
+                    curRight=j;
+                }
+            }
+            for(int k=0;k<n;++k){
+                maxArea=max(maxArea,(right[k]-left[k])*height[k]);
+            }
+        }
+        return maxArea;
+    }
+};
+==============================================
+85. Maximal Rectangle
+Given a 2D binary matrix filled with 0's and 1's, find the largest rectangle containing only 1's and return its area.
