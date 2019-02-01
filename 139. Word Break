@@ -1,0 +1,30 @@
+class Solution {
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        unordered_set<string> wordSet(wordDict.begin(),wordDict.end());
+        int size=s.size();
+        bool* dp=new bool[size+1];
+        fill_n(dp,size+1,false);
+        dp[0]=1;
+        for(int i=1;i<size+1;++i){//若i位置为true，意味着i-1处的字符，是一个word的结尾，i处意味着可以是新的开始
+            for(int j=i-1;j>=0;--j){
+                if(dp[j]){
+                    string temp=s.substr(j,i-j);
+                    if(wordSet.find(temp)!=wordSet.end()){
+                        dp[i]=true;
+                        break;
+                    }
+                }
+            }
+        }
+        return dp[size];
+    }
+};
+==========================================
+139. Word Break
+Given a non-empty string s and a dictionary wordDict containing a list of non-empty words, determine if s can be segmented into a space-separated sequence of one or more dictionary words.
+
+Note:
+
+The same word in the dictionary may be reused multiple times in the segmentation.
+You may assume the dictionary does not contain duplicate words.
