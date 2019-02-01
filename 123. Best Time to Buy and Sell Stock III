@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        if(prices.size()<2)
+            return 0;
+        int k=2;
+        int maxProfit=0;
+        int* dp=new int[k+1];//注意维度不要写成k
+        int* tmpMax=new int[k+1];
+        fill_n(tmpMax,k+1,-prices[0]);
+        fill_n(dp,k+1,0);
+        for(int i=1;i<prices.size();++i){
+            for(int kk=1;kk<=k;++kk){
+                dp[kk]=max(dp[kk],prices[i]+tmpMax[kk]);
+                tmpMax[kk]=max(tmpMax[kk],dp[kk-1]-prices[i]);//这句话放在dp前还是dp后，结果都是对的
+            }
+        }
+        return dp[k];
+    }
+};
+======================================
+主要参考：
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/discuss/39608/A-clean-DP-solution-which-generalizes-to-k-transactions
+下面的这个文章，主要参考其降低复杂度的思路，写的非常好：
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/discuss/135704/Detail-explanation-of-DP-solution
+（尤其关注其交换内外层循环时的做法1.将min数组化，2.dp[][]两个维度的变量写法并无变化）
+123. Best Time to Buy and Sell Stock III
+Say you have an array for which the ith element is the price of a given stock on day i.
+
+Design an algorithm to find the maximum profit. You may complete at most two transactions.
+
+Note: You may not engage in multiple transactions at the same time (i.e., you must sell the stock before you buy again).
