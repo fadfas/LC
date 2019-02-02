@@ -1,4 +1,4 @@
-/**   这道题也是非常好的DP的问题！！！！尤其是参考链接的讲解，非常的好！！！！！！！
+/**   这道题也是非常好的DP的问题！！！！尤其是参考链接的讲解，非常的好！！！！！！！  还有关于重叠子问题的定义也讲解的很好！！！！
  * Definition for a binary tree node.
  * struct TreeNode {
  *     int val;
@@ -101,8 +101,13 @@ However the solution runs very slowly (1186 ms) and barely got accepted (the tim
 
 Step II -- Think one step further
 
-In step I, we only considered the aspect of "optimal substructure", but think little about the possibilities of overlapping of the subproblems. For example, to obtain rob(root), we need rob(root.left), rob(root.right), rob(root.left.left), rob(root.left.right), rob(root.right.left), rob(root.right.right); but to get rob(root.left), we also need rob(root.left.left), rob(root.left.right), similarly for rob(root.right). The naive solution above computed these subproblems repeatedly, which resulted in bad time performance. Now if you recall the two conditions for dynamic programming: "optimal substructure" + "overlapping of subproblems", we actually have a DP problem. A naive way to implement DP here is to use a hash map to record the results for visited subtrees.
-
+In step I, we only considered the aspect of "optimal substructure", but think little about the possibilities of overlapping of the 
+subproblems. For example, to obtain rob(root), we need rob(root.left), rob(root.right), rob(root.left.left), rob(root.left.right), 
+rob(root.right.left), rob(root.right.right); but to get rob(root.left), we also need rob(root.left.left), rob(root.left.right), 
+similarly for rob(root.right). The naive solution above computed these subproblems repeatedly, which resulted in bad time performance.
+Now if you recall the two conditions for dynamic programming: "optimal substructure" + "overlapping of subproblems", we actually
+have a DP problem. A naive way to implement DP here is to use a hash map to record the results for visited subtrees.
+以上关于重叠子问题的讲解非常的好！！！！！（也就是什么是重叠子问题）
 And here is the improved solution:
 
       public int rob(TreeNode root) {
