@@ -16,6 +16,22 @@ public:         //动态规划的问题，很多都是类似于：对于位置i�
         return memo[len];
     }
 };
+
+class Solution {  //另一解法，空间复杂度再次降低：观察上面的解法，发现每次迭代只使用到了memo[i-1]和memo[i-2]的信息，因此可以用两个变量来取代
+public:
+    int rob(vector<int>& nums) {
+        if(nums.empty())
+            return 0;
+        int cur=0,pre1=0,pre2=0;
+        pre1=0,pre2=nums[0];
+        for(int i=1;i<nums.size();++i){
+            cur=max(pre1+nums[i],pre2);
+            pre1=pre2;
+            pre2=cur;
+        }
+        return pre2;
+    }
+};
 ============================================
 This particular problem and most of others can be approached using the following sequence:
 
