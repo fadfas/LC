@@ -1,0 +1,48 @@
+class Solution {//这个是排列组合类问题的BFS解法
+public:
+    vector<string> letterCombinations(string digits) {
+        if(digits.empty())
+            return {};
+        string dict[]={"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        vector<string> result={""};//一定要先生成一个空字符串元素
+        for(int i=0;i<digits.size();++i){
+            string digit2Str=dict[digits[i]-'0'];
+            vector<string> temp={};
+            for(auto each:digit2Str){
+                for(auto eachResult:result){
+                    temp.push_back(eachResult+each);
+                }
+            }
+            result=temp;
+        }
+        return result;
+    }
+};
+
+class Solution {//这个是排列组合类问题的DFS解法
+public:
+    vector<string> letterCombinations(string digits) {
+        if(digits.empty())
+            return {};
+        string dict[]={"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        vector<string> result={};
+        dfs(digits,dict,result,"",0);
+        return result;
+    }
+private:
+    void dfs(string digits,string* dict,vector<string>& result,string temp,int level){
+        if(level==digits.size()){
+            result.push_back(temp);
+            return;
+        }
+        string digit2Str=dict[digits[level]-'0'];
+        for(auto each:digit2Str){
+            dfs(digits,dict,result,temp+each,level+1);
+        }
+    }
+};
+================================================
+17. Letter Combinations of a Phone Number
+Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could represent.
+
+A mapping of digit to letters (just like on the telephone buttons) is given below. Note that 1 does not map to any letters.
