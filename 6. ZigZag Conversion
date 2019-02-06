@@ -1,0 +1,32 @@
+class Solution {
+public:
+    string convert(string s, int numRows) {
+        vector<string> temp(numRows,"");//学习这种初始化的方式
+        int i=0;
+        int n=s.size();
+        while(i<n){
+            for(int j=0;(j<numRows)&&i<n;++j){
+                temp[j].push_back(s[i++]);//string也有push_back()函数！！！！
+            }
+            for(int j=numRows-2;(j>=1)&&i<n;--j){
+                temp[j].push_back(s[i++]);
+            }
+        }
+        string result="";
+        for(auto each:temp)
+            result+=each;
+        return result;
+    }
+};
+======================================================
+6. ZigZag Conversion
+The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)
+
+P   A   H   N
+A P L S I I G
+Y   I   R
+And then read line by line: "PAHNAPLSIIGYIR"
+
+Write the code that will take a string and make this conversion given a number of rows:
+
+string convert(string s, int numRows);
