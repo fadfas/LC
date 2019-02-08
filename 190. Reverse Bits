@@ -1,0 +1,34 @@
+class Solution {
+public:
+    uint32_t reverseBits(uint32_t n) {
+        uint32_t result=n; //注意类型别声明为int
+        result=(result>>16)|(result<<16);
+        result=((result&0xff00ff00)>>8)|((result&0x00ff00ff)<<8);
+        result=((result&0xf0f0f0f0)>>4)|((result&0x0f0f0f0f)<<4);
+        result=((result&0xcccccccc)>>2)|((result&0x33333333)<<2);
+        result=((result&0xaaaaaaaa)>>1)|((result&0x55555555)<<1);//注意是1010,不是1000
+        return result;
+    }
+};
+
+class Solution {
+public:
+    uint32_t reverseBits(uint32_t n) {
+        uint32_t result=0;
+        //int mask=1;
+        for(int i=0;i<32;++i){//注意不能用while(n)，否则00001，结果就错了
+            //result=result<<1;
+            result<<=1;//学习这种写法！！！
+            //int temp=n&1;
+            int temp=n%2; //这句和上一句都可以
+            if(temp){
+                result+=1;
+            }
+            n>>=1;
+        }
+        return result;
+    }
+};
+=============================================
+190. Reverse Bits
+Reverse bits of a given 32 bits unsigned integer.
