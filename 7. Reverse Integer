@@ -1,0 +1,52 @@
+class Solution {
+public:
+    int reverse(int x) {
+        int result=0;
+        while(x){
+            int tail=x%10;
+            if(result>INT_MAX/10||(result==INT_MAX/10&&tail>7))
+                return 0;
+            if(result<INT_MIN/10||(result==INT_MIN/10&&tail<-8))
+                return 0;
+            result=result*10+x%10;
+            x/=10;
+        }
+        return result;
+    }
+};
+
+class Solution { //这个方法目前无法在LeetCode上运行了，可能是编译器更新了吧，但是思路还是可以学习的
+public:
+    int reverse(int x) {
+        int result=0;
+        while(x){
+            int newResult=result*10+x%10;//A
+            if((newResult-tail)/10!=result)
+                return 0;
+            result=newResult;
+            x/=10;
+        }
+        return result;
+    }
+};
+
+如果在语句A处溢出了，则再尝试还原回去时，就会不等于result了。但是也有一些特殊情况会导致判断是否溢出的if语句失效：
+
+Imaging you a in a 9 bit system, in which INT_MAX is 512, for test case input 315, when result = 51, tail = 3,
+newresult = 510 + 3 which overflows by 1 = -513. newResult - tail = 510, (newResult - tail ) / 10 = 51 == result.
+
+但是如果将判断语句更改成if((newResult)/10!=result)就没有问题了
+
+=============================================
+7. Reverse Integer
+Given a 32-bit signed integer, reverse digits of an integer.
+
+
+int能够表示的范围： -2147483648 ~ 2147483647 
+但是却不能用int x=-2147483648; 来声明，vs里面会报错，原因见以下链接
+https://blog.csdn.net/liuhhaiffeng/article/details/53991071
+因此只能用int x=INT_MIN; 来声明  
+#define INT_MIN     (-2147483647 - 1) /* minimum (signed) int value */
+
+	int y = INT_MIN;
+	cout << y-1  << endl;//输出2147483647
