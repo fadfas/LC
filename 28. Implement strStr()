@@ -1,0 +1,43 @@
+class Solution { //KMP算法，可以尝试背下来。。。。。
+public:
+    int strStr(string haystack, string needle) {
+        if(needle.empty())
+            return 0;
+        vector<int> nextArray=nextProcess(needle);
+        int m=haystack.size(),n=needle.size();
+        for(int i=0,j=0;i<m;){//for循环不要写++i
+            if(haystack[i]==needle[j]){
+                ++i,++j;
+            }
+            if(j==n)
+                return i-j;
+            if(haystack[i]!=needle[j]){
+                j?j=nextArray[j-1]:++i; //学习这种三元表达式的用法，直接当做if语句使用
+            }
+        }
+        return -1;
+    }
+private:
+    vector<int> nextProcess(string needle){
+        int n=needle.size();
+        vector<int> next(n,0);
+        int len=0;
+        for(int i=1;i<n;){
+            if(needle[i]==needle[len]){
+                next[i++]=++len;
+            }else if(len){
+                len=next[len-1];
+            }else{
+                next[i++]=0;
+            }
+        }
+        return next;
+    }
+};
+=================================================
+28. Implement strStr()
+Implement strStr().
+
+Return the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.
+KMP算法的讲解可以参考以下博客，但是程序还是不要看他的了，似乎有错
+https://blog.csdn.net/starstar1992/article/details/54913261/
