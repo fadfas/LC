@@ -1,0 +1,50 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {//此题的solution中的关于复杂度的计算很好，值得分析学习  
+public://本程序的时间复杂度为O(Nlogk)
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        if(lists.empty())
+            return nullptr;
+        int len=lists.size();
+        while(len>1){  //这个地方的len很巧妙，见下面
+            for(int i=0;i<len/2;++i){
+                lists[i]=merge2(lists[i],lists[len-1-i]);
+            }
+            len=(len+1)/2;
+        }
+        return lists.front();
+    }
+//当len=5 即0 1 2 3 4, 此时处理第一个和倒数第一个，第二个和倒数第二个（奇数个则中间的2不处理）
+//然后while的下一轮中len=3（此时的第一个和第二个是上一轮处理过的，第三个是上一轮中的最中间的那一个）
+//记住这种处理的模式以及len的每一轮的计算方法(len=(len+1)/2)  还有首位对应的下标的表示（i,len-1-i）
+private:
+    ListNode* merge2(ListNode* l1,ListNode* l2){ //此块儿程序的时间复杂度为O(N)，分析方法：
+    //对于两个链表的每一个节点，都只处理了一遍，因此复杂度为O(N)
+        ListNode dummy(-1);
+        ListNode* pNode=&dummy;
+        
+        while(l1&&l2){
+            if(l1->val<l2->val){
+                pNode->next=l1;
+                l1=l1->next;
+            }else{
+                pNode->next=l2;
+                l2=l2->next;
+            }
+            pNode=pNode->next;//这句别忘了！！！
+        }
+        
+        pNode->next=l1?l1:l2;
+        
+        return dummy.next;
+    }
+};
+=============================================
+23. Merge k Sorted Lists
+Merge k sorted linked lists and return it as one sorted list. Analyze and describe its complexity.
