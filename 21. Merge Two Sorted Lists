@@ -57,5 +57,18 @@ public:
     }
 };
 ================================================
+stack memory vs heap memory
+In C++ the stack memory is where local variables get stored/constructed. The stack is also used to hold parameters passed to functions.
+
+The stack is like a very like the std::stack class, you push parameters onto it and then call a function. The function then knows 
+the parameters it expects can be found on the end of the stack. Likewise the function can push locals onto the stack and pop them off it 
+before returning from the function. (caveat- compiler optimizations and calling conventions all mean things aren't this simple)
+
+Heap memory is much as rskar says. Generally speaking in C++ objects allocated with new, or blocks of memory allocated with the likes
+of malloc ends up on the heap. Heap memory almost always must be manually freed, though you should reallly use a smart pointer class or 
+similar to avoid needing to remember to do so. Running out of heap memory can (will?) result in a std::bad_alloc.
+
+因此第一个解法中的dummy使用完成后，不用delete掉
+
 21. Merge Two Sorted Lists
 Merge two sorted linked lists and return it as a new list. The new list should be made by splicing together the nodes of the first two lists.
