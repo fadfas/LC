@@ -1,0 +1,61 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {//循环的方法
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        ListNode dummy(0);//dummyNode的应用！！！可以说应用场景非常广泛，基本上只要问题能够涉
+                    //及到头结点，都可以使用dummy node
+        ListNode* pNode=&dummy;
+        
+        while(l1&&l2){
+            if(l1->val<l2->val){
+                pNode->next=l1;
+                l1=l1->next;
+            }else{
+                pNode->next=l2;
+                l2=l2->next;
+            }
+            pNode=pNode->next;
+        }
+        pNode->next=l1?l1:l2;
+        
+        return dummy.next;  //注意dummy的声明方式不是指针！！！！所以要用.运算符
+    }
+};
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {  //递归的解法
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        if(!l1)
+            return l2;
+        if(!l2)
+            return l1;
+        ListNode* pNode=nullptr;
+        if(l1->val<l2->val){
+            pNode=l1;
+            l1->next=mergeTwoLists(l1->next,l2);
+        }else{
+            pNode=l2;
+            l2->next=mergeTwoLists(l1,l2->next);
+        }
+        return pNode;
+    }
+};
+================================================
+21. Merge Two Sorted Lists
+Merge two sorted linked lists and return it as a new list. The new list should be made by splicing together the nodes of the first two lists.
