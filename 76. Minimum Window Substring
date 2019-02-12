@@ -1,0 +1,39 @@
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        if(t.size()>s.size())
+            return "";
+        unordered_map<char,int> hm;
+        for(auto c:t){
+            hm[c]++;
+        }
+        int needCount=hm.size();
+        int start=0,end=0,len=0x7ffffff,head=0;
+        while(end<s.size()){
+            hm[s[end]]--;
+            if(hm[s[end]]==0)
+                --needCount;
+            ++end;
+            while(needCount==0){
+                if(hm.find(s[start])!=hm.end()){  //不能不管三七二十一，不判断是不是需要的char，直接执行下一句
+                    ++hm[s[start]];
+                    if(hm[s[start]]==1)
+                        ++needCount;
+                }
+                ++start;
+                if(end-start<len){ //这个不能放在while(needCount==0)的外面
+                    head=start-1;
+                    len=min(len,end-start+1);//注意此处要加一，因为end,start都是未处理的
+                }
+
+            }
+            
+        }
+        if(len==0x7ffffff)
+            return "";//别忘了这种情况
+        return s.substr(head,len);
+    }
+};
+=============================================
+76. Minimum Window Substring
+Given a string S and a string T, find the minimum window in S which will contain all the characters in T in complexity O(n).
