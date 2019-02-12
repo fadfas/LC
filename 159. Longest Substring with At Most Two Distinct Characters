@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int lengthOfLongestSubstringTwoDistinct(string s) {
+        int start=0,end=0,len=0,counter=0;
+        unordered_map<char,int> hm;  //也可以用int dict[256];来模拟
+        while(end<s.size()){
+            hm[s[end]]++;  //dict[s[i]]++;  模拟的hash表直接这么用就可以，不用减去一个'a'或者'0'啥的
+            if(hm[s[end]]==1)
+                ++counter;
+            ++end;
+            while(counter>2){
+                hm[s[start]]--;
+                if(hm[s[start]]==0)
+                    --counter;
+                ++start;
+            }
+            len=max(len,end-start);//不是end-start+1,因为当前end所指的位置的字符，并未处理
+        }
+        return len;
+    }
+};
+===================================================
+159. Longest Substring with At Most Two Distinct Characters
+Given a string s , find the length of the longest substring t  that contains at most 2 distinct characters.
+
+Example 1:
+
+Input: "eceba"
+Output: 3
+Explanation: t is "ece" which its length is 3.
