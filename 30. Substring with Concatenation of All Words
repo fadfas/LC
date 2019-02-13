@@ -1,0 +1,53 @@
+class Solution {
+public:
+    vector<int> findSubstring(string s, vector<string>& words) {
+        vector<int> res={};
+        int num=words.size();
+        if(words.empty()){
+            return {};
+        }
+        int wl=words[0].size();//要先检测words是否为空！！！
+        if(s.size()<num*wl)
+            return {};
+        unordered_map<string,int> counts;
+        unordered_map<string,int> found;
+        for(auto e:words){
+            counts[e]++;
+        }
+        for(int i=0;i<s.size()-wl*num+1;++i){
+            int foundNum=0;
+            while(foundNum<num){
+                string word=s.substr(i+foundNum*wl,wl);
+                if(counts.find(word)!=counts.end()){
+                    found[word]++;
+                    if(found[word]>counts[word]){
+                        found.clear();//容器的通用的清空方法  不过以下三个clear可以通过在本for循环开始定义
+                        break;       //map来达到清空的效果
+                    }
+                }else{
+                    found.clear();
+                    break;
+                }
+                ++foundNum;
+            }
+            
+            if(foundNum==num){
+                res.push_back(i);
+                found.clear();
+            }
+        }
+        return res;
+    }
+};
+============================================
+30. Substring with Concatenation of All Words
+You are given a string, s, and a list of words, words, that are all of the same length. Find all starting indices of substring(s) in s that is a concatenation of each word in words exactly once and without any intervening characters.
+
+Example 1:
+
+Input:
+  s = "barfoothefoobarman",
+  words = ["foo","bar"]
+Output: [0,9]
+Explanation: Substrings starting at index 0 and 9 are "barfoor" and "foobar" respectively.
+The output order does not matter, returning [9,0] is fine too.
