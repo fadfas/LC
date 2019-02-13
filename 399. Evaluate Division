@@ -1,0 +1,47 @@
+class Solution {
+public:
+    vector<double> calcEquation(vector<pair<string, string>> equations, vector<double>& values, vector<pair<string, string>> queries) {
+        vector<double> res;
+        unordered_map<string,unordered_map<string,double>> mp;
+        int n=values.size();
+        for(int i=0;i<n;++i){
+            mp[equations[i].first][equations[i].second]=values[i];//学习这种二维的map的访问方法
+            mp[equations[i].second][equations[i].first]=1.0/values[i];//学习pair的first,second访问方法,另外注意不是1/values
+        }
+
+        //unordered_set<string> visited;
+        for(auto e:queries){
+            unordered_set<string> visited;//注意visited的声明要放在这里，不可以放在for的前面，否则第二轮visted不是新的
+            double result=dfs(mp,visited,e.first,e.second);
+            res.push_back(result);
+        }
+        return res;
+    }
+private:
+    double dfs(unordered_map<string,unordered_map<string,double>>& mp,
+               unordered_set<string>& visited,
+               string s,
+               string e){
+        visited.insert(s);
+        if(mp[s].find(e)!=mp[s].end())
+            return mp[s][e];
+        for(auto each:mp[s]){//学习for循环内的first和second用法！！！
+            if(visited.find(each.first)!=visited.end())
+                continue;
+            //visited.insert(each.first);//这个visited放在第一行还是放在这里都可以
+            double res=dfs(mp,visited,each.first,e);
+            if(res>0.0) return res*each.second; //double类型不可以用==判断是否相等
+            //上面这句不可以用return res==-1?-1:res*each.second;   注意逻辑差别
+        }
+        return -1;
+        
+    }
+};
+=====================================================
+399. Evaluate Division
+Equations are given in the format A / B = k, where A and B are variables represented as strings, and k is a real number (floating point number). Given some queries, return the answers. If the answer does not exist, return -1.0.
+
+Example:
+Given a / b = 2.0, b / c = 3.0. 
+queries are: a / c = ?, b / a = ?, a / e = ?, a / a = ?, x / x = ? . 
+return [6.0, 0.5, -1.0, 1.0, -1.0 ].
