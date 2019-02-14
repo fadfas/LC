@@ -1,0 +1,33 @@
+class Solution {
+public:
+    string nextClosestTime(string time) {
+        vector<int> scale{600,60,10,1};//不适用括号初始化
+        string res="0000";
+        int d=0;
+        int sep=time.find(':');
+        int cur=stoi(time.substr(0,sep))*60+stoi(time.substr(sep+1));
+        for(int i=1;i<1440;++i){
+            int next=(i+cur)%1440;//此处注意这种循环的方式，另外一个周期是1440，那么取余就取1440，不是1439啥的
+            for(d=0;d<4;++d){
+                res[d]='0'+next/scale[d];
+                next%=scale[d];//学习这种/和取余的搭配 以及如果将时间转化为分钟的方法
+                if(time.find(res[d])==string::npos) 
+                    break;
+            }
+            if(d==4)
+                return res.substr(0,2)+":"+res.substr(2);
+        }
+        return time; //注意00:00这种时间
+    }
+};
+==========================================
+681. Next Closest Time
+Given a time represented in the format "HH:MM", form the next closest time by reusing the current digits. There is no limit on how many times a digit can be reused.
+
+You may assume the given input string is always valid. For example, "01:34", "12:09" are all valid. "1:34", "12:9" are all invalid.
+
+Example 1:
+
+Input: "19:34"
+Output: "19:39"
+Explanation: The next closest time choosing from digits 1, 9, 3, 4, is 19:39, which occurs 5 minutes later.  It is not 19:33, because this occurs 23 hours and 59 minutes later.
