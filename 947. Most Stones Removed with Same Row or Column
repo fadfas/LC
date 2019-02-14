@@ -1,0 +1,59 @@
+class Solution {
+public:
+    int removeStones(vector<vector<int>>& stones) {
+        for(int i=0;i<stones.size();++i){
+            uni(stones[i][0],~stones[i][1]);  //~x==-x-1， 此处之所以把x y坐标也uni，是因为
+            //假设再有一个点是x1 y1只有有横坐标或者纵坐标任一相等，那么这四个数字就是一个组的
+            //因此不要刻意区分横纵坐标，把他们当成一个数组即可，只不过为了防止横纵坐标的取值范围重叠
+            //进行了一下坐标变换而已
+        }
+        return stones.size()-islands;
+    }
+private:
+    unordered_map<int,int> uf;//union-find set这个就是并查集
+    int islands=0;
+   // int find(int x) {  //这个是递归版的带压缩路径功能的find函数，写起来更简单
+   //     if (!uf.count(x)) uf[x] = x, islands++;
+   //     if (x != uf[x]) uf[x] = find(uf[x]);
+   //     return uf[x];
+   // }
+    
+    int find(int x){
+        if(uf.find(x)==uf.end())
+            uf[x]=x,++islands;//建立初始并查集
+        else{
+            int r=x;//压缩路径
+            while(uf[r]!=r){
+                r=uf[r];
+            }
+            int i=x,j;
+            while(i!=r){
+                j=uf[i];
+                uf[i]=r;
+                i=j;
+            }
+        }
+        return uf[x];
+    }
+    void uni(int x,int y){  //union是保留关键字，所以命名成uni
+        int rx=find(x),ry=find(y);
+        if(rx!=ry){
+            uf[rx]=y;
+            --islands;
+        }
+    }
+};
+==============================================
+947. Most Stones Removed with Same Row or Column
+On a 2D plane, we place stones at some integer coordinate points.  Each coordinate point may have at most one stone.
+
+Now, a move consists of removing a stone that shares a column or row with another stone on the grid.
+
+What is the largest possible number of moves we can make?
+
+ 
+
+Example 1:
+
+Input: stones = [[0,0],[0,1],[1,0],[1,2],[2,1],[2,2]]
+Output: 5
