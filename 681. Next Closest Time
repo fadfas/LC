@@ -1,7 +1,7 @@
 class Solution {
 public:
     string nextClosestTime(string time) {
-        vector<int> scale{600,60,10,1};//不适用括号初始化
+        vector<int> scale{600,60,10,1};//指定元素时不适用括号初始化，要用{}
         string res="0000";
         int d=0;
         int sep=time.find(':');
