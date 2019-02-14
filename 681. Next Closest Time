@@ -25,8 +25,8 @@ class Solution {
 public:
     string nextClosestTime(string time) {
         string res = time;
-        set<int> s{time[0], time[1], time[3], time[4]};
-        string str(s.begin(), s.end());
+        set<int> s{time[0], time[1], time[3], time[4]}; //这种指定元素的初始化方式，都是用{}  另外set有自动排序功能~默认递增的
+        string str(s.begin(), s.end());                  
         for (int i = res.size() - 1; i >= 0; --i) {
             if (res[i] == ':') continue;
             int pos = str.find(res[i]);
