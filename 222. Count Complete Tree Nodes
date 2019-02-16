@@ -1,0 +1,56 @@
+/**  主要涉及二叉树知识以及复杂度分析！！！！
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int countNodes(TreeNode* root) {
+        if(!root)
+            return 0;
+        TreeNode* pLeft=root,*pRight=root;  //*和&都要贴着变量！！！
+        int n=1;
+        int lHeight=0,rHeight=0;
+        while(pLeft){
+            n<<=1;//尽量少用pow函数，而是用n<<1来代替计算，更快
+            pLeft=pLeft->left;
+            lHeight++;
+        }
+        while(pRight){
+            pRight=pRight->right;
+            rHeight++;
+        }
+        if(lHeight==rHeight)
+            return n-1;
+        return countNodes(root->left)+countNodes(root->right)+1;
+    }
+};
+==========================================
+参考链接：https://leetcode.com/problems/count-complete-tree-nodes/discuss/61953/Easy-short-c%2B%2B-recursive-solution
+https://www.cnblogs.com/grandyang/p/4567827.html
+
+完全二叉树 (Complete Binary Tree)：
+A Complete Binary Tree （CBT) is a binary tree in which every level, except possibly the last, 
+is completely filled, and all nodes are as far left as possible.
+完美二叉树 (Perfect Binary Tree)：就是满二叉树
+完满二叉树 (Full Binary Tree):比完全二叉树多一个要求，就是所有节点度必须为2
+
+复杂度分析下：
+T(n) = T(n/2) + c1 lgn
+       = T(n/4) + c1 lgn + c2 (lgn - 1)
+       = ...
+       = T(1) + c [lgn + (lgn-1) + (lgn-2) + ... + 1]
+       = O(lgn*lgn)   
+为何不是T(n) = 2T(n/2) + c1 lgn ：因为左右子树至少有一颗是满二叉树
+
+222. Count Complete Tree Nodes
+Given a complete binary tree, count the number of nodes.
+
+Note:
+
+Definition of a complete binary tree from Wikipedia:
+In a complete binary tree every level, except possibly the last, is completely filled, and all nodes in the last level are as far left as possible. It can have between 1 and 2h nodes inclusive at the last level h.
