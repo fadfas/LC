@@ -1,0 +1,62 @@
+/**
+ * // This is the robot's control interface.
+ * // You should not implement it, or speculate about its implementation
+ * class Robot {
+ *   public:
+ *     // Returns true if the cell in front is open and robot moves into the cell.
+ *     // Returns false if the cell in front is blocked and robot stays in the current cell.
+ *     bool move();
+ *
+ *     // Robot will stay in the same cell after calling turnLeft/turnRight.
+ *     // Each turn will be 90 degrees.
+ *     void turnLeft();
+ *     void turnRight();
+ *
+ *     // Clean the current cell.
+ *     void clean();
+ * };
+ */
+class Solution {
+public:
+    void cleanRoom(Robot& robot) {
+        set<pair<int,int>> visited;
+        dfs(visited,robot,0,0);
+    }
+private:
+    int dx[4]={0,1,0,-1};  //学习这种在坐标系中，控制方向的方法
+    int dy[4]={1,0,-1,0};
+    int direction=0;//direction变量要放在外面，因为假设当机器人是从上往下进入到新的一格，此时的方向也是保持向下的，不能重置为向上的
+    void dfs(set<pair<int,int>>& visited,Robot& robot,int x,int y){
+        if(visited.count({x,y}))//pair也可以用{}定义生成！！！
+            return;
+        visited.insert({x,y});
+        robot.clean();    
+        for(int i=0;i<4;++i){
+            if(robot.move()){
+                x+=dx[direction];        //============================
+                y+=dy[direction];         //回溯的精华就在于此
+                dfs(visited,robot,x,y);  //it is the backtracing, after you've done one step, you want to go 
+                robot.turnRight();      //back to the 'original' position. In this case, we do left,left == trun
+                robot.turnRight();    // around, move == move back one step, left,left == trun around. So now you 
+                robot.move();         //are at the original postion, facing the original direction.
+                robot.turnRight();
+                robot.turnRight();
+                x-=dx[direction];
+                y-=dy[direction];       //================================
+            }
+            robot.turnRight();
+            direction=(direction+1)%4;
+        }
+    }
+};
+=======================================
+489. Robot Room Cleaner
+Given a robot cleaner in a room modeled as a grid.
+
+Each cell in the grid can be empty or blocked.
+
+The robot cleaner with 4 given APIs can move forward, turn left or turn right. Each turn it made is 90 degrees.
+
+When it tries to move into a blocked cell, its bumper sensor detects the obstacle and it stays on the current cell.
+
+Design an algorithm to clean the entire room using only the 4 given APIs shown below.
