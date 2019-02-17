@@ -15,5 +15,7 @@ public:
     }
 };
 ==========================================
+参考：https://www.cnblogs.com/grandyang/p/9001474.html
+我们观察这个test case，可以发现start中的R可以往后移动，没有问题，但是start中的L永远无法变到end中L的位置，因为L只能往前移。这道题被归类为brainteaser，估计就是因为要观察出这个规律吧。那么搞明白这个以后，我们其实可以用双指针来解题，思路是，我们每次分别找到start和end中非X的字符，如果二者不相同的话，直接返回false，想想问什么？这是因为不论是L还是R，其只能跟X交换位置，L和R之间是不能改变相对顺序的，所以如果分别将start和end中所有的X去掉后的字符串不相等的话，那么就永远无法让start和end相等了。这个判断完之后，就来验证L只能前移，R只能后移这个限制条件吧，当i指向start中的L时，那么j指向end中的L必须要在前面，所以如果i小于j的话，就不对了，同理，当i指向start中的R，那么j指向end中的R必须在后面，所以i大于j就是错的，最后别忘了i和j同时要自增1，不然死循环了，参见代码如下：
 777. Swap Adjacent in LR String
 In a string composed of 'L', 'R', and 'X' characters, like "RXXLRXRXL", a move consists of either replacing one occurrence of "XL" with "LX", or replacing one occurrence of "RX" with "XR". Given the starting string start and the ending string end, return True if and only if there exists a sequence of moves to transform one string to the other.
