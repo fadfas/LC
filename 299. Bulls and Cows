@@ -1,0 +1,42 @@
+class Solution {
+public:
+    string getHint(string secret, string guess) {
+        int cows=0,bulls=0;
+        int count[10]={0};
+        for(int i=0;i<secret.size();++i){
+            if(secret[i]==guess[i]){
+                ++cows;
+            }else{
+                if(count[secret[i]-'0']<0) //非常巧妙的方法！！！
+                    ++bulls;
+                if(count[guess[i]-'0']>0)
+                    ++bulls;
+                count[secret[i]-'0']++; //别忘了sercet[i]取出来的是char，要减去一个'0'
+                count[guess[i]-'0']--;
+            }
+        }
+
+        return to_string(cows)+"A"+to_string(bulls)+"B";//to_string()函数学习！！！
+    }
+};
+======================================
+At first we naturally come up with 2 pass solution using two int[10] array, right? After knowing this solution, next time we could figure 
+how we can compress these two arrays into one. The answer emerges: by using negative values. I remembered one problem I solved:289 game 
+of life, the top voted solution use a very clever way to store data, not negative values but bit operation. Very different problems but 
+somewhat similar in this respect.
+上面的总结：如何将需要两个数组表示的内容，压缩到一个数组完成？  答：使用正数和负数来表示不同的状态
+
+299. Bulls and Cows
+You are playing the following Bulls and Cows game with your friend: You write down a number and ask your friend to guess what the number is. Each time your friend makes a guess, you provide a hint that indicates how many digits in said guess match your secret number exactly in both digit and position (called "bulls") and how many digits match the secret number but locate in the wrong position (called "cows"). Your friend will use successive guesses and hints to eventually derive the secret number.
+
+Write a function to return a hint according to the secret number and friend's guess, use A to indicate the bulls and B to indicate the cows. 
+
+Please note that both secret number and friend's guess may contain duplicate digits.
+
+Example 1:
+
+Input: secret = "1807", guess = "7810"
+
+Output: "1A3B"
+
+Explanation: 1 bull and 3 cows. The bull is 8, the cows are 0, 1 and 7.
