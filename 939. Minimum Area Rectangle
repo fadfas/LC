@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int minAreaRect(vector<vector<int>>& points) {
+        map<int,set<int>> points_map;
+        for(auto e:points){
+            points_map[e[0]].insert(e[1]);  
+        }
+        int res=INT_MAX;
+        for(auto e1:points){
+            for(auto e2:points){
+                if(e1[0]==e2[0]||e1[1]==e2[1])
+                    continue;
+                if(points_map[e1[0]].count(e2[1])&&points_map[e2[0]].count(e1[1])){
+          //即使points_map中没有e1[0]也没有关系，也可以执行count  //别写成e1[1].count(e2[0]),注意
+                                                        //points_map的前一个维度存的是x坐标
+                    res=min(res,abs(e1[0]-e2[0])*abs(e1[1]-e2[1]));
+                }
+            }
+        }
+        return res==INT_MAX?0:res;//别忘了判断无结果的情况
+    }
+};
+==========================================
+939. Minimum Area Rectangle
+Given a set of points in the xy-plane, determine the minimum area of a rectangle formed from these points, with sides parallel to the x and y axes.
+
+If there isn't any rectangle, return 0.
