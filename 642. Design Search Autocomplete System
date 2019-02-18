@@ -19,6 +19,7 @@ public:
             return a.second > b.second || (a.second == b.second && a.first < b.first);
         };
         priority_queue<pair<string, int>, vector<pair<string, int>>, decltype(cmp) > q(cmp);
+        //也可以不用优先队列，而是用set<pair<string,int>>，然后当输入第二个字符的时候，对之前的set进行再次过滤，从而提高效率
         for (auto f : freq) {
             bool matched = true;
             for (int i = 0; i < data.size(); ++i) {
