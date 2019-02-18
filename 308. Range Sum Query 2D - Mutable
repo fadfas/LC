@@ -1,0 +1,65 @@
+class NumMatrix {
+public:
+    NumMatrix(vector<vector<int>> matrix) {
+        if(matrix.empty()||matrix[0].empty())//短路或的特性
+            return;
+        rows=matrix.size();
+        cols=matrix[0].size();
+        data=vector<vector<int>>(rows,vector<int>(cols,0));
+        bits=vector<vector<int>>(rows+1,vector<int>(cols+1,0));
+        for(int i=0;i<rows;++i){
+            for(int j=0;j<cols;++j){
+                data[i][j]=matrix[i][j];
+                bitsUpdate(i,j,matrix[i][j]);
+            }
+        }
+    }
+    
+    void update(int row, int col, int val) {
+        int diff=val-data[row][col];
+        data[row][col]=val;
+        bitsUpdate(row,col,diff);
+    }
+    
+    int sumRegion(int row1, int col1, int row2, int col2) {
+        return sum(row2,col2)-sum(row2,col1-1)-sum(row1-1,col2)+sum(row1-1,col1-1);
+    }
+private:
+    vector<vector<int>> data;
+    vector<vector<int>> bits;
+    int rows=0;
+    int cols=0;
+    void bitsUpdate(int row,int col,int diff){
+        if(row>rows||col>cols)
+            return;
+        ++row,++col;
+        for(int i=row;i<rows+1;i+=(i&-i)){//注意是+=  
+            for(int j=col;j<cols+1;j+=(j&-j)){
+                bits[i][j]+=diff;
+            }
+        }
+    }
+    int sum(int row,int col){
+        ++row,++col;//别写成++cols，因此变量命名还是要有意义且便于区分，而不是为了短小
+        int res=0;
+        for(int i=row;i>0;i-=(i&-i)){//注意是-=
+            for(int j=col;j>0;j-=(j&-j)){
+                res+=bits[i][j];
+            }
+        }
+        return res;
+    }
+};
+
+/**
+ * Your NumMatrix object will be instantiated and called as such:
+ * NumMatrix obj = new NumMatrix(matrix);
+ * obj.update(row,col,val);
+ * int param_2 = obj.sumRegion(row1,col1,row2,col2);
+ */
+ =============================================
+ 308. Range Sum Query 2D - Mutable
+Given a 2D matrix matrix, find the sum of the elements inside the rectangle defined by its upper left corner (row1, col1) and lower right corner (row2, col2).
+
+Range Sum Query 2D
+The above rectangle (with the red border) is defined by (row1, col1) = (2, 1) and (row2, col2) = (4, 3), which contains sum = 8.
