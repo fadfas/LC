@@ -1,5 +1,5 @@
-class NumArray {
-public:
+class NumArray {//及acc(i+1)代表从nums[0]到num[i]的和，因此，题目中的从i到j的求和，就变成了从acc[i+1]
+public://减去从（0到j-1的和），也就是acc[j]
     NumArray(vector<int> nums) {
         acc.push_back(0);
         for(auto e:nums){
