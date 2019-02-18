@@ -20,6 +20,7 @@ public:
 };
 ==========================================
 原理见：https://www.jianshu.com/p/3bcd521df954
+也可以看LeetCode给出的solution，讲解的比较具体
 753. Cracking the Safe
 There is a box protected by a password. The password is n digits, where each letter can be one of the first k digits 0, 1, ..., k-1.
 
