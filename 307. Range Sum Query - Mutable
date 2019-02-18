@@ -1,0 +1,53 @@
+class NumArray {
+public:
+    NumArray(vector<int> nums) {
+        size=nums.size();
+        bits=vector<int>(size+1,0);
+        for(int i=0;i<size;++i){
+            bitUpdate(i,nums[i]);  //注意此处的i还是从0开始的，但是树状数组要求从一开始
+            data.push_back(nums[i]);//因此在bitUpdate要加上偏移
+        }
+    }
+    
+    void update(int i, int val) {
+        int diff=val-data[i];
+        data[i]=val;
+        bitUpdate(i,diff);
+    }
+    
+    int sumRange(int i, int j) {
+        return sum(j)-sum(i-1);
+    }
+private:
+    vector<int> bits;
+    vector<int> data;
+    int size=0;//要生命在这里，不要声明在构造函数里面，否则别的函数获取不到这个值
+    void bitUpdate(int i,int val){
+        ++i;//加上偏移
+        while(i<size+1){
+            bits[i]+=val;
+            i+=(i&-i);
+        }
+    }
+    int sum(int i){//这一行的i还是原始数组的下标（从0开始）
+        ++i;//加上偏移，此时符合树状数组的规律了
+        int res=0;
+        while(i>0){
+            res+=bits[i];
+            i-=(i&-i);
+        }
+        return res;
+    }
+};
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray obj = new NumArray(nums);
+ * obj.update(i,val);
+ * int param_2 = obj.sumRange(i,j);
+ */
+ =======================================
+ 307. Range Sum Query - Mutable
+Given an integer array nums, find the sum of the elements between indices i and j (i ≤ j), inclusive.
+
+The update(i, val) function modifies nums by updating the element at index i to val.
