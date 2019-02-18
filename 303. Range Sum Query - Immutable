@@ -1,0 +1,31 @@
+class NumArray {
+public:
+    NumArray(vector<int> nums) {
+        acc.push_back(0);
+        for(auto e:nums){
+            acc.push_back(acc.back()+e);//back()函数的使用！！！
+        }
+    }
+    
+    int sumRange(int i, int j) {
+        return acc[j+1]-acc[i];
+    }
+private:
+    vector<int> acc;
+};
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray obj = new NumArray(nums);
+ * int param_1 = obj.sumRange(i,j);
+ */
+ =========================================
+ 303. Range Sum Query - Immutable
+Given an integer array nums, find the sum of the elements between indices i and j (i ≤ j), inclusive.
+
+Example:
+Given nums = [-2, 0, 3, -5, 2, -1]
+
+sumRange(0, 2) -> 1
+sumRange(2, 5) -> -1
+sumRange(0, 5) -> -3
