@@ -1,0 +1,45 @@
+// Forward declaration of the read4 API.
+int read4(char *buf);
+
+class Solution {
+public:
+    /**
+     * @param buf Destination buffer
+     * @param n   Number of characters to read
+     * @return    The number of actual characters read
+     */
+    int read(char *buf, int n) {
+        int i=0;
+        while(i<n){
+            if(i_temp==i_read4){
+                i_temp=0;
+                i_read4=read4(temp);
+                if(i_read4==0) break;
+            }
+            buf[i++]=temp[i_temp++];
+        }
+        return i;  
+    }
+private:
+    char temp[4];
+    int i_temp=0,i_read4=0;
+};
+============================================
+ class test {
+private:
+	 int a = 0;
+public:
+	void p() {
+		cout << a << endl;
+		++a;
+	}
+};
+int main() {
+	test *temp = new test();
+	temp->p();//输出0
+	temp->p();//输出1
+  test().p();//输出0
+  test().p();//输出0
+}
+158. Read N Characters Given Read4 II - Call multiple times
+Given a file and assume that you can only read the file using a given method read4, implement a method read to read n characters. Your method read may be called multiple times.
