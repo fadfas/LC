@@ -1,0 +1,30 @@
+// Forward declaration of the read4 API.
+int read4(char *buf);
+
+class Solution {
+public:
+    /**
+     * @param buf Destination buffer
+     * @param n   Number of characters to read
+     * @return    The number of actual characters read
+     */
+    int read(char *buf, int n) {
+        int res=0;
+        int i=0;
+        char temp[4];//不要写成char* temp[4]
+        while(i<n){
+            int cur=read4(temp);
+            res+=cur;
+            if(cur==0) break;
+            for(int j=0;j<cur&&i<n;++j){
+                buf[i++]=temp[j];
+            }        
+        }
+        return min(res,n);
+    }
+};
+===========================================
+这个博客的答案是错误的：
+http://www.cnblogs.com/grandyang/p/5174322.html
+157. Read N Characters Given Read4
+Given a file and assume that you can only read the file using a given method read4, implement a method to read n characters.
