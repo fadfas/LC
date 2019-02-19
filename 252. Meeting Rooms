@@ -1,0 +1,32 @@
+/**
+ * Definition for an interval.
+ * struct Interval {
+ *     int start;
+ *     int end;
+ *     Interval() : start(0), end(0) {}
+ *     Interval(int s, int e) : start(s), end(e) {}
+ * };
+ */
+class Solution {
+public:
+    bool canAttendMeetings(vector<Interval>& intervals) {
+        if(intervals.empty())
+            return true;
+        //sort(intervals.begin(),intervals.end(),[](Interval& a,Interval& b){return a.start<b.start;});
+        sort(intervals.begin(),intervals.end(),comp);//这两种比较函数都可以
+        for(int i=0;i<intervals.size()-1;++i){
+            if(intervals[i].end>intervals[i+1].start)
+                return false;
+        }
+        return true;
+    }
+private:
+    struct comp{
+        bool operator()(Interval& a,Interval& b){
+            return a.start<b.start;
+        }  
+    } comp;//注意要写上1.comp  2. ;
+};
+========================================
+252. Meeting Rooms
+Given an array of meeting time intervals consisting of start and end times [[s1,e1],[s2,e2],...] (si < ei), determine if a person could attend all meetings.
