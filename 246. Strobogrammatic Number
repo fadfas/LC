@@ -1,0 +1,21 @@
+class Solution {
+public:
+    bool isStrobogrammatic(string num) {
+        unordered_map<char,char> check={{'0','0'},{'1','1'},{'8','8'},{'6','9'},{'9','6'}};
+        for(int i=0;i<=num.size()/2;++i){
+            if(check[num[i]]!=num[num.size()-1-i])  //学习数组对称的两个位置的下标
+                return false;
+        }
+        return true;
+    }
+};
+===========================================
+246. Strobogrammatic Number
+A strobogrammatic number is a number that looks the same when rotated 180 degrees (looked at upside down).
+
+Write a function to determine if a number is strobogrammatic. The number is represented as a string.
+
+Example 1:
+
+Input:  "69"
+Output: true
