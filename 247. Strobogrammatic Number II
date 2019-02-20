@@ -1,0 +1,34 @@
+class Solution {
+public:
+    vector<string> findStrobogrammatic(int n) {
+        return find(n,n);
+    }
+private:
+    vector<string> find(int m,int n){
+        if(m==0)
+            return {""};//注意不能是{}这样没有元素，会导致下面的for循环不运行
+        if(m==1)
+            return {"0","1","8"};//注意这种递归，有两个递归的终止情况，以便应对不同的问题
+        vector<string> res={};
+        vector<string> temp=find(m-2,n);
+        for(auto e:temp){
+            if(m!=n)
+                res.push_back("0"+e+"0");
+            res.push_back("1"+e+"1");
+            res.push_back("6"+e+"9");
+            res.push_back("8"+e+"8");
+            res.push_back("9"+e+"6");
+        }
+        return res;
+    }
+};
+==============================================
+247. Strobogrammatic Number II
+A strobogrammatic number is a number that looks the same when rotated 180 degrees (looked at upside down).
+
+Find all strobogrammatic numbers that are of length = n.
+
+Example:
+
+Input:  n = 2
+Output: ["11","69","88","96"]
