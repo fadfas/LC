@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int strobogrammaticInRange(string low, string high) {
+        int count=0;
+        vector<pair<char,char>> num={{'0', '0'}, {'1', '1'}, {'6', '9'}, {'8', '8'}, {'9', '6'}};
+        for(int i=low.size();i<=high.size();++i){
+            string str(i,'0');//学习这种string的初始化方法
+            dfs(low,high,str,0,str.size()-1,count,num);
+        }
+        return count;
+    }
+private:
+    void dfs(string low,string high,string &str,int l,int r,int& count,vector<pair<char,char>> &num){
+        if(l>r){
+            if((str.size()==low.size()&&str.compare(low)<0)||(str.size()==high.size()&&str.compare(high)>0)) return;
+            ++count;//学习string的compare用法，如果用stoi转换成int的话，注意是否超出int的范围
+            return;
+        }
+        
+        for(auto e:num){
+            str[l]=e.first;
+            str[r]=e.second;
+            if(str.size()!=1&&str[0]=='0') continue;
+            if(l==r&&(e.first=='6'||e.first=='9')) continue;
+            dfs(low,high,str,l+1,r-1,count,num);
+        }
+    }
+};
+================================================
+248. Strobogrammatic Number III
+A strobogrammatic number is a number that looks the same when rotated 180 degrees (looked at upside down).
+
+Write a function to count the total strobogrammatic numbers that exist in the range of low <= num <= high.
+
+Example:
+
+Input: low = "50", high = "100"
+Output: 3 
+Explanation: 69, 88, and 96 are three strobogrammatic numbers.
