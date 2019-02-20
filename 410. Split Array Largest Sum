@@ -1,0 +1,47 @@
+class Solution {
+public:
+    int splitArray(vector<int>& nums, int m) {
+        int size=nums.size();
+        long long sum[size+1]={0};
+        for(int i=1;i<size+1;++i){
+            sum[i]=sum[i-1]+nums[i-1];
+        }
+        long long dp[size]={0};
+        for(int i=0;i<size;++i){
+            dp[i]=sum[size]-sum[i];
+        }
+        for(int s=1;s<m;++s){
+            for(int i=0;i<size-s;++i){
+                long long res=LLONG_MAX;
+                for(int j=i+1;j<=size-s;++j){
+                    long long temp=max(dp[j],sum[j]-sum[i]);
+                    res=min(res,temp);
+                }
+                dp[i]=res;
+            }
+        }
+        return dp[0];
+    }
+};
+===============================================
+410. Split Array Largest Sum
+Given an array which consists of non-negative integers and an integer m, you can split the array into m non-empty continuous subarrays. Write an algorithm to minimize the largest sum among these m subarrays.
+
+Note:
+If n is the length of array, assume the following constraints are satisfied:
+
+1 ≤ n ≤ 1000
+1 ≤ m ≤ min(50, n)
+Examples:
+
+Input:
+nums = [7,2,5,10,8]
+m = 2
+
+Output:
+18
+
+Explanation:
+There are four ways to split nums into two subarrays.
+The best way is to split it into [7,2,5] and [10,8],
+where the largest sum among the two subarrays is only 18.
