@@ -1,0 +1,99 @@
+class Solution {
+public:
+	vector<int> hitBricks(vector<vector<int>>& grid, vector<vector<int>>& hits) {
+		int m = grid.size();
+		int n = m>0 ? grid[0].size() : 0;
+		if (!m || !n)
+			return {};
+		for (auto hit : hits) {
+            if(grid[hit[0]][hit[1]]==1) //别忘了判断一下，被击打的砖块得存在才行
+			    grid[hit[0]][hit[1]] = 2;
+		}
+		init(m, n);
+		for (int i = 0; i<m; ++i) {
+			for (int j = 0; j<n; ++j) {
+				if (grid[i][j] == 1) {
+					unionAround(i, j, grid);
+				}
+			}
+		}
+		int afterSize = size[find(0)];//不可以直接写size[0]
+		vector<int> res(hits.size(), 0);
+		for (int i = hits.size() - 1; i >= 0; --i) {
+            if(grid[hits[i][0]][hits[i][1]] == 2){
+                unionAround(hits[i][0], hits[i][1], grid);
+                grid[hits[i][0]][hits[i][1]] = 1;
+            }
+            int preSize = size[find(0)];
+            res[i] = (preSize - afterSize)>0?preSize - afterSize-1:0;
+            //若添加的砖块并不和顶部连通，则会出现preSize-afterSize-1<0，因为preSize和afterSize
+            //计算的都是和顶部连通的砖块数
+            afterSize = preSize;
+            
+		}
+		return res;
+
+	}
+
+private:
+	vector<int> index;
+	vector<int> size;
+	void init(int m, int n) {
+		index = vector<int>(m*n + 1, 0);
+		size = vector<int>(m*n + 1, 1);//其实size[0]应该初始化为0，但是也无所谓
+		for (int i = 0; i<index.size(); ++i) {//在计算preSize-afterSize时会抵消掉
+			index[i] = i;
+		}
+	}
+	int find(int i) {
+		while (index[i] != i) {
+			index[i] = index[index[i]];
+			i = index[i];
+		}
+		return i;
+	}
+	void uni(int i, int j) {
+		int rootA = find(i);
+		int rootB = find(j);
+		if (rootA != rootB) {
+			index[rootB] = rootA;
+			size[rootA] += size[rootB];
+		}
+	}
+	void unionAround(int x, int y, vector<vector<int>>& grid) {
+		int dx[] = { 0,0,-1,1 };
+		int dy[] = { 1,-1,0,0 };
+		int m = grid.size();
+		int n = grid[0].size();
+		for (int i = 0; i<4; ++i) {
+			int nextX = x + dx[i];
+			int nextY = y + dy[i];
+			if (nextX >= m || nextX<0 || nextY >= n || nextY<0) {
+				continue;
+			}
+            if(grid[nextX][nextY]==1)  //得判断周围的砖块是否存在
+			    uni(x*n + y + 1, nextX*n + nextY + 1);
+		}
+        if(x==0){
+            uni(y+1,0);
+        }
+	}
+
+};
+==================================================
+参考链接：https://leetcode.com/problems/bricks-falling-when-hit/discuss/193781/UnionFind
+803. Bricks Falling When Hit
+We have a grid of 1s and 0s; the 1s in a cell represent bricks.  A brick will not drop if and only if it is directly connected to the top of the grid, or at least one of its (4-way) adjacent bricks will not drop.
+
+We will do some erasures sequentially. Each time we want to do the erasure at the location (i, j), the brick (if it exists) on that location will disappear, and then some other bricks may drop because of that erasure.
+
+Return an array representing the number of bricks that will drop after each erasure in sequence.
+
+Example 1:
+Input: 
+grid = [[1,0,0,0],[1,1,1,0]]
+hits = [[1,0]]
+Output: [2]
+Explanation: 
+If we erase the brick at (1, 0), the brick at (1, 1) and (1, 2) will drop. So we should return 2.
+
