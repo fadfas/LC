@@ -1,0 +1,62 @@
+class Solution {
+public:
+	bool circularArrayLoop(vector<int>& nums) {
+		int n = nums.size();
+		if (n<2)
+			return false;
+		for (int i = 0; i<n; ++i) {
+			nums[i] %= n;
+		}
+		for (int i = 0; i<n; ++i) {
+			if (nums[i] == 0) continue;
+			int slow = i, fast = get_index(nums, i);
+			int sgn = nums[i]>0 ? 1 : -1;
+			while (sgn*nums[fast]>0 && sgn*nums[get_index(nums,fast)]>0) {//既防止反向，又防止遇到0
+				if (slow == fast) {//为何不能只用一个指针，然后和i比较？见底部实例，虽然从0开始，但是循环是135781，不包括0
+					if (slow == get_index(nums, slow)) break;
+					return true;
+				}
+				slow = get_index(nums, slow);
+				fast = get_index(nums, get_index(nums, fast));
+				//快慢指针每次循环，是各个指针前进各自当前状态的两次，而不是慢指针前进一
+				//然后快指针前进当前的慢指针的一步
+			}
+			slow = i;
+			while (sgn*nums[slow]>0) {
+				int temp = get_index(nums, slow);
+				nums[slow] = 0;
+				slow = temp;
+			}
+		}
+		return false;
+	}
+private:
+	int get_index(vector<int>& nums, int i) {
+		int N = nums.size();
+		return (nums[i] + i + N) % N;//若nums[i]为负数，则后退这些步，最终的下标计算方法是这样的
+	}
+};
+=============================================
+  0 1 2 3 4 5 6 7 8 <--下标 
+  1 2 3 2 1 2 3 2 1
+ 
+ 以下为上面程序中快慢指针初始化的方式（slow=i,fast=get_index(nums,i)）
+ s 0 1 3 5 7 8 1 3   
+ f 1 5 8 3 7       （每次走两次的快慢指针）
+ f 1 7 3 8 5 1 7 3 (每次走三次的快慢指针）
+ 以下为快慢指针初始化都为i的方式
+ s 0 1 3 5 7 8 1
+ f 0 3 7 1 5 8 3 7
+ 
+ 可见两种初始化方式都是正确的，当s==f的时候，也就是存在环的时候
+
+457. Circular Array Loop
+You are given a circular array nums of positive and negative integers. If a number k at an index is positive, then move forward k steps. Conversely, if it's negative (-k), move backward k steps. Since the array is circular, you may assume that the last element's next element is the first element, and the first element's previous element is the last element.
+
+Determine if there is a loop (or a cycle) in nums. A cycle must start and end at the same index and the cycle's length > 1. Furthermore, movements in a cycle must all follow a single direction. In other words, a cycle must not consist of both forward and backward movements.
+
+Example 1:
+
+Input: [2,-1,1,2,2]
+Output: true
+Explanation: There is a cycle, from index 0 -> 2 -> 3 -> 0. The cycle's length is 3.
