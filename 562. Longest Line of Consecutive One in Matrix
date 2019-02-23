@@ -1,0 +1,48 @@
+class Solution {
+public:
+	int longestLine(vector<vector<int>>& M) {
+		int rows = M.size();
+		if (rows == 0) return 0;
+		int cols = M[0].size();
+		if (cols == 0) return 0;
+		vector<int> col(cols, 0);
+		vector<int> diag(rows + cols, 0);
+		vector<int> antiD(rows + cols, 0);
+		int res = 0;
+		for (int i = 0; i<rows; ++i) {
+			int row = 0;
+			for (int j = 0; j<cols; ++j) {
+				if (M[i][j] == 0) {
+					row = 0;//这行不能省略
+					col[j] = 0;//这行不能省略
+					diag[i + j] = 0;//这行不能省略
+					antiD[j - i + rows] = 0;//这行不能省略 不能认为col diag antiD初始值为0，就可以跳过了
+					continue;
+				}
+				//对于cols,diag,row,antiD中的每一个位置，确实是记录的【以i,j为结尾的最大值】
+				//但是题目要求是矩阵中的任一位置的最大值，而不是以右下角结尾的最大值
+				//那么此算法还是正确的吗？ 是的，因为在计算过程中，对每一个值，都保留了
+				//了max最大值
+				++row;
+				++col[j];
+				++diag[i + j];
+				++antiD[j - i + rows];//因为减去了i，为了防止出现负数，加上i的取值范围的最大值
+				res = max(res, row);
+				res = max(res, col[j]);
+				res = max(res, diag[i + j]);
+				res = max(res, antiD[j - i + rows]);
+				//学习如何将在同一条对角线或反对角线的坐标，映射到各自的一维数组中
+			}
+		}
+		return res;
+	}
+};
+====================================================
+562. Longest Line of Consecutive One in Matrix
+Given a 01 matrix M, find the longest line of consecutive one in the matrix. The line could be horizontal, vertical, diagonal or anti-diagonal.
+Example:
+Input:
+[[0,1,1,0],
+ [0,1,1,0],
+ [0,0,0,1]]
+Output: 3
