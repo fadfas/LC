@@ -1,0 +1,40 @@
+class Solution {
+public:
+	int expressiveWords(string S, vector<string>& words) {
+		int count = 0;
+		for (auto e : words) {
+			if (check(S, e)) {
+				++count;
+			}
+		}
+		return count;
+	}
+
+	bool check(string S, string W) {
+		int n = S.size(), m = W.size(), i = 0, j = 0;
+		for (int i2 = 0, j2 = 0; i < n && j < m; i = i2, j = j2) {
+			if (S[i] != W[j]) return false;
+			while (i2 < n && S[i2] == S[i]) i2++;
+			while (j2 < m && W[j2] == W[j]) j2++;
+			//if (i2 - i != j2 - j && i2 - i < max(3, j2 - j)) return false;  这种写法应该有错
+			if ((i2 - i != j2 - j && i2 - i<3) || (i2 - i >= 3 && j2 - j>i2 - i)) return false;
+            //分两种情况： 1:S中重复的字符数量小于3，但是w中重复的数量却不等于S重复数，则失败
+            //2. S中重复的数量大于等于3，而w中重复的数量却比S大，则失败
+            //类似的情况用笔写一写，分情况讨论，比干想容易多了
+		}
+		return i == n && j == m;//双指针/（多指针）的一种模式，最终要判断指针是不是都停在末端
+	}
+};
+=============================================
+809. Expressive Words
+英文原题有点儿难以理解：
+也就是目标字符串S,和另一个待扩充的字符串w
+当S中连续重复的字符数小于3的时候，w中重复的字符数量必须相等；
+Example:
+Input: 
+S = "heeellooo"
+words = ["hello", "hi", "helo"]
+Output: 1
+Explanation: 
+We can extend "e" and "o" in the word "hello" to get "heeellooo".
+We can't extend "helo" to get "heeellooo" because the group "ll" is not extended.
