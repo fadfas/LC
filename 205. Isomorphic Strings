@@ -1,0 +1,29 @@
+class Solution {
+public:
+    bool isIsomorphic(string s, string t) {
+        int m1[256]={0},m2[256]={0};//还是要初始化一下的，要不有错
+        for(int i=0;i<s.size();++i){
+            if(m1[s[i]]!=m2[t[i]]) return false;
+            m1[s[i]]=i+1;//为何要i+1  为了防止假设第一个位置两个字符串都是同一个字母，假设为e，然后第二个位置
+            m2[t[i]]=i+1;//s字符串为e，t字符串则为f，但是此时会误认为e是第一次出现，之前并没有映射
+            //（但是之前已经确定映射为他自己了)
+        }
+        return true;
+    }
+};
+================================================
+205. Isomorphic Strings
+Given two strings s and t, determine if they are isomorphic.
+
+Two strings are isomorphic if the characters in s can be replaced to get t.
+
+All occurrences of a character must be replaced with another character while preserving the order of characters. No two characters may map to the same character but a character may map to itself.
+
+Example 1:
+
+Input: s = "egg", t = "add"
+Output: true
+Example 2:
+
+Input: s = "foo", t = "bar"
+Output: false
