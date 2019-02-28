@@ -1,0 +1,75 @@
+class ExamRoom {
+public:
+    ExamRoom(int N) {
+        n=N;//这个别忘了，另外其他的函数用不了N，所以需要自己生命一个变量
+    }
+    
+    int seat() {
+        if(loc.empty()){
+            loc.insert(0);
+            return 0;
+        }
+        int dist=0,res=0;
+        if(loc.find(0)==loc.end()){
+            dist=*loc.begin()-0;
+            res=0;
+        }
+        auto start=loc.begin(),end=loc.end();
+        int pre=0;
+        while(start!=end){
+            int temp=(*start-pre)/2;
+            if(temp>dist){
+                res=(*start+pre)/2;
+                dist=temp;
+            }
+            pre=*start;
+            ++start;
+        }
+        if(loc.find(n-1)==loc.end()){
+            auto pLast=--loc.end();
+            int temp=n-1-*pLast;
+            if(temp>dist){
+                dist=temp;
+                res=n-1;
+            }
+        }
+        loc.insert(res);
+        return res;
+    }
+    
+    void leave(int p) {
+        loc.erase(loc.find(p));
+    }
+private:
+    set<int> loc;
+    int n;
+};
+
+/**
+ * Your ExamRoom object will be instantiated and called as such:
+ * ExamRoom obj = new ExamRoom(N);
+ * int param_1 = obj.seat();
+ * obj.leave(p);
+ */
+ ===============================================
+ 855. Exam Room
+In an exam room, there are N seats in a single row, numbered 0, 1, 2, ..., N-1.
+
+When a student enters the room, they must sit in the seat that maximizes the distance to the closest person.  If there are multiple such seats, they sit in the seat with the lowest number.  (Also, if no one is in the room, then the student sits at seat number 0.)
+
+Return a class ExamRoom(int N) that exposes two functions: ExamRoom.seat() returning an int representing what seat the student sat in, and ExamRoom.leave(int p) representing that the student in seat number p now leaves the room.  It is guaranteed that any calls to ExamRoom.leave(p) have a student sitting in seat p.
+
+ 
+
+Example 1:
+
+Input: ["ExamRoom","seat","seat","seat","seat","leave","seat"], [[10],[],[],[],[],[4],[]]
+Output: [null,0,9,4,2,null,5]
+Explanation:
+ExamRoom(10) -> null
+seat() -> 0, no one is in the room, then the student sits at seat number 0.
+seat() -> 9, the student sits at the last seat number 9.
+seat() -> 4, the student sits at the last seat number 4.
+seat() -> 2, the student sits at the last seat number 2.
+leave(4) -> null
+seat() -> 5, the student sits at the last seat number 5.
