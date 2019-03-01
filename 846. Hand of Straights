@@ -1,0 +1,56 @@
+class Solution {//这个方法更高效一点
+public:
+    bool isNStraightHand(vector<int>& hand, int W) {
+        map<int,int> count;
+        for(int e:hand){
+            count[e]++;
+        }
+        for(auto e:count){
+            if(e.second>0){
+                /*for(int i=0;i<W;++i){这样是错误的，因为第一次循环就是count[e.first]为0，从而后面的都不会被减掉
+                    count[e.first+i]-=count[e.first];
+                    if(count[e.first+i]<0)
+                        return false;
+                }*/
+                for(int i=W-1;i>=0;--i){
+                    count[e.first+i]-=count[e.first];
+                    if(count[e.first+i]<0)
+                        return false;
+                }
+            }
+        }
+        return true;
+    }
+};
+
+class Solution {
+public:
+    bool isNStraightHand(vector<int>& hand, int W) {
+        map<int,int> count;
+        for(int e:hand){
+            count[e]++;
+        }
+        while(!count.empty()){
+            int start=(*count.begin()).first;
+            for(int i=0;i<W;++i){
+                if(count[start]>0){
+                    --count[start];
+                    if(count[start]==0){
+                        count.erase(count.find(start));//务必要erase，否则下一轮start还是有可能会获取到当前这个值
+                    }
+                    ++start;
+                }else{
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+};
+=================================================
+846. Hand of Straights
+Alice has a hand of cards, given as an array of integers.
+
+Now she wants to rearrange the cards into groups so that each group is size W, and consists of W consecutive cards.
+
+Return true if and only if she can.
