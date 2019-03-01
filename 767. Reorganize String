@@ -1,0 +1,70 @@
+class Solution {
+public:
+    string reorganizeString(string S) {
+        vector<int> count(26,0);
+        for(auto e:S){
+            count[e-'a']+=100;//学习这种讲两种信息编码进一个数字的方法，因为关于是那个字母的信息最多需要两位
+        }//因此出现次数则通过百位及以上来存储
+        for(int i=0;i<26;++i){
+            count[i]+=i;
+        }
+        sort(count.rbegin(),count.rend());//学习降序排列vector的方法！！以及反响迭代器的使用
+        int idx=0;
+        for(auto e:count){
+            int times=e/100;
+            if(times>(S.size()+1)/2) return "";//注意是S.size()+1 再除以2
+            char c='a'+e%100;
+            for(int i=0;i<times;++i){
+                if(idx>=S.size()) idx=1;
+                S[idx]=c;
+                idx+=2;
+            }
+        }
+        return S;
+    }
+};
+
+class Solution {
+public:
+    string reorganizeString(string S) {
+        string res="";
+        unordered_map<char,int> mp;
+        priority_queue<pair<int,char>> pq;
+        for(auto e:S){
+            mp[e]++;
+        }
+        for(auto &e:mp){
+            if(e.second>(S.size()+1)/2) return res;//注意这里size要+1，再除以2
+            pq.push({e.second,e.first});
+        }
+        while(pq.size()>=2){
+            auto a=pq.top();pq.pop();
+            auto b=pq.top();pq.pop();
+            res.push_back(a.second);
+            res.push_back(b.second);
+            if(--a.first>0) pq.push(a);//对于pair中某一个元素--后，其值也确实更新了
+            if(--b.first>0) pq.push(b);
+        }
+        while(!pq.empty()){
+            res.push_back(pq.top().second);
+            pq.pop();
+        }
+        return res;
+        
+    }
+};
+============================================
+参考：http://www.cnblogs.com/grandyang/p/8799483.html
+767. Reorganize String
+Given a string S, check if the letters can be rearranged so that two characters that are adjacent to each other are not the same.
+
+If possible, output any possible result.  If not possible, return the empty string.
+
+Example 1:
+
+Input: S = "aab"
+Output: "aba"
+Example 2:
+
+Input: S = "aaab"
+Output: ""
