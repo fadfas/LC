@@ -1,0 +1,98 @@
+class Solution {
+public:
+	int numDistinctIslands(vector<vector<int>>& grid) {
+		int m = grid.size();
+		if (!m) return 0;
+		int n = grid[0].size();
+		if (!n) return 0;
+
+		unordered_set<string> res;
+		for (int i = 0; i < m; ++i) {
+			for (int j = 0; j < n; ++j) {
+				if (grid[i][j] != 1) continue;
+				string temp = "";
+				queue<pair<int, int>> toVisit;
+				toVisit.push({ i,j });
+				grid[i][j] *= -1;//如果可以更改输入数据，学习这种标记为负数来表示已经访问过的思想,注意是*=
+				while (!toVisit.empty()) {
+					auto e = toVisit.front();
+					toVisit.pop();
+					int x = e.first;
+					int y = e.second;
+					temp += (to_string(x - i) + "-" + to_string(y - j) + "-");
+					//grid[x][y] *= -1;不是在这里标记已访问
+					for (int i = 0; i < 4; ++i) {
+						int newX = x + dx[i];
+						int newY = y + dy[i];
+						if (newX < 0 || newY < 0 || newX >= m || newY >= n || grid[newX][newY] != 1) continue;
+						toVisit.push({ newX,newY });
+						grid[newX][newY] *= -1;//对于BFS，是在添加到待访问队列后，就标记词典为已访问，而不是在处理完此点
+                        //后，才标记为已访问
+					}
+				}
+				if (temp != "")
+					res.insert(temp);
+			}
+		}
+		return res.size();
+	}
+private:
+	int dx[4] = { 0,0,-1,1 };
+	int dy[4] = { 1,-1,0,0 };
+};
+
+class Solution {
+public:
+    int numDistinctIslands(vector<vector<int>>& grid) {
+        m=grid.size();
+        if(!m){
+            return 0;
+        }
+        n=grid[0].size();
+        if(!n){
+            return 0;
+        }
+        vector<vector<int>> visited(m,vector<int>(n,0));
+        unordered_set<string> res;
+        for(int i=0;i<m;++i){
+            for(int j=0;j<n;++j){
+                string temp="";
+                dfs(grid,i,j,i,j,visited,temp);
+                if(temp!="")//注意排除掉temp为空的情况
+                    res.insert(temp);
+            }
+        }
+        return res.size();
+        
+    }
+private:
+    int n=0,m=0;
+    int dx[4]={0,0,-1,1};
+    int dy[4]={1,-1,0,0};
+    void dfs(vector<vector<int>>& grid,int x0,int y0,int x,int y,vector<vector<int>>& visited,string& temp){
+        if(x<0||y<0||x>=m||y>=n||visited[x][y]||grid[x][y]==0) return;
+        visited[x][y]=1;
+        temp+=(to_string(x-x0)+"-"+to_string(y-y0)+"-");
+        for(int i=0;i<4;++i){
+            dfs(grid,x0,y0,x+dx[i],y+dy[i],visited,temp);
+        }
+    }
+};
+================================================
+694. Number of Distinct Islands
+Given a non-empty 2D array grid of 0's and 1's, an island is a group of 1's (representing land) connected 4-directionally (horizontal or vertical.) You may assume all four edges of the grid are surrounded by water.
+
+Count the number of distinct islands. An island is considered to be the same as another if and only if one island can be translated (and not rotated or reflected) to equal the other.
+
+Example 1:
+11000
+11000
+00011
+00011
+Given the above grid map, return 1.
+Example 2:
+11011
+10000
+00001
+11011
+Given the above grid map, return 3.
