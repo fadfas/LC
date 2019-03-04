@@ -1,0 +1,55 @@
+class Solution {
+public:
+    double knightProbability(int N, int K, int r, int c) {
+        vector<vector<double>> dp(N,vector<double>(N,1.0));
+        for(int l=1;l<=K;++l){
+            vector<vector<double>> temp(N,vector<double>(N,0.0));
+            for(int i=0;i<N;++i){
+                for(int j=0;j<N;++j){
+                    for(auto e:dirs){
+                        int x=i+e[0];
+                        int y=j+e[1];
+                        if(x<0||y<0||x>=N||y>=N) continue;
+                        temp[i][j]+=dp[x][y];
+                    }
+                }
+            }
+            dp=temp;
+        }
+        return dp[r][c]/pow(8,K);
+    }
+private:
+    vector<vector<int>> dirs{{-1,-2},{-2,-1},{-2,1},{-1,2},{1,2},{2,1},{2,-1},{1,-2}};
+};
+
+class Solution {
+public:
+    double knightProbability(int N, int K, int r, int c) {
+        vector<vector<vector<double>>> dp(K+1,vector<vector<double>>(N,vector<double>(N,0.0)));//学习这种三维的vector的生成
+        //另外这个地方是k+1维的，为的是方便直接使用，实际上第0层并没有用，学习这种方法！！
+        return core(dp,K,K,r,c,N)/pow(8,K);
+    }
+private:
+    vector<vector<int>> dirs{{-1,-2},{-2,-1},{-2,1},{-1,2},{1,2},{2,1},{2,-1},{1,-2}};
+    double core(vector<vector<vector<double>>>& dp,int K,int k,int r,int c,int N){
+        if(k==0) return 1;//有事对于动态规划问题，初始状态的值可能只能透过实际意义来帮助确定。例如此题，从其他坐标，
+        //跳一次，跳到(x,y)，一共有多少种情形。因此只要不越界的话，那么必然是8种情况。因此确定初始值为1
+        if(dp[k][r][c]!=0.0)
+            return dp[k][r][c];
+        for(auto e:dirs){
+            int x=r+e[0];
+            int y=c+e[1];
+            if(x<0||y<0||x>=N||y>=N) continue;
+            dp[k][r][c]+=core(dp,K,k-1,x,y,N);
+        }
+        return dp[k][r][c];
+    }
+};
+============================================
+688. Knight Probability in Chessboard
+On an NxN chessboard, a knight starts at the r-th row and c-th column and attempts to make exactly K moves. The rows and columns are 0 indexed, so the top-left square is (0, 0), and the bottom-right square is (N-1, N-1).
+
+A chess knight has 8 possible moves it can make, as illustrated below. Each move is two squares in a cardinal direction, then one square in an orthogonal direction.
+Each time the knight is to move, it chooses one of eight possible moves uniformly at random (even if the piece would go off the chessboard) and moves there.
+
+The knight continues moving until it has made exactly K moves or has moved off the chessboard. Return the probability that the knight remains on the board after it has stopped moving.
