@@ -15,7 +15,12 @@ public:
         if(root->val==sum&&!root->left&&!root->right){
             return true;
         }
-        return hasPathSum(root->left,sum-root->val)||hasPathSum(root->right,sum-root->val);
+        bool has=false;
+        has=hasPathSum(root->left,sum-root->val);
+        if(!has){
+            has=hasPathSum(root->right,sum-root->val);
+        }
+        return has;
     }
 };
 ==========================================
