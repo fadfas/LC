@@ -1,0 +1,56 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if(!head)
+            return nullptr;
+        ListNode* pNewHead=nullptr;
+        reverseList(head,pNewHead);
+        return pNewHead;
+    }
+private:
+    void reverseList(ListNode* pNode,ListNode*& pNewHead){
+        if(!pNode->next){
+            pNewHead=pNode;
+            return;
+        }
+        reverseList(pNode->next,pNewHead);
+        pNode->next->next=pNode;   
+        pNode->next=nullptr;//如果没有这句话，那么当处理到最后的一个节点后，就会形成一个环，OJ检测的时候无法终止
+    }
+};
+
+ListNode* ReverseList(ListNode* pHead) {
+	ListNode* pReverseListHead = nullptr;
+	ListNode* pNode = pHead;
+	ListNode* pPrevNode = nullptr;
+
+	while (pNode!= nullptr) {
+		
+		ListNode* pNext = pNode->next;
+		if (pNext == nullptr) {
+			pReverseListHead = pNode;
+		}
+		pNode->next = pPrevNode;
+		pPrevNode = pNode;
+		pNode = pNext;
+		
+	}
+
+	return pReverseListHead;
+}
+=====================================
+206. Reverse Linked List
+Reverse a singly linked list.
+
+Example:
+
+Input: 1->2->3->4->5->NULL
+Output: 5->4->3->2->1->NULL
