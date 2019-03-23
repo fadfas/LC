@@ -1,0 +1,51 @@
+class Solution {
+public:
+    string fractionToDecimal(int numerator, int denominator) {
+        if(denominator==0){
+            return "";
+        }
+        unordered_map<long long,int> mp;
+        int nSign=numerator>0?1:-1;
+        int dSign=denominator>0?1:-1;
+        long long num=abs((long long)numerator);//若numerator为-2147483648，则绝对值会后会溢出，另外abs前就要转换
+        long long de=abs((long long) denominator);
+        long long first=num/de;
+        long long rem=num%denominator;
+        string res=to_string(first);
+        if((nSign*dSign<0)&&(first>0||rem>0)){
+            res='-'+res;
+        }
+        if(rem==0)
+            return res;
+        res+=".";
+        string second="";
+        int pos=0;
+        while(rem!=0){
+            if(mp.find(rem)!=mp.end()){
+                second.insert(mp[rem],"(");//学习insert的用法，其插入位置代表放在loc之前
+                second+=")";//字符串连接还有上面的插入，最好都用""双引号吧，要不insert这个函数会报错
+                return res+second;
+            }
+            mp[rem]=pos;
+            ++pos;
+            second+=to_string((rem*10)/de);
+            rem=(rem*10)%de;
+        }
+        return res+second;
+    }
+};
+=============================================
+166. Fraction to Recurring Decimal
+Given two integers representing the numerator and denominator of a fraction, return the fraction in string format.
+
+If the fractional part is repeating, enclose the repeating part in parentheses.
+
+Example 1:
+Input: numerator = 1, denominator = 2
+Output: "0.5"
+Example 2:
+Input: numerator = 2, denominator = 1
+Output: "2"
+Example 3:
+Input: numerator = 2, denominator = 3
+Output: "0.(6)"
