@@ -1,0 +1,39 @@
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        int left=0,right=s.size()-1;
+        while(left<right){
+            if(!isNumChar(s[left])){
+                ++left;
+            }else if(!isNumChar(s[right])){
+                --right;
+            }else if((s[left]-'a'+32)%32!=(s[right]-'a'+32)%32){//加32，为的是让大写字母转换成小写字母；如果本来就是小写字母，再
+                return false;//加32也不会影响数值结果
+            }else{
+                ++left,--right;
+            }
+        }
+        return true;
+    }
+private:
+    bool isNumChar(char c){
+        if(c>='a'&&c<='z') return true;
+        if(c>='A'&&c<='Z') return true;
+        if(c>='0'&&c<='9') return true;
+        return false;
+    }
+};
+========================================
+125. Valid Palindrome
+Given a string, determine if it is a palindrome, considering only alphanumeric characters and ignoring cases.
+
+Note: For the purpose of this problem, we define empty string as valid palindrome.
+
+Example 1:
+
+Input: "A man, a plan, a canal: Panama"
+Output: true
+Example 2:
+
+Input: "race a car"
+Output: false
