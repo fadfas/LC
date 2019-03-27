@@ -1,0 +1,38 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        ListNode* pSlow=head,*pFast=head;
+        while(pFast&&pFast->next){
+            pSlow=pSlow->next;
+            pFast=pFast->next->next;
+            if(pSlow==pFast)
+                break;
+        }
+        if(!pFast||!pFast->next){//只要有用到->next，就要判断是不是pFast为空指针（比如为空链表的情况）
+            return nullptr;
+        }
+        pSlow=head;
+        while(pSlow!=pFast){
+            pSlow=pSlow->next;
+            pFast=pFast->next;
+        }
+        return pSlow;
+    }
+};
+=======================================
+参考链接：http://www.cnblogs.com/hiddenfox/p/3408931.html
+第一次相遇时slow走过的距离：a+b，fast走过的距离：a+b+c+b。
+因为fast的速度是slow的两倍，所以fast走的距离是slow的两倍，有 2(a+b) = a+b+c+b，可以得到a=c
+
+为什么有环的情况下二者一定会相遇呢？因为fast先进入环，在slow进入之后，如果把slow看作在前面，fast在后面每次循环都向slow靠近1，所以一定会相遇，而不会出现fast直接跳过slow的情况。
+
+142. Linked List Cycle II
+就是判断一个链表是否有环，有的话，找到环的入口节点
