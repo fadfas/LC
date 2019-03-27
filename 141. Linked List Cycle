@@ -1,0 +1,24 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        ListNode* pSlow=head,*pFast=head;
+        while(pFast&&pFast->next){//第一个pFast用于保证第二个pFast->next不会异常，第二个pFast->next用于保障循环中的
+            pSlow=pSlow->next;//pFast->next->next不会异常
+            pFast=pFast->next->next;
+            if(pSlow==pFast)
+                return true;
+        }
+        return false;
+    }
+};
+=====================================
+141. Linked List Cycle
+就是判断一个链表中是否有环，原英文题目似乎写的有错
