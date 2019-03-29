@@ -1,0 +1,49 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* sortList(ListNode* head) {
+        if(!head||!head->next)
+            return head;
+        ListNode* pPre=nullptr,*pSlow=head,*pFast=head;
+        while(pFast&&pFast->next){//学习怎样找一个链表的中点并拆分！！！
+            pPre=pSlow;
+            pSlow=pSlow->next;
+            pFast=pFast->next->next;
+        }
+        pPre->next=nullptr;
+        return merge(sortList(head),sortList(pSlow));//注意这个地方还要调用sortList自己进行递归
+    }
+private:
+    ListNode* merge(ListNode* p1,ListNode* p2){
+        if(!p1)
+            return p2;
+        if(!p2)
+            return p1;
+        if(p1->val>p2->val){
+            p2->next=merge(p1,p2->next);
+            return p2;
+        }else{
+            p1->next=merge(p1->next,p2);
+            return p1;
+        }
+    }
+};
+===============================================
+148. Sort List
+Sort a linked list in O(n log n) time using constant space complexity.
+
+Example 1:
+
+Input: 4->2->1->3
+Output: 1->2->3->4
+Example 2:
+
+Input: -1->5->3->4->0
+Output: -1->0->3->4->5
