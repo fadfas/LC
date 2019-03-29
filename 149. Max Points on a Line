@@ -1,0 +1,56 @@
+/**
+ * Definition for a point.
+ * struct Point {
+ *     int x;
+ *     int y;
+ *     Point() : x(0), y(0) {}
+ *     Point(int a, int b) : x(a), y(b) {}
+ * };
+ */
+class Solution {
+public:
+    int maxPoints(vector<Point>& points) {
+        if(points.empty())
+            return 0;
+        int res=1;
+        for(int i=0;i<points.size();++i){
+            map<pair<int,int>,int> mp;
+            int duplicates=1;//初始值为一！！！！
+            for(int j=i+1;j<points.size();++j){//学习如何遍历集合中任意两个元素对 注意j=i+1开始
+                if(points[i].x==points[j].x&&points[i].y==points[j].y){//学习struct对象如何取成员变量
+                    ++duplicates;
+                    continue;
+                }
+                int dx=points[i].x-points[j].x;
+                int dy=points[i].y-points[j].y;
+                int dom=gcd(dx,dy);
+                ++mp[{dx/dom,dy/dom}];//为什么不算斜率？因为相除后double类型不精确问题！！！
+            }
+            res=max(res,duplicates);//用于当只有两个点，并且重合的情况下计算正确的结果（此时mp没有元素）
+            for(auto it=mp.begin();it!=mp.end();++it){
+                res=max(res,it->second+duplicates);
+            }
+        }
+        return res;
+    }
+private:
+    int gcd(int a,int b){
+        return b==0?a:gcd(b,a%b);
+    }
+};
+=============================================
+149. Max Points on a Line
+Given n points on a 2D plane, find the maximum number of points that lie on the same straight line.
+
+Example 1:
+
+Input: [[1,1],[2,2],[3,3]]
+Output: 3
+Explanation:
+^
+|
+|        o
+|     o
+|  o  
++------------->
+0  1  2  3  4
