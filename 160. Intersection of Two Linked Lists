@@ -1,0 +1,45 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        if(!headA||!headB)
+            return nullptr;
+        ListNode* pCurA=headA,*pCurB=headB;
+        int lenA=getLen(headA),lenB=getLen(headB);
+        if(lenA<lenB){
+            for(int i=0;i<lenB-lenA;++i){
+                pCurB=pCurB->next;
+            }
+        }else{
+            for(int i=0;i<lenA-lenB;++i){
+                pCurA=pCurA->next;
+            }
+        }
+        while(pCurA&&pCurB&&pCurA!=pCurB){
+            pCurA=pCurA->next;
+            pCurB=pCurB->next;
+        }
+        return pCurA&&pCurB?pCurA:nullptr;//别忘了判断一下pCurA或pCurB是不是两个都不为空
+    }
+private:
+    int getLen(ListNode* pHead){
+        int len=0;
+        while(pHead){
+            pHead=pHead->next;
+            ++len;
+        }
+        return len;
+    }
+};
+===========================================
+160. Intersection of Two Linked Lists
+Write a program to find the node at which the intersection of two singly linked lists begins.
+
+For example, the following two linked lists:
