@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int trailingZeroes(int n) {
+        return n==0?0:n/5+trailingZeroes(n/5);
+    }
+};
+============================================
+https://blog.csdn.net/xqn2017/article/details/77984031
+eg: 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25
+那么，从25到1，一共有25/5个因子5（5,10,15,20,25 就是算从0加了多少次5才到25）
+然后呢，从25中拆出一个因子5后，还剩下另一个因子5，这个因子也要算在内。
+另一个例子从1到125,  对于125来说，其可以拆分为5和25两个因子，第一个因子在125/5时计算上了
+但是剩余的另一个因子25并没有考虑，因此还需要执行trailingZeroes(25)即可
+172. Factorial Trailing Zeroes
+Given an integer n, return the number of trailing zeroes in n!.
+
+Example 1:
+
+Input: 3
+Output: 0
+Explanation: 3! = 6, no trailing zero.
