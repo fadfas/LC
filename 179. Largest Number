@@ -1,0 +1,27 @@
+class Solution {
+public:
+    string largestNumber(vector<int>& nums) {
+        string res="";
+        sort(nums.begin(),nums.end(),[](int a,int b){return to_string(a)+to_string(b)>to_string(b)+to_string(a);});//别忘了一共两个分号
+        //如何判断返回true还是false？ 首先假设ab的先后顺序就是自己期望的顺序，然后  想办法让函数返回true
+        //例如 期望顺序为  2  20,  那么看看组合成字符串后  220  和  202  应该用哪个比较符号才能返回true
+        if(nums[0]==0)
+            return "0";
+        for(auto e:nums){
+            res+=to_string(e);
+        }
+        return res;
+    }
+};
+===================================================
+179. Largest Number
+Given a list of non negative integers, arrange them such that they form the largest number.
+
+Example 1:
+
+Input: [10,2]
+Output: "210"
+Example 2:
+
+Input: [3,30,34,5,9]
+Output: "9534330"
