@@ -1,0 +1,69 @@
+class MinStack {
+public:
+    /** initialize your data structure here. */
+    MinStack() {
+        curMin=INT_MAX;
+    }
+    
+    void push(int x) {
+        curMin=min(curMin,x);
+        curMinStack.push(curMin);
+        data.push(x);
+    }
+    
+    void pop() {
+        if(data.empty())
+            return;
+        curMinStack.pop();
+        data.pop();
+        if(curMinStack.empty()){
+            curMin=INT_MAX;
+        }else{
+            curMin=curMinStack.top();
+        }
+    }
+    
+    int top() {
+        if(data.empty()){
+            return INT_MIN;
+        }
+        return data.top();
+    }
+    
+    int getMin() {
+        if(data.empty()){
+            return INT_MIN;
+        }
+        return curMinStack.top();
+    }
+private:
+    stack<int> curMinStack;
+    stack<int> data;
+    int curMin;
+};
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack* obj = new MinStack();
+ * obj->push(x);
+ * obj->pop();
+ * int param_3 = obj->top();
+ * int param_4 = obj->getMin();
+ */
+ =======================================
+ 155. Min Stack
+Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
+
+push(x) -- Push element x onto stack.
+pop() -- Removes the element on top of the stack.
+top() -- Get the top element.
+getMin() -- Retrieve the minimum element in the stack.
+Example:
+MinStack minStack = new MinStack();
+minStack.push(-2);
+minStack.push(0);
+minStack.push(-3);
+minStack.getMin();   --> Returns -3.
+minStack.pop();
+minStack.top();      --> Returns 0.
+minStack.getMin();   --> Returns -2.
