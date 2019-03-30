@@ -1,0 +1,52 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool isPalindrome(ListNode* head) {
+        if(!head) return true;
+        if(!head->next) return true;
+        ListNode* pSlow=head,*pFast=head;
+        while(pFast->next&&pFast->next->next){//之所一不是pFast&&pFast->next，只不过为了
+            pSlow=pSlow->next;//期望slow停止的点便于解题而已
+            pFast=pFast->next->next;
+        }
+        ListNode* pNode=pSlow->next;
+        pSlow->next=nullptr;
+        ListNode* pPre=nullptr;
+        //ListNode* pNext=pNode->next; pNext不要在这里定义，在循环中定义
+        while(pNode){//记住是判断pNode节点是否存在，不是pNext等
+            ListNode* pNext=pNode->next;//pNext不要定义为pNext->next
+            pNode->next=pPre;
+            pPre=pNode;
+            pNode=pNext;
+        }//返回的新的头结点是pPre!!!
+        pSlow=head;
+        while(pPre){
+            if(pPre->val!=pSlow->val){
+                return false;
+            }
+            pPre=pPre->next;
+            pSlow=pSlow->next;
+        }
+        return true;
+    }
+};
+==============================================
+这道题一定要画图，分别是5个节点和4个节点的情况即可！！！
+234. Palindrome Linked List
+Given a singly linked list, determine if it is a palindrome.
+
+Example 1:
+
+Input: 1->2
+Output: false
+Example 2:
+
+Input: 1->2->2->1
+Output: true
