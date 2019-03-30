@@ -1,0 +1,38 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    //若p,q都分别在当前root左右子树中，则返回他们的LCA （即root节点）
+    //若都不在当前root左右子树，则返回nullptr
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if(!root)
+            return nullptr;
+        if(root==p)
+            return p;
+        if(root==q)
+            return q;
+        TreeNode* pLeft=lowestCommonAncestor(root->left,p,q);
+        TreeNode* pRight=lowestCommonAncestor(root->right,p,q);
+        if(pLeft&&pRight)
+            return root;
+        return pLeft?pLeft:pRight;//当执行到这一句时，二者必定有一个为空
+        //因此最后一句必定返回一个不为空的指针
+    }
+};
+==============================================
+236. Lowest Common Ancestor of a Binary Tree
+Given a binary tree, find the lowest common ancestor (LCA) of two given nodes in the tree.
+According to the definition of LCA on Wikipedia: “The lowest common ancestor is defined between two nodes p and q as the lowest node in T that has both p and q as descendants (where we allow a node to be a descendant of itself).”
+Given the following binary tree:  root = [3,5,1,6,2,0,8,null,null,7,4]
+Example 1:
+
+Input: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1
+Output: 3
+Explanation: The LCA of nodes 5 and 1 is 3.
