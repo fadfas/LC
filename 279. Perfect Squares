@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int numSquares(int n) {
+        vector<int> dp(n+1,INT_MAX);
+        //dp[i]表示正整数i最少能由多个完全平方数组成
+        //这种dp的模式不是那种逐渐缩减问题范围的，而是从小至大依次遍历每种可能性(即遍历j)
+        dp[0]=0;
+        for(int i=0;i<=n;++i){
+            for(int j=1;i+j*j<=n;++j){
+                dp[i+j*j]=min(dp[i+j*j],dp[i]+1);
+            }
+        }
+        return dp[n];
+    }
+};
+=============================================
+279. Perfect Squares
+Given a positive integer n, find the least number of perfect square numbers (for example, 1, 4, 9, 16, ...) which sum to n.
+
+Example 1:
+
+Input: n = 12
+Output: 3 
+Explanation: 12 = 4 + 4 + 4.
+Example 2:
+
+Input: n = 13
+Output: 2
+Explanation: 13 = 4 + 9.
