@@ -1,0 +1,50 @@
+class MedianFinder {
+public:
+    /** initialize your data structure here. */
+    MedianFinder() {
+        
+    }
+    
+    void addNum(int num) {
+        if(maxHeap.empty()){//别忘了判断是否为空，若没有这个，则进入maxSize==minSize后，执行minHeap.top()报错
+            maxHeap.push(num);
+        }else if(maxHeap.size()==minHeap.size()){//具体怎么判断，用一个例子就可以了！！
+            if(num>minHeap.top()){
+                minHeap.push(num);
+                num=minHeap.top();
+                minHeap.pop();//别忘了pop()掉
+            }
+            maxHeap.push(num);            
+        }else{
+            if(num<maxHeap.top()){
+                maxHeap.push(num);
+                num=maxHeap.top();
+                maxHeap.pop();
+            }
+            minHeap.push(num);
+        }
+    }
+    
+    double findMedian() {
+        if(maxHeap.empty())//别忘了是否为空！！！
+            return 0.0;
+        if(maxHeap.size()==minHeap.size()){
+            return (maxHeap.top()+minHeap.top())/2.0;
+        }else{
+            return maxHeap.top();
+        }
+    }
+private:
+    priority_queue<int,vector<int>,less<int>> maxHeap;//不是less<int>()
+    priority_queue<int,vector<int>,greater<int>> minHeap;
+};
+===============================================
+295. Find Median from Data Stream
+Median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value. So the median is the mean of the two middle value.
+
+For example,
+[2,3,4], the median is 3
+[2,3], the median is (2 + 3) / 2 = 2.5
+Design a data structure that supports the following two operations:
+void addNum(int num) - Add a integer number from the data stream to the data structure.
+double findMedian() - Return the median of all elements so far.
