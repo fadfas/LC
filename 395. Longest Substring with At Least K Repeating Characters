@@ -1,0 +1,38 @@
+class Solution {
+public:
+    int longestSubstring(string s, int k) {
+        int res=0,i=0,n=s.size();
+        while(i+k<=n){
+            int mask=0,nextStart=i+1;
+            vector<int> m(26,0);
+            for(int j=i;j<n;++j){
+                int idx=s[j]-'a';
+                ++m[idx];
+                if((m[idx]==1)&&(m[idx]<k)){
+                    mask|=(1<<idx);
+                }else if(m[idx]==k){
+                    mask&=(~(1<<idx));//学习这种生成 1111110111111的方法
+                }
+                if(mask==0){
+                    res=max(res,j-i+1);
+                    nextStart=i+1;
+                }
+            }
+            i=nextStart;
+        }
+        return res;
+    }
+};
+==============================================
+395. Longest Substring with At Least K Repeating Characters
+Find the length of the longest substring T of a given string (consists of lowercase letters only) such that every character in T appears no less than k times.
+
+Example 1:
+
+Input:
+s = "aaabb", k = 3
+
+Output:
+3
+
+The longest substring is "aaa", as 'a' is repeated 3 times.
