@@ -7,6 +7,8 @@ public:
         return n==1;
     }
 };
+方法2：
+由于输入是int，正数范围是0-231，在此范围中允许的最大的3的次方数为319=1162261467，那么我们只要看这个数能否被n整除即可
 ===================================
 326. Power of Three
 Given an integer, write a function to determine if it is a power of three.
