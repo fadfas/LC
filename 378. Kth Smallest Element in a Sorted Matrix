@@ -17,6 +17,36 @@ public:
         return l;
     }
 };
+class Solution {
+public:
+    int kthSmallest(vector<vector<int>>& matrix, int k) {
+        int l=matrix[0][0],r=matrix.back().back();
+        while(l<r){
+            int mid=l+((r-l)>>1);
+            int count=getLessEqual(mid,matrix);
+            if(count<k){
+                l=mid+1;
+            }else{
+                r=mid;
+            }
+        }
+        return l;
+    }
+private:
+    int getLessEqual(int mid,vector<vector<int>>& matrix){
+        int i=matrix.size()-1,j=0;
+        int res=0;
+        while(i>=0&&j<matrix.size()){
+            if(matrix[i][j]<=mid){
+                res+=i+1;
+                ++j;
+            }else{
+                --i;
+            }
+        }
+        return res;
+    }
+};
 =======================================
 The key point for any binary search is to figure out the "Search Space". For me, I think there are two kind of "Search Space" -- index and range(the range from the smallest number to the biggest number). Most usually, when the array is sorted in one direction, we can use index as "search space", when the array is unsorted and we are going to find a specific number, we can use "range".
 Let me give you two examples of these two "search space"
