@@ -1,0 +1,17 @@
+class Solution {
+public:
+    bool isPowerOfThree(int n) {
+        while(n&&n%3==0){
+            n/=3;
+        }
+        return n==1;
+    }
+};
+===================================
+326. Power of Three
+Given an integer, write a function to determine if it is a power of three.
+
+Example 1:
+
+Input: 27
+Output: true
