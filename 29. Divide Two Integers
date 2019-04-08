@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int divide(int dividend, int divisor) {
+        if(dividend==INT_MIN&&divisor==-1){
+            return INT_MAX;
+        }
+        int sign=(dividend<0)^(divisor<0)?-1:1;
+        long long a=abs((long long)dividend),b=abs((long long)divisor);//计算绝对值前就要进行long long 转换，否则INT_MIN绝对值后溢出
+        long long res=0;//也要声明为long long 否则 INT_MIN 1 的输入会有问题（在计算的过程中 int 类型的res无否保存 21....48这个数）
+        while(a>=b){
+            long long c=b,p=1;
+            while(a>=(c<<1)){
+                c<<=1;
+                p<<=1;
+            }
+            res+=p;
+            a-=c;
+        }
+        return sign<0?-res:res;
+    }
+};
+=====================================
+29. Divide Two Integers
+Given two integers dividend and divisor, divide two integers without using multiplication, division and mod operator.
+
+Return the quotient after dividing dividend by divisor.
+
+The integer division should truncate toward zero.
+
+Example 1:
+
+Input: dividend = 10, divisor = 3
+Output: 3
+Example 2:
+
+Input: dividend = 7, divisor = -3
+Output: -2
