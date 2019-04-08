@@ -1,0 +1,65 @@
+class Solution {//与剑指offer51：数组中的逆序对比较相似P249
+public://使用了归并排序的思想
+    vector<int> countSmaller(vector<int>& nums) {
+        vector<int> res(nums.size());//学习这种声明方法！！！
+        vector<pair<int,int>> numsIdx;
+        for(int i=0;i<nums.size();++i){
+            numsIdx.push_back({nums[i],i});
+        }
+        merge(0,nums.size(),res,numsIdx);//注意不要写成nums.size()-1
+        return res;
+        
+    }
+private:
+    void merge(int s,int e,vector<int>& res,vector<pair<int,int>>& numsIdx){
+        //一般都是[s,e)  即左闭右开区间
+        if(e-s<=1)
+            return;
+        int mid=s+((e-s)>>1);
+        merge(s,mid,res,numsIdx);
+        merge(mid,e,res,numsIdx);
+        for(int i=s,j=mid;i!=mid;++i){
+            while(j!=e&&numsIdx[i].first>numsIdx[j].first){
+                ++j;
+            }
+            res[numsIdx[i].second]+=j-mid;
+        }
+        auto it=numsIdx.begin();
+        inplace_merge(it+s,it+mid,it+e);//注意其参数为一个迭代器
+    }
+};
+
+class Solution {
+public:
+    vector<int> countSmaller(vector<int>& nums) {
+        vector<int> temp;
+        vector<int> res(nums.size(),0);//使用insert函数时，必须确保有足够的长度，否则异常
+        for(int i=nums.size()-1;i>=0;--i){
+            int l=0,r=temp.size();
+            while(l<r){
+                int mid=l+((r-l)>>1);
+                if(temp[mid]<nums[i]){
+                    l=mid+1;
+                }else{
+                    r=mid;
+                }
+            }
+            res[i]=l;
+            temp.insert(temp.begin()+l,nums[i]);//注意insert参数为一个迭代器，学习begin()+l这种的用法
+        }
+        return res;
+    }
+};
+====================================
+315. Count of Smaller Numbers After Self
+You are given an integer array nums and you have to return a new counts array. The counts array has the property where counts[i] is the number of smaller elements to the right of nums[i].
+
+Example:
+
+Input: [5,2,6,1]
+Output: [2,1,1,0] 
+Explanation:
+To the right of 5 there are 2 smaller elements (2 and 1).
+To the right of 2 there is only 1 smaller element (1).
+To the right of 6 there is 1 smaller element (1).
+To the right of 1 there is 0 smaller element.
