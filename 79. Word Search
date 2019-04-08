@@ -1,0 +1,61 @@
+class Solution {
+public:
+    bool exist(vector<vector<char>>& board, string word) {
+        if(board.empty()||board[0].empty())
+            return false;
+        int m=board.size(),n=board[0].size();
+        if(word=="")
+            return false;
+        vector<vector<bool>> visited(m,vector<bool>(n,0));
+        for(int i=0;i<m;++i){
+            for(int j=0;j<n;++j){
+                if(dfs(board,i,j,word,0,visited)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+private:
+    int di[4]={0,0,-1,1};
+    int dj[4]={1,-1,0,0};
+    bool dfs(vector<vector<char>>& board,int i,int j,string word,int cur,vector<vector<bool>>& visited){
+        if(word[cur]!=board[i][j]){
+            return false;
+        }
+        if(cur==word.size()-1){
+            return true;
+        }
+        int m=board.size(),n=board[0].size();
+        visited[i][j]=1;
+        for(int k=0;k<4;++k){
+            int ni=i+di[k];
+            int nj=j+dj[k];
+            if(ni<0||ni>=m||nj<0||nj>=n||visited[ni][nj]==1)
+                continue;
+            if(dfs(board,ni,nj,word,cur+1,visited)){
+                return true;
+            }
+        }
+        visited[i][j]=0;
+        return false;
+    }
+};
+=======================================
+79. Word Search
+Given a 2D board and a word, find if the word exists in the grid.
+
+The word can be constructed from letters of sequentially adjacent cell, where "adjacent" cells are those horizontally or vertically neighboring. The same letter cell may not be used more than once.
+
+Example:
+
+board =
+[
+  ['A','B','C','E'],
+  ['S','F','C','S'],
+  ['A','D','E','E']
+]
+
+Given word = "ABCCED", return true.
+Given word = "SEE", return true.
+Given word = "ABCB", return false.
