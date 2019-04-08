@@ -1,0 +1,66 @@
+struct point           //建立结构体，存储坐标点和移动的步数
+{
+	int x, y;
+	int moves;
+};
+queue<point>q;//建立队列
+int ex, ey, l;
+int map1[305][305];
+int dir[8][2] = { -1,-2,1,-2,-2,-1,2,-1,-2,1,2,1,-1,2,1,2 };//8个方向遍历
+int bfs(point s) //广搜
+{
+	int i;
+	map1[s.x][s.y] = 1;
+	point head, t;
+	q.push(s);
+	while (!q.empty())   //基本套路
+	{
+		head = q.front();
+		q.pop();
+		if (head.x == ex && head.y == ey)
+			return head.moves;
+		for (i = 0; i < 8; i++)
+		{
+			int x = head.x + dir[i][0];
+			int y = head.y + dir[i][1];
+			if (x >= 0 && x < l&&y >= 0 && y < l && !map1[x][y])
+			{
+				map1[x][y] = 1;
+				t.x = x;
+				t.y = y;
+				t.moves = head.moves + 1;
+				q.push(t);
+			}
+		}
+	}
+}
+
+int bfs(int x, int y) {
+	int i, tx, ty;
+	p.x = x;
+	p.y = y;
+	cstep[x][y] = 0;
+	que.push(p);
+	while (!que.empty()) {
+		p = que.front();
+		que.pop();
+		x = p.x;
+		y = p.y;
+		if (x == dx && y == dy)break;
+		for (i = 0; i < MAX; ++i) {
+			tx = x + dirx[i];
+			ty = y + diry[i];
+			if (tx < 0 || ty < 0 || tx >= MAX || ty >= MAX)continue;
+			if (cstep[tx][ty] != -1)continue;
+			cstep[tx][ty] = cstep[x][y] + 1;
+			p.x = tx;
+			p.y = ty;
+			que.push(p);
+		}
+	}
+	return cstep[dx][dy];
+}
+
+===================================
+poj 2243 Knight Moves
+BFS。一般要求最少步数用广搜。由于问的是最少步数，而且又是棋盘遍历题，所以优先考虑BFS。对于一个点，扫描其8个方向，若该方向上的下一个点未走过，则将该点入队，标记。最终就是检验一下最终步数即可。由于是广度优先，所以第一次找到得步数一定是最小的。
