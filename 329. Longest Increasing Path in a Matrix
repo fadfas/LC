@@ -1,0 +1,90 @@
+class Solution {
+public:
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        if(matrix.empty()||matrix[0].empty())
+            return 0;
+        int dx[4]={0,0,-1,1};
+        int dy[4]={1,-1,0,0};
+        int m=matrix.size(),n=matrix[0].size();
+        vector<vector<int>> dp(m,vector<int>(n,0));//代表从某一点走到当前点的最长路径
+        int res=1;//初始值为1！！！！！
+        for(int i=0;i<m;++i){
+            for(int j=0;j<n;++j){
+                if(dp[i][j])
+                    continue;//如果某一点的dp值在之前的遍历已经更新过了，那么如果这次从这个节点开始遍历，其最长递增路径肯定小于
+                queue<pair<int,int>> q;//上一次从别的节点开始，走到当前点，再走到别的点的路径短。
+                q.push({i,j});
+                int cnt=1;
+                while(!q.empty()){
+                    int size=q.size();
+                    ++cnt;
+                    for(int k=0;k<size;++k){
+                        auto cur=q.front();q.pop();
+                        for(int h=0;h<4;++h){
+                            int ni=cur.first+dx[h];
+                            int nj=cur.second+dy[h];
+                            if(ni<0||ni>=m||nj<0||nj>=n||matrix[cur.first][cur.second]>=matrix[ni][nj]||cnt<=dp[ni][nj])    continue;
+                            dp[ni][nj]=cnt;
+                            res=max(res,dp[ni][nj]);
+                            q.push({ni,nj});//别忘了还要把新的节点加入队列！！
+                        }
+                    }
+                }
+            }
+        }
+        return res;
+    }
+};
+
+class Solution {
+public:
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        if(matrix.empty()||matrix[0].empty())
+            return 0;
+        int m=matrix.size(),n=matrix[0].size();
+        int res=1;
+        vector<vector<int>> dp(m,vector<int>(n,0));//代表从当前点出发，最长的递增路径
+        for(int i=0;i<m;++i){
+            for(int j=0;j<n;++j){
+                res=max(res,dfs(matrix,dp,i,j));
+            }
+        }
+        return res;
+    }
+private:
+    int dx[4]={0,0,-1,1};
+    int dy[4]={1,-1,0,0};
+    int dfs(vector<vector<int>>& matrix,vector<vector<int>>& dp,int i,int j){
+        int m=matrix.size();
+        int n=matrix[0].size();
+        int res=1;
+        if(dp[i][j]){
+            return dp[i][j];
+        }
+        
+        for(int k=0;k<4;++k){
+            int ni=i+dx[k];
+            int nj=j+dy[k];
+            if(ni<0||ni>=m||nj<0||nj>=n||matrix[i][j]>=matrix[ni][nj]) continue;
+            res=max(res,dfs(matrix,dp,ni,nj)+1);
+        }
+        dp[i][j]=res;
+        return res;
+    }
+};
+=======================================
+329. Longest Increasing Path in a Matrix
+Given an integer matrix, find the length of the longest increasing path.
+
+From each cell, you can either move to four directions: left, right, up or down. You may NOT move diagonally or move outside of the boundary (i.e. wrap-around is not allowed).
+
+Example 1:
+
+Input: nums = 
+[
+  [9,9,4],
+  [6,6,8],
+  [2,1,1]
+] 
+Output: 4 
+Explanation: The longest increasing path is [1, 2, 6, 9].
