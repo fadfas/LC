@@ -1,0 +1,51 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int maxPathSum(TreeNode* root) {
+        int res=INT_MIN;
+        core(root,res);
+        return res;
+    }
+private:
+    //因为我们返回值的定义是以当前结点为终点的path之和，所以只能取left和right中较大的那个值，而不是两个都要
+    int core(TreeNode* pNode,int& res){//设置成引用类型，才能不断的跟踪并保留最大值
+        if(!pNode){
+            return 0;
+        }
+        //int left=max(core(pNode->left,res),0);
+        //int right=max(core(pNode->right,res),0);//注释掉的三行和没有注释的三行，效果是一样的
+        int left=core(pNode->left,res);
+        int right=core(pNode->right,res);
+        res=max(res,left+right+pNode->val);//学习这种将res设置为引用类型，然后再递归中不断更新，最终保留下最大值的方法
+        //return max(left,right)+pNode->val;
+        return max(max(left,right)+pNode->val,0);
+    }
+};
+=====================================
+根据以往的经验，树的递归解法【一般都是递归到叶节点，然后开始边处理边回溯到根节点】。那么我们就假设此时已经递归到结点7了，那么其没有左右子节点，
+所以如果以结点7为根结点的子树最大路径和就是7。然后回溯到结点11，如果以结点11为根结点的子树，我们知道最大路径和为7+11+2=20。但是当回溯到结点4的时候，
+对于结点11来说，就不能同时取两条路径了，只能取左路径，或者是右路径，所以当根结点是4的时候，那么结点11只能取其左子结点7，因为7大于2。
+所以，对于每个结点来说，我们要知道经过其左子结点的path之和大还是经过右子节点的path之和大。
+学习这种分析递归问题的方法
+124. Binary Tree Maximum Path Sum
+Given a non-empty binary tree, find the maximum path sum.
+
+For this problem, a path is defined as any sequence of nodes from some starting node to any node in the tree along the parent-child connections. The path must contain at least one node and does not need to go through the root.
+
+Example 1:
+
+Input: [1,2,3]
+
+       1
+      / \
+     2   3
+
+Output: 6
