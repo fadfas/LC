@@ -1,0 +1,89 @@
+class Solution {//同下面的方法作对比，看看两种dfs的不同。但是这种方式效率更高一些
+public:
+    vector<vector<string>> partition(string s) {
+        int n=s.size();
+        vector<vector<bool>> dp(n,vector<bool>(n,false));//将dp[i][j]定义成子字符串[i, j]是否是回文串就行了
+       //学习这种看似问题是一维的，但是用一个二维的dp数组去记录不同的子问题的方法
+        for(int i=n-1;i>=0;--i){
+            for(int j=i;j<n;++j){
+                dp[i][j]=(s[i]==s[j])&&(j-i<=2||dp[i+1][j-1]);//一定要注意，dp[i+1][j-1]需要是之前已经计算过的
+            }
+        }
+        vector<vector<string>> res;
+        vector<string> out;
+        dfs(s,0,dp,res,out);
+        return res;
+    }
+private:
+    void dfs(string s,int idx,vector<vector<bool>>& dp,vector<vector<string>>& res,vector<string>& out){
+        if(idx==s.size()){
+            res.push_back(out);
+            return;
+        }
+        for(int i=idx;i<s.size();++i){
+            if(dp[idx][i]){//别写成了dp[i][idx]
+                out.push_back(s.substr(idx,i-idx+1));
+                dfs(s,i+1,dp,res,out);
+                out.pop_back();
+            }
+        }
+    }
+};
+
+class Solution {
+public:
+    vector<vector<string>> partition(string s) {
+        int n=s.size();
+        vector<vector<int>> dp(n,vector<int>(n,0));//将dp[i][j]定义成子字符串[i, j]是否是回文串就行了
+       //学习这种看似问题是一维的，但是用一个二维的dp数组去记录不同的子问题的方法
+        for(int i=n-1;i>=0;--i){
+            for(int j=i;j<n;++j){
+                dp[i][j]=(s[i]==s[j])&&(j-i<=2||dp[i+1][j-1]);
+            }
+        }
+        return dfs(s,0,dp);
+    }
+private:
+    vector<vector<string>> dfs(string s,int idx,vector<vector<int>>& dp){
+        if(idx==s.size()){
+            return {{}};
+        }
+        vector<vector<string>> res;
+        for(int i=idx;i<s.size();++i){
+            string cur=s.substr(idx,i+1-idx);
+            if(dp[idx][i]){
+                auto temp=dfs(s,i+1,dp);
+                for(auto e:temp){
+                    e.insert(e.begin(),cur);
+                    res.push_back(e);
+                }
+            }
+        }
+        return res;
+    }
+    bool check(string cur){
+        int i=0,j=cur.size()-1;
+        while(i<j){
+            if(cur[i]!=cur[j]){
+                return false;
+            }else{
+                ++i,--j;
+            }
+        }
+        return true;
+    }
+};
+====================================
+131. Palindrome Partitioning
+Given a string s, partition s such that every substring of the partition is a palindrome.
+
+Return all possible palindrome partitioning of s.
+
+Example:
+
+Input: "aab"
+Output:
+[
+  ["aa","b"],
+  ["a","a","b"]
+]
