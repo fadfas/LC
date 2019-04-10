@@ -1,0 +1,47 @@
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        if(matrix.empty()||matrix[0].empty()){
+            return {};
+        } 
+        int m=matrix.size(),n=matrix[0].size();
+        int startRow=0,endRow=m-1,startCol=0,endCol=n-1;
+        vector<int> res;
+        while(startRow<=endRow&&startCol<=endCol){
+            for(int i=startCol;i<=endCol;++i){
+                res.push_back(matrix[startRow][i]);
+            }//从左至右，不用额外检测是否startRow<=endRow，因为while循环已经检测过了
+            ++startRow;//此处自增的变量，和上面matrix[][]中一直固定的那个维度是一致的
+            for(int i=startRow;i<=endRow;++i){
+                res.push_back(matrix[i][endCol]);
+            }//从上至下，不用额外检测是否startcol<=endCol，因为while循环已经检测过了
+            --endCol;
+            if(startRow<=endRow){
+                for(int i=endCol;i>=startCol;--i){
+                    res.push_back(matrix[endRow][i]);
+                }
+                --endRow;//但是这两种情况，就要检测了，因为之前startRow已经自增一了，需要检测是否合格
+            }
+            if(startCol<=endCol){
+                for(int i=endRow;i>=startRow;--i){
+                    res.push_back(matrix[i][startCol]);
+                }
+                ++startCol;
+            }
+        }
+        return res;
+    }
+};
+=======================================
+54. Spiral Matrix
+Given a matrix of m x n elements (m rows, n columns), return all elements of the matrix in spiral order.
+
+Example 1:
+
+Input:
+[
+ [ 1, 2, 3 ],
+ [ 4, 5, 6 ],
+ [ 7, 8, 9 ]
+]
+Output: [1,2,3,6,9,8,7,4,5]
