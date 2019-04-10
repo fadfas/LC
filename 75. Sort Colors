@@ -1,0 +1,26 @@
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        int n=nums.size();
+        int red=0,blue=n-1;//red代表其左侧的元素都为0,（不包括red），blue指针同理
+        for(int i=0;i<=blue;++i){//注意不是i<n，而是blue，而且是<=(因为blue指针所指元素还没有被处理过)
+            if(nums[i]==0){
+                swap(nums[red++],nums[i]);
+            }else if(nums[i]==2){
+                swap(nums[i--],nums[blue--]);//为何要i--?因为另一个被交换的nums[blue]无法确定是0还是1，因此下一轮
+            }//需要再检测一下,而上一个if条件则不需要自减，因为被换过去的另一个元素nums[red]，肯定是1
+        }
+    }
+};
+========================================
+75. Sort Colors
+Given an array with n objects colored red, white or blue, sort them in-place so that objects of the same color are adjacent, with the colors in the order red, white and blue.
+
+Here, we will use the integers 0, 1, and 2 to represent the color red, white, and blue respectively.
+
+Note: You are not suppose to use the library's sort function for this problem.
+
+Example:
+
+Input: [2,0,2,1,1,0]
+Output: [0,0,1,1,2,2]
