@@ -1,0 +1,75 @@
+class Solution {
+public:
+    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
+        if(board.empty()||board[0].empty()||words.empty()){
+            return {};
+        }
+        int m=board.size(),n=board[0].size();
+        TrieNode* root=new TrieNode();//注意字典树的根节点，其word永远为空
+        vector<string> res;
+        for(auto e:words){
+            insert(e,root);    
+        }
+        for(int i=0;i<m;++i){
+            for(int j=0;j<n;++j){
+                dfs(board,res,i,j,root);
+            }
+        }
+        return res;
+    }
+private:
+    struct TrieNode{//小写的s!!  不是Struct
+        TrieNode* next[26];
+        string word;
+    };
+    int dx[4]={0,0,-1,1};
+    int dy[4]={1,-1,0,0};
+    void dfs(vector<vector<char>>& board,vector<string>& res,int i,int j,TrieNode* pNode){
+        if(!pNode->next[board[i][j]-'a'])
+            return;
+        pNode=pNode->next[board[i][j]-'a'];
+        if(!pNode->word.empty()){
+            res.push_back(pNode->word);
+            pNode->word="";//防止答案重复
+            //return;不要返回，因为还可以继续走下去
+        }
+        int m=board.size(),n=board[0].size();
+        //pNode=pNode->next[board[i][j]-'a'];不要放在这里，应该放在前面
+        char c=board[i][j];
+        board[i][j]='#';//学习这种防止重复使用元素的方法
+        for(int k=0;k<4;++k){//这个地方注意不要再声明变量i了
+            int ni=i+dx[k];
+            int nj=j+dy[k];
+            if(ni<0||ni>=m||nj<0||nj>=n||board[ni][nj]=='#')    continue;
+            dfs(board,res,ni,nj,pNode);
+        }
+        board[i][j]=c;//回溯法的精髓！！！！别忘了
+            
+    }
+    void insert(string w,TrieNode* root){
+        TrieNode* pNode=root;
+        for(auto e:w){
+            int i=e-'a';
+            if(!pNode->next[i])
+                pNode->next[i]=new TrieNode();
+            pNode=pNode->next[i];
+        }
+        pNode->word=w;
+    }
+};
+===================================
+212. Word Search II
+Given a 2D board and a list of words from the dictionary, find all words in the board.
+
+Each word must be constructed from letters of sequentially adjacent cell, where "adjacent" cells are those horizontally or vertically neighboring. The same letter cell may not be used more than once in a word.
+Example:
+
+Input: 
+board = [
+  ['o','a','a','n'],
+  ['e','t','a','e'],
+  ['i','h','k','r'],
+  ['i','f','l','v']
+]
+words = ["oath","pea","eat","rain"]
+Output: ["eat","oath"]
