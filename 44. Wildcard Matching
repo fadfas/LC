@@ -1,0 +1,42 @@
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        int m=s.size(),n=p.size();
+        vector<vector<bool>> dp(m+1,vector<bool>(n+1,false));//对于这种字符串类的题目，如果需要考虑空串的情况，就要设置为m+1 n+1维
+        //本题目中，dp[i][j]代表s[0]~s[i-1]与p[0]~p[j-1]的匹配情况（不是从0~i-1中某一部分子串与0~j-1中某一部分子串的匹配情况）
+        dp[0][0]=true;
+        for(int j=1;j<=n;++j){//不是j<n!!!
+            if(p[j-1]=='*'){
+                dp[0][j]=dp[0][j-1];
+            }
+        }
+        for(int i=1;i<=m;++i){//不是i<m
+            for(int j=1;j<=n;++j){
+                if(p[j-1]=='*'){//注意dp的i j和字符串的实际位置有偏移
+                    dp[i][j]=(dp[i][j-1]||dp[i-1][j]);//动态规划永远是利用之前的状态的，即求dp[i][j]时，只可以用之前计算过的状态
+                }else{ //另外，求dp[i][j]的时候，不用思考大于当前i和j的情况
+                    dp[i][j]=(s[i-1]==p[j-1]||p[j-1]=='?')&&dp[i-1][j-1];                
+                }
+            }
+        }
+        return dp[m][n];
+    }
+};
+===================================
+对于这种玩字符串的题目，动态规划Dynamic Programming是一大神器，因为字符串跟其子串之间的关系十分密切，正好适合DP这种靠推导状态转移方程的特性。那么先来定义dp数组吧，我们使用一个二维dp数组，其中 dp[i][j] 表示 s中前i个字符组成的子串和p中前j个字符组成的子串是否能匹配。大小初始化为 (m+1) x (n+1)，加1的原因是要包含dp[0][0] 的情况，因为若s和p都为空的话，也应该返回true，所以也要初始化 dp[0][0] 为true。还需要提前处理的一种情况是，当s为空，p为连续的星号时的情况。由于星号是可以代表空串的，所以只要s为空，那么连续的星号的位置都应该为true，所以我们现将连续星号的位置都赋为true。然后就是推导一般的状态转移方程了，如何更新 dp[i][j]，首先处理比较tricky的情况，若p中第j个字符是星号，由于星号可以匹配空串，所以如果p中的前j-1个字符跟s中前i个字符匹配成功了（dp[i][j-1] 为true）的话，那么 dp[i][j] 也能为true。或者若 p中的前j个字符跟s中的前i-1个字符匹配成功了（dp[i-1][j] 为true）的话，那么 dp[i][j] 也能为true（因为星号可以匹配任意字符串，再多加一个任意字符也没问题）。若p中的第j个字符不是星号，对于一般情况，我们假设已经知道了s中前i-1个字符和p中前j-1个字符的匹配情况（即 dp[i-1][j-1] ），那么现在只需要匹配s中的第i个字符跟p中的第j个字符，若二者相等（s[i-1] == p[j-1]），或者p中的第j个字符是问号（p[j-1] == '?'），再与上 dp[i-1][j-1] 的值，就可以更新 dp[i][j] 了
+
+44. Wildcard Matching
+Given an input string (s) and a pattern (p), implement wildcard pattern matching with support for '?' and '*'.
+
+'?' Matches any single character.
+'*' Matches any sequence of characters (including the empty sequence).
+The matching should cover the entire input string (not partial).
+
+s could be empty and contains only lowercase letters a-z.
+p could be empty and contains only lowercase letters a-z, and characters like ? or *.
+
+Input:
+s = "aa"
+p = "a"
+Output: false
+Explanation: "a" does not match the entire string "aa".
