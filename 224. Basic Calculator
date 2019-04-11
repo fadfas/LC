@@ -8,7 +8,7 @@ public:
             if(s[i]>='0'&&s[i]<='9'){
                 num=num*10+s[i]-'0';
             }else if(s[i]=='+'||s[i]=='-'){
-                res+=sign*num;
+                res+=sign*num;//此时的sign是上一次处理符号时设置的，也就是说，当碰到一个符号时，可以认为一个数字已经获取完全了
                 num=0;
                 sign=s[i]=='+'?1:-1;
             }else if(s[i]=='('){
