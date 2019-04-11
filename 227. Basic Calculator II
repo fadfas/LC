@@ -1,0 +1,51 @@
+class Solution {
+public:
+    int calculate(string s) {
+        int n=s.size();
+        long long num=0,res=0,curRes=0;
+        char op='+';
+        for(int i=0;i<n;++i){
+            char c=s[i];
+            if(c>='0'&&c<='9'){
+                num=num*10+c-'0';
+            }//不可以写成 else if,否则2*2就是错误的，因为最后一位数字转换完成后，就结束了
+            if(c=='+'||c=='-'||c=='*'||c=='/'||i==n-1){
+                switch(op){//本块用于处理i之前的那个一数字以及数字前的符号，然后暂存至curRes
+                    case '+': curRes+=num; break;//之后根据当前位置的符号，来决定curRes的去留
+                    case '-': curRes-=num; break;//即如果是加减号，可以放入res中
+                    case '*': curRes*=num; break;//如果是乘除号，暂时保留在curRes中
+                    case '/': curRes/=num; break;//因为其优先级高，还要和后面的数字运算
+                }
+                if(c=='+'||c=='-'||i==n-1){
+                    res+=curRes;
+                    curRes=0;
+                }
+                op=c;
+                num=0;
+            }
+        }
+        return res;
+    }
+};
+======================================
+227. Basic Calculator II
+Implement a basic calculator to evaluate a simple expression string.
+
+The expression string contains only non-negative integers, +, -, *, / operators and empty spaces . The integer division should truncate toward zero.
+
+Example 1:
+
+Input: "3+2*2"
+Output: 7
+Example 2:
+
+Input: " 3/2 "
+Output: 1
+Example 3:
+
+Input: " 3+5 / 2 "
+Output: 5
+Note:
+
+You may assume that the given expression is always valid.
+Do not use the eval built-in library function.
