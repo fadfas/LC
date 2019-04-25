@@ -1,0 +1,41 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int> res;
+        if(!root){
+            return res;
+        }
+        stack<TreeNode*> s;
+        s.push(root);
+        TreeNode* pPre=nullptr;
+        while(!s.empty()){
+            TreeNode* pCur=s.top();
+            if((pCur->left==nullptr&&pCur->right==nullptr)||
+              (pPre&&(pPre==pCur->left||pPre==pCur->right))){
+                res.push_back(pCur->val);
+                s.pop();
+                pPre=pCur;
+            }else{
+                if(pCur->right){//注意先右再左，另外别忘了判断是否右子树为空
+                    s.push(pCur->right);
+                }
+                if(pCur->left){
+                    s.push(pCur->left);
+                }
+            }
+        }
+        return res;
+    }
+};
+===========================================
+145. Binary Tree Postorder Traversal
+Given a binary tree, return the postorder traversal of its nodes' values.
