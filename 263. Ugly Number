@@ -1,0 +1,30 @@
+class Solution {
+public:
+    bool isUgly(int num) {
+        if(num<=0){
+            return false;
+        }
+        int remain=num;
+        while(remain%2==0){
+            remain/=2;
+        }
+        while(remain%3==0){
+            remain/=3;
+        }
+        while(remain%5==0){
+            remain/=5;
+        }
+        return remain==1;
+    }
+};
+==========================================
+263. Ugly Number
+Write a program to check whether a given number is an ugly number.
+
+Ugly numbers are positive numbers whose prime factors only include 2, 3, 5.
+
+Example 1:
+
+Input: 6
+Output: true
+Explanation: 6 = 2 × 3
