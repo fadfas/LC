@@ -9,6 +9,29 @@ public:
         fill_n(tmpMax,k+1,-prices[0]);
         fill_n(dp,k+1,0);
         for(int i=1;i<prices.size();++i){
+            int upLeft=dp[0];
+            for(int kk=1;kk<=k;++kk){
+                int temp=dp[kk];
+                dp[kk]=max(dp[kk],prices[i]+tmpMax[kk]);
+                tmpMax[kk]=max(tmpMax[kk],upLeft-prices[i]);//这句话放在dp前还是dp后，结果都是对的
+                upLeft=temp;//对比下面方法中的dp[kk-1]，其实并不等于dp[kk-1,i-1]，因此最好还是写成这种形式吧
+            }//虽然为何下面的方法也并不报错，不知道为什么
+        }
+        return dp[k];
+    }
+};
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        if(prices.size()<2)
+            return 0;
+        int k=2;
+        int* dp=new int[k+1];//注意维度不要写成k
+        int* tmpMax=new int[k+1];
+        fill_n(tmpMax,k+1,-prices[0]);
+        fill_n(dp,k+1,0);
+        for(int i=1;i<prices.size();++i){
             for(int kk=1;kk<=k;++kk){
                 dp[kk]=max(dp[kk],prices[i]+tmpMax[kk]);
                 tmpMax[kk]=max(tmpMax[kk],dp[kk-1]-prices[i]);//这句话放在dp前还是dp后，结果都是对的
