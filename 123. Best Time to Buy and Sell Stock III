@@ -15,8 +15,8 @@ public:
                 dp[kk]=max(dp[kk],prices[i]+tmpMax[kk]);
                 tmpMax[kk]=max(tmpMax[kk],upLeft-prices[i]);//这句话放在dp前还是dp后，结果都是对的
                 upLeft=temp;//对比下面方法中的dp[kk-1]，其实并不等于dp[kk-1,i-1]，因此最好还是写成这种形式吧
-            }//虽然为何下面的方法也并不报错，不知道为什么
-        }
+            }//虽然为何下面的方法也并不报错，不知道为什么  20190807 下方的写法，实际上对应于dp[k-1,j]+p[i]-p[j]
+        }//而本行的写法，对应于dp[k-1,j-1]+p[i]-p[j]  
         return dp[k];
     }
 };
