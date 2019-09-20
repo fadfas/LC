@@ -1,0 +1,64 @@
+class MyHashMap {
+public:
+    /** Initialize your data structure here. */
+    MyHashMap() {
+        data.resize(size);
+    }
+    
+    /** value will always be non-negative. */
+    void put(int key, int value) {
+        auto &cur=data[key%size];
+        for(auto &each:cur){
+            if(each.first==key){
+                each.second=value;
+                return;
+            }
+        }
+        cur.push_back({key,value});
+    }
+    
+    /** Returns the value to which the specified key is mapped, or -1 if this map contains no mapping for the key */
+    int get(int key) {
+        auto &cur=data[key%size];
+        for(auto &each:cur){
+            if(each.first==key){
+                return each.second;
+            }
+        }
+        return -1;
+    }
+    
+    /** Removes the mapping of the specified value key if this map contains a mapping for the key */
+    void remove(int key) {
+        auto &cur=data[key%size];
+        auto it=cur.begin();
+        while(it!=cur.end()){
+            if((*it).first==key){
+                cur.erase(it);
+                return;
+            }
+            ++it;
+        }
+    }
+private:
+    vector<list<pair<int,int>>> data;
+    int size=10000;
+};
+
+/**
+ * Your MyHashMap object will be instantiated and called as such:
+ * MyHashMap* obj = new MyHashMap();
+ * obj->put(key,value);
+ * int param_2 = obj->get(key);
+ * obj->remove(key);
+ */
+ 
+ ===========================================
+ 706. Design HashMap
+ Design a HashMap without using any built-in hash table libraries.
+
+To be specific, your design should include these functions:
+
+put(key, value) : Insert a (key, value) pair into the HashMap. If the value already exists in the HashMap, update the value.
+get(key): Returns the value to which the specified key is mapped, or -1 if this map contains no mapping for the key.
+remove(key) : Remove the mapping for the value key if this map contains the mapping for the key.
