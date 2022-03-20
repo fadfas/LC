@@ -1,0 +1,59 @@
+class Solution {
+public:
+    int partitionDisjoint(vector<int>& nums) {
+        vector<int> minVec(nums.size());
+        vector<int> maxVec={};
+        int res=0;
+        int maxNum=0x80000000,minNum=0x7fffffff;
+        for(int i=0;i<nums.size();++i){
+            maxNum=max(nums[i],maxNum);
+            maxVec.push_back(maxNum);
+        }
+        for(int i=nums.size()-1;i>=0;--i){
+            minNum=min(minNum,nums[i]);
+            minVec[i]=minNum;
+        }
+        for(int i=0;i<nums.size()-1;++i){
+            if(maxVec[i]<=minVec[i+1]){
+                res= i+1;
+                break;
+            }
+        }
+        return res;
+    }
+};
+
+class Solution {
+public:
+    int partitionDisjoint(vector<int>& nums) {
+        int pos=0,leftMax=nums[0],iMax=nums[0];
+        for(int i=0;i<nums.size();++i){
+            iMax=max(iMax,nums[i]);//imax记录从0到i下标内，最大的值
+            if(nums[i]>=leftMax){
+                continue;//如果当前值大于leftMax，则可以继续判断下一个值
+            }else{
+                //如果当前值小于leftMax,则从第0个数到当前值的数值，都要并入left
+                pos=i;
+                leftMax=iMax;//因为从第0个数到当前值的数值，都要并入left，所以leftMax=iMax
+            }
+        }
+        return pos+1;
+    }
+};
+=======================================
+915. Partition Array into Disjoint Intervals
+
+Given an integer array nums, partition it into two (contiguous) subarrays left and right so that:
+
+Every element in left is less than or equal to every element in right.
+left and right are non-empty.
+left has the smallest possible size.
+Return the length of left after such a partitioning.
+
+Test cases are generated such that partitioning exists.
+
+Example 1:
+
+Input: nums = [5,0,3,8,6]
+Output: 3
+Explanation: left = [5,0,3], right = [8,6]
