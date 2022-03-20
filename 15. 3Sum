@@ -7,6 +7,9 @@ public:
 		}
 		sort(nums.begin(), nums.end());  //因为排序复杂度为O(nlogn),而后面双层循环为o(n^2)，所以此处可以使用现成的排序算法
 		for (int i = 0; i<nums.size() - 2; ++i) {//注意边界
+			            // if(nums[i]==nums[i+1]&&i<nums.size()-3){
+				    //     continue;
+				    // }  不能用以上三行取代下一行，因为会导致{-4,-1,-1,0,1,2}这种输入，略过{-1,-1,2}的组合
 			if (i == 0 || nums[i] != nums[i - 1]) {
 				int sum = 0 - nums[i];
 				int low = i + 1, high = nums.size() - 1;
