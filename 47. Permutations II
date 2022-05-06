@@ -1,6 +1,43 @@
 class Solution {
 public:
     vector<vector<int>> permuteUnique(vector<int>& nums) {
+        vector<vector<int>> res={};
+        if(nums.size()==0){
+            return res;
+        }
+        vector<int> tmp;
+        sort(nums.begin(),nums.end());
+        used.resize(nums.size());
+        helper(nums,0,res,tmp);
+        return res;
+    }
+private:
+    vector<int> used;
+    void helper(vector<int>& nums,int idx,vector<vector<int>>& res,vector<int>& tmp){
+        if(idx==nums.size()){
+            res.push_back(tmp);
+            return;
+        }
+        
+        for(int i=0;i<nums.size();++i){
+            //每次函数进入到这个地方，used[i]代表了当前、此刻，nums中哪些元素，已经被选入结果集了
+            if(used[i]||(i>0&&nums[i]==nums[i-1]&&used[i-1]==0)){
+            //保证在填第idx个数的时候重复数字只会被填入一次即可。而在本题解中，我们选择对原数组排序，保证相同的数字都相邻，然后每次填入的数一定是这个数所在重复数集合中「从左往右第一个未被填过的数字」
+                continue;
+            }
+            used[i]=1;
+            //这道题对于理解回溯法，非常有帮助
+            tmp.push_back(nums[i]);
+            helper(nums,idx+1,res,tmp);
+            tmp.pop_back();
+            used[i]=0;
+        }
+    }
+};
+
+class Solution {
+public:
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
         set<vector<int>> result={};  
         if(nums.empty()){
             return {};
@@ -22,3 +59,5 @@ public:
 ===================================================
 47. Permutations II
 Given a collection of numbers that might contain duplicates, return all possible unique permutations.
+此题有助于理解回溯算法。
+另外中文版的leetcode的算法解释不错，还有时间复杂度如何计算的讲解。
