@@ -7,6 +7,98 @@
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
+class Codec { //层序遍历的方法
+public:
+
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        vector<string> res={};
+        string output="";
+        if(root==nullptr){
+            return output;
+        }
+        level_ser(root,res);
+        for(auto s:res){
+            output+=(s+" ");
+        }
+        output=output.substr(0,output.size()-1);
+        return output;
+
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        if(data==""){
+            return nullptr;
+        }
+        bool find_flag=true;
+        vector<string> input={};
+        while(find_flag){
+            int pos=data.find(" ");
+            if(pos!=string::npos){
+                string val=data.substr(0,pos);
+                input.push_back(val);
+                data=data.substr(pos+1);
+            }else{
+                input.push_back(data);
+                find_flag=false;
+            }
+        }
+        int idx=input.size()-1;
+        return level_deser(input);
+        
+    }
+private:
+    void level_ser(TreeNode* pNode,vector<string>& res){
+        queue<TreeNode*> q;
+        q.push(pNode);
+        while(!q.empty()){
+            TreeNode* pCur=q.front();
+            q.pop();
+            if(pCur){
+                res.push_back(to_string(pCur->val));
+                q.push(pCur->left);
+                q.push(pCur->right);
+            }else{
+                res.push_back("#");
+            }
+        }
+    }
+
+    TreeNode* level_deser(vector<string>& input){
+        queue<TreeNode*> q;
+        TreeNode* pRoot=nullptr;
+        if(input[0]!="#"){
+            pRoot=new TreeNode(stoi(input[0]));
+        }
+        q.push(pRoot);
+        int i=1;
+        while(!q.empty()){
+            TreeNode* pCur=q.front();
+            q.pop();
+            TreeNode* pLeft=nullptr;
+            if(input[i]!="#"){
+                pLeft=new TreeNode(stoi(input[i]));
+                q.push(pLeft);
+            }
+            pCur->left=pLeft;
+            i++;
+            TreeNode* pRight=nullptr;
+            if(input[i]!="#"){
+                pRight=new TreeNode(stoi(input[i]));
+                q.push(pRight);
+            }
+            pCur->right=pRight;
+            i++;
+        }
+        return pRoot;
+        
+    }
+};
+
+// Your Codec object will be instantiated and called as such:
+// Codec ser, deser;
+// TreeNode* ans = deser.deserialize(ser.serialize(root));
 class Solution {
 public:
     vector<vector<int>> levelOrder(TreeNode* root) {
