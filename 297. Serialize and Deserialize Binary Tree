@@ -7,7 +7,73 @@
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
-class Codec {
+ class Codec {//后续遍历的方法
+public:
+
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        vector<string> res={};
+        string output="";
+        if(root==nullptr){
+            return output;
+        }
+        post_ser(root,res);
+        for(auto s:res){
+            output+=(s+" ");
+        }
+        output=output.substr(0,output.size()-1);
+        return output;
+
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        if(data==""){//别忘了判断特殊情况
+            return nullptr;
+        }
+        bool find_flag=true;
+        vector<string> input={};
+        while(find_flag){
+            int pos=data.find(" ");
+            if(pos!=string::npos){
+                string val=data.substr(0,pos);
+                input.push_back(val);
+                data=data.substr(pos+1);
+            }else{
+                input.push_back(data);
+                find_flag=false;
+            }
+        }
+        int idx=input.size()-1;
+        return post_deser(input,idx);
+        
+    }
+private:
+    void post_ser(TreeNode* pNode,vector<string>& res){
+        if(pNode==nullptr){
+            res.push_back("#");
+            return;
+        }
+        post_ser(pNode->left,res);
+        post_ser(pNode->right,res);
+        res.push_back(to_string(pNode->val));
+    }
+
+    TreeNode* post_deser(vector<string>& input,int& idx){
+        if(input[idx]=="#"){
+            idx--;//这个地方，一个是别忘了对idx进行操作；另外就是要执行减操作。
+            return nullptr;
+        }
+        TreeNode* pCur=new TreeNode(stoi(input[idx]));
+        idx--;
+        pCur->right=post_deser(input,idx);
+        pCur->left=post_deser(input,idx);
+        
+        return pCur;
+        
+    }
+};
+class Codec {//前序遍历的方法
 public:
 
     // Encodes a tree to a single string.
