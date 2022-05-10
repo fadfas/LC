@@ -1,41 +1,52 @@
 class Solution {
 public:
-	bool isMatch(string s, string p) {
-		if ((p.size() == 0) && (s.size() != 0)) {
-			return false;
-		}
-		return matchCore((const char*)s.c_str(), (const char*)p.c_str());
-	}
+    bool isMatch(string s, string p) {
+        memo=vector<vector<int>>(s.size(),vector<int>(p.size(),-1));
+        return dp(s,0,p,0);
+    }
 private:
-	bool matchCore(const char* str, const char* pattern) {
-		if ((*str) == '\0' && (*pattern) == '\0') {
-			return true;
-		}
-
-		if ((*str) != '\0' && (*pattern) == '\0') {
-			return false;
-		}
-
-		//if ((*str) == '\0' && (*pattern) != '\0') {
-		//	return false;
-		//}   此段代码我考虑的排除情况是字符串已经结束了"ab",但是正则未结束"abc"，但是未考虑到"",".*"的模式
-
-		if ((*(pattern + 1)) == '*') {
-			if ((*str) == (*pattern) || (*pattern) == '.' && (*str != '\0')) {
-				return matchCore(str, pattern + 2) || matchCore(str + 1, pattern) || matchCore(str + 1, pattern + 2);
-			}
-			else
-			{
-				return matchCore(str, pattern + 2);
-			}
-		}
-
-		if ((*str) == (*pattern) || (*pattern) == '.' && (*str != '\0')) {
-			return matchCore(str + 1, pattern + 1);
-		}
-
-		return false;
-	}
+    vector<vector<int>> memo;
+    bool dp(string s,int i,string p,int j){
+        if(i==s.size()){
+            if(j==p.size()){
+                return true;
+            }else{
+                if((p.size()-j)%2==1){
+                    return false;
+                }else{
+                    for(j=j+1;j<p.size();j=j+2){
+                        if(p[j]!='*'){
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+            }
+        }else{
+            if(j==p.size()){
+                return false;
+            }
+        }
+        int res=0;
+        if(memo[i][j]!=-1){
+            return memo[i][j];
+        }
+        if(s[i]==p[j]||p[j]=='.'){
+            if(j<p.size()-1&&p[j+1]=='*'){
+                res = dp(s,i,p,j+2)||dp(s,i+1,p,j);
+            }else{
+                res = dp(s,i+1,p,j+1);
+            }
+        }else{
+            if(j<p.size()-1&&p[j+1]=='*'){
+                res= dp(s,i,p,j+2);
+            }else{
+                res= 0;
+            }
+        }
+        memo[i][j]=res;
+        return res;
+    }
 };
 ===================================================
 10. Regular Expression Matching
