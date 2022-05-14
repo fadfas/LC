@@ -1,3 +1,15 @@
+class Solution {
+public:
+    int rob(vector<int>& nums) {
+        vector<int> dp(nums.size()+1,0);//dp的定义是：截止到当前房间，所能获得的最大收益
+        dp[1]=nums[0];
+        for(int i=2;i<nums.size()+1;++i){
+            dp[i]=max(nums[i-1]+dp[i-2],dp[i-1]);
+        }
+        return dp[nums.size()];
+    }
+};
+
 class Solution {//很经典的动态规划的问题，而且连接的讲解对于dp的分析写的非常的好！！！！！！!!!!!!!!!!!!!!!!!!!!
 public:         //动态规划的问题，很多都是类似于：对于位置i，我做还是不做某件事，然后以此开写出dp方程
     int rob(vector<int>& nums) {
