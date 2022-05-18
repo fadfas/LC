@@ -1,18 +1,23 @@
 class Solution {
 public:
-    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {  //优先队列解法，用这个吧
+        deque<int> q;
         vector<int> res;
-        deque<int> dq;
-        for(int i=0;i<nums.size();++i){
-            if(!dq.empty()&&dq.front()==i-k){
-                dq.pop_front();
+        for(int i=0;i<k-1;++i){
+            while(!q.empty()&&nums[i]>q.back()){
+                q.pop_back();
             }
-            while(!dq.empty()&&nums[dq.back()]<=nums[i]){
-                dq.pop_back();
+            q.push_back(nums[i]);
+        }
+        
+        for(int i=k-1;i<nums.size();++i){
+            while(!q.empty()&& nums[i]>q.back()){
+                q.pop_back();
             }
-            dq.push_back(i);
-            if(i>=k-1){
-                res.push_back(nums[dq.front()]);
+            q.push_back(nums[i]);
+            res.push_back(q.front());
+            if(q.front()==nums[i-k+1]){
+                q.pop_front();
             }
         }
         return res;
