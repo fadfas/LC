@@ -6,6 +6,31 @@
  *     ListNode(int x) : val(x), next(NULL) {}
  * };
  */
+ class Solution { //递归的方法，感受递归的思想即可。
+public:
+    ListNode* reverseBetween(ListNode* head, int left, int right) {
+        if(left==1){
+            return reverseN(head,right);
+        }
+        ListNode* pLast=reverseBetween(head->next,left-1,right-1);
+        head->next=pLast;
+        return head;
+        
+    }
+private:
+    ListNode* successor=nullptr;
+    ListNode* reverseN(ListNode* head,int n){
+        if(n==1){
+            successor=head->next;
+            return head;
+        }
+        
+        ListNode* pNewHead=reverseN(head->next,n-1);
+        head->next->next=head;
+        head->next=successor;
+        return pNewHead;
+    }
+};
 class Solution {
 public:
     ListNode* reverseBetween(ListNode* head, int m, int n) {
