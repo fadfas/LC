@@ -27,6 +27,33 @@ private:
     }
 };
 
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if(head==nullptr){
+            return nullptr;
+        }
+        if(head->next==nullptr){
+            return head; //这种递归解法，和上面的递归解法，差别在于，返回新头结点方式的差别
+        }//学习这两种在递归中，传递信息的方式
+        
+        ListNode* pNewHead=reverseList(head->next);
+        head->next->next=head;
+        head->next=nullptr;
+        return pNewHead;
+    }
+};
+
 ListNode* ReverseList(ListNode* pHead) {
 	ListNode* pReverseListHead = nullptr;
 	ListNode* pNode = pHead;
