@@ -32,6 +32,7 @@ private:
     }
 };
 class Solution {
+//详细思路见 https://leetcode.cn/problems/reverse-linked-list-ii/solution/fan-zhuan-lian-biao-ii-by-leetcode-solut-teyq/ 解法二
 public:
     ListNode* reverseBetween(ListNode* head, int m, int n) {
         ListNode* pDummyNode=new ListNode(-1);
@@ -40,7 +41,7 @@ public:
         for(int i=0;i<m-1;++i)
             pPre=pPre->next;
         ListNode* pCur=pPre->next;
-        for(int i=m;i<n;++i){
+        for(int i=m;i<n;++i){//每次指
             ListNode* pToMove=pCur->next;
             pCur->next=pToMove->next;
             pToMove->next=pPre->next;//不可以赋值为pCur
