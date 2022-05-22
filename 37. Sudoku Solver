@@ -1,0 +1,61 @@
+class Solution {
+public:
+    void solveSudoku(vector<vector<char>>& board) {
+        memset(line,false,sizeof(line));
+        memset(col,false,sizeof(col));
+        memset(block,false,sizeof(block));//三维的数组，也可以这样初始化
+        
+        for(int i=0;i<9;++i){
+            for(int j=0;j<9;++j){
+                if(board[i][j]=='.'){
+                    spaces.push_back(make_pair(i,j));
+                }else{
+                    int idx=board[i][j]-'0'-1; //注意这个偏移
+                    line[i][idx]=true;
+                    col[j][idx]=true;
+                    block[i/3][j/3][idx]=true;
+                }
+            }
+        }
+        backtrack(board,0);
+    }
+private:
+    bool line[9][9];
+    bool col[9][9];
+    bool block[3][3][9];
+    vector<pair<int,int>> spaces; //这样写，就不用再递归函数调用的时候，一直传引用类型的参数了
+    bool valid=false; //回溯的解法，如果发现一个解，就可以停止程序的话，可以使用这种方法。
+    
+    void backtrack(vector<vector<char>>& board,int start){
+        if(start==spaces.size()){
+            valid=true;
+            return;
+        }
+        int i=spaces[start].first;
+        int j=spaces[start].second;
+        for(int m=1;m<=9&&(!valid);++m){
+            if(line[i][m-1]==true || col[j][m-1]==true || block[i/3][j/3][m-1]==true){
+                continue; //注意索引值和实际数字的偏移
+            }
+            board[i][j]='0'+m; //注意偏移
+            line[i][m-1]=true;
+            col[j][m-1]=true;
+            block[i/3][j/3][m-1]=true;
+            backtrack(board,start+1);
+            if(!valid){
+                line[i][m-1]=false;
+                col[j][m-1]=false;
+                block[i/3][j/3][m-1]=false;
+                board[i][j]='.'; //其实这个还原与否都可以
+            }
+        }
+    }
+};
+=====================================================================
+37. Sudoku Solver
+Write a program to solve a Sudoku puzzle by filling the empty cells.
+A sudoku solution must satisfy all of the following rules:
+Each of the digits 1-9 must occur exactly once in each row.
+Each of the digits 1-9 must occur exactly once in each column.
+Each of the digits 1-9 must occur exactly once in each of the 9 3x3 sub-boxes of the grid.
+The '.' character indicates empty cells.
