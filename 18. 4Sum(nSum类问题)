@@ -1,0 +1,50 @@
+class Solution {
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        vector<vector<int>> res;
+        if(nums.size()<4){
+            return res;
+        }
+        sort(nums.begin(),nums.end());
+        res=nSum(nums,target,4,0);
+        return res;
+    }
+private:
+    vector<vector<int>> nSum(vector<int>& nums,int target,int n,int start){  //任意nSum都可以解决
+        vector<vector<int>> res;
+        if(n==2){
+            int low=start,high=nums.size()-1;
+            while(low<high){
+                int sum=nums[low]+nums[high];
+                int left=nums[low],right=nums[high];
+                if(sum<target){
+                    while(low<high&&nums[low]==left) ++low;
+                }else if(sum>target){
+                    while(low<high&&nums[high]==right) --high;
+                }else{
+                    res.push_back({left,right});
+                    while(low<high&&nums[low]==left) ++low;
+                    while(low<high&&nums[high]==right) --high;
+                }
+            }
+        }else{
+            for(int i=start;i<nums.size();++i){
+                int newTarget=target-nums[i];
+                vector<vector<int>> tmp=nSum(nums,newTarget,n-1,i+1);
+                for(vector<int> each:tmp){
+                    each.push_back(nums[i]);
+                    res.push_back(each);
+                }
+                while(i<nums.size()-1&&nums[i]==nums[i+1]) i++;
+            }
+        }
+        return res;
+    }
+};
+=====================================================================
+18. 4Sum
+Given an array nums of n integers, return an array of all the unique quadruplets [nums[a], nums[b], nums[c], nums[d]] such that:
+0 <= a, b, c, d < n
+a, b, c, and d are distinct.
+nums[a] + nums[b] + nums[c] + nums[d] == target
+You may return the answer in any order.
