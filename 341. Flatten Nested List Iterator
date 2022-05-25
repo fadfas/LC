@@ -15,36 +15,36 @@
  *     const vector<NestedInteger> &getList() const;
  * };
  */
+
 class NestedIterator {
 public:
     NestedIterator(vector<NestedInteger> &nestedList) {
-        for(int i=nestedList.size()-1;i>=0;--i){
-            s.push(nestedList[i]);
-        }
+        b.push(nestedList.begin());
+        e.push(nestedList.end());
     }
-
+    
     int next() {
-        auto res=s.top();
-        s.pop();
-        return res.getInteger();
+        return (b.top()++)->getInteger();//先调用get函数，再++
     }
-
+    
     bool hasNext() {
-        while(!s.empty()){
-            auto topEle=s.top();
-            if(topEle.isInteger()){
-                return true;
-            }
-            s.pop();
-            vector<NestedInteger> temp=topEle.getList();
-            for(int i=temp.size()-1;i>=0;--i){
-                s.push(temp[i]);
+        while(!b.empty()){
+            if(b.top()==e.top()){
+                b.pop(),e.pop();
+            }else{
+                auto x=b.top();
+                if(x->isInteger()){
+                    return true;
+                }
+                b.top()++;
+                b.push(x->getList().begin());
+                e.push(x->getList().end());
             }
         }
         return false;
     }
 private:
-    stack<NestedInteger> s;
+    stack<vector<NestedInteger>::iterator> b,e;//不可以写成stack<NestedInteger::iterator> 
 };
 
 /**
@@ -53,6 +53,7 @@ private:
  * while (i.hasNext()) cout << i.next();
  */
 ======================================
+341. Flatten Nested List Iterator
 Given a nested list of integers, implement an iterator to flatten it.
 
 Each element is either an integer, or a list -- whose elements may also be integers or other lists.
