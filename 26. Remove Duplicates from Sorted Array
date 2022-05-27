@@ -1,19 +1,20 @@
 class Solution {
 public:
     int removeDuplicates(vector<int>& nums) {
-        int size=nums.size();
-        if(size==0){
-            return 0;
+        if(nums.size()<=1){
+            return nums.size();
         }
-        int count=0;
-        for(int i=1;i<size;++i){
-            if(nums[i]==nums[i-1]) ++count;
-            else nums[i-count]=nums[i];  //不是size-count!!!!!!
+        int i=0,j=1;
+        while(j<nums.size()){
+            if(nums[i]!=nums[j]){
+                i++;
+                nums[i]=nums[j];
+            }
+            ++j;
         }
-        return size-count;
+        return i+1;
     }
 };
-
 =====================================================================
 26. Remove Duplicates from Sorted Array
 Given a sorted array nums, remove the duplicates in-place such that each element appear only once and return the new length.
