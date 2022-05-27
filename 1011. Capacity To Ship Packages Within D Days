@@ -1,0 +1,41 @@
+class Solution {
+public:
+    int shipWithinDays(vector<int>& weights, int days) {
+        int left=*max_element(weights.begin(),weights.end());
+        int right=0;
+        for(int each:weights){
+            right+=each;
+        }
+        while(left<=right){
+            int mid=left+(right-left)/2;
+            if(canFinish(weights,days,mid)){
+                right=mid-1;
+            }else{
+                left=mid+1;
+            }
+        }
+        return left;
+    }
+private:
+    bool canFinish(vector<int>& weights,int days,int cap){
+        int need=0;
+        int cur_sum=0;
+        for(int i=0;i<weights.size();++i){
+            cur_sum+=weights[i];
+            if(cur_sum>cap){
+                --i;
+                cur_sum=0;
+                ++need;
+            }
+        }
+        ++need;//最后一次运输，在上面的for训练内，不会被统计进去
+        return need<=days;
+    }
+};
+=====================================================================
+1011. Capacity To Ship Packages Within D Days
+A conveyor belt has packages that must be shipped from one port to another within days days.
+
+The ith package on the conveyor belt has a weight of weights[i]. Each day, we load the ship with packages on the conveyor belt (in the order given by weights). We may not load more weight than the maximum weight capacity of the ship.
+
+Return the least weight capacity of the ship that will result in all the packages on the conveyor belt being shipped within days days.
