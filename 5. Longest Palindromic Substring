@@ -34,6 +34,26 @@ public:
         return s.substr((maxMidIndex-maxRadius)/2,maxRadius-1);
     }
 };
+class Solution { //双指针解法，空间复杂度比dp好
+public:
+    string longestPalindrome(string s) {
+        string res="";
+        for(int i=0;i<s.size();++i){
+            string tmp=find(s,i,i);
+            res=res.size()<tmp.size()?tmp:res;
+            tmp=find(s,i,i+1);
+            res=res.size()<tmp.size()?tmp:res;
+        }
+        return res;
+    }
+private:
+    string find(string& s,int l,int r){
+        while(l>=0&&r<s.size()&&s[l]==s[r]){
+            l--,r++;
+        }
+        return s.substr(l+1,r-l-1);//注意l,r所指向的位置，是不符合while循环条件后，退出来的位置。
+    }
+};
 class Solution {
 public:
     string longestPalindrome(string s) {
