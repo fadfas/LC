@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        vector<int> res(nums.size(),INT_MAX);
+        res[0]=0;
+        for(int i=0;i<res.size()-1;++i){
+            for(int j=1;j<=nums[i];++j){
+                if(i+j<nums.size())
+                    res[i+j]=min(res[i+j],res[i]+1);
+            }
+        }
+        return res[nums.size()-1];
+    }
+};
+=====================================================================
+45. Jump Game II
+Given an array of non-negative integers nums, you are initially positioned at the first index of the array.
+Each element in the array represents your maximum jump length at that position.
+Your goal is to reach the last index in the minimum number of jumps.
+You can assume that you can always reach the last index.
