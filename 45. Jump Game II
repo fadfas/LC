@@ -1,3 +1,20 @@
+class Solution {//贪心算法，时间复杂度更低；分析见labuladong书
+public:
+    int jump(vector<int>& nums) {
+        int curFarthest=0;
+        int step=0;
+        int end=0;
+        for(int i=0;i<nums.size()-1;++i){
+            curFarthest=max(curFarthest,i+nums[i]);
+            if(i==end){
+                ++step;
+                end=curFarthest;
+            }
+        }
+        return step;
+    }
+};
+
 class Solution {
 public:
     int jump(vector<int>& nums) {
