@@ -1,50 +1,53 @@
 class ExamRoom {
 public:
-    ExamRoom(int N) {
-        n=N;//这个别忘了，另外其他的函数用不了N，所以需要自己生命一个变量
+    ExamRoom(int n) {
+        vol=n;
     }
     
     int seat() {
-        if(loc.empty()){
-            loc.insert(0);
+        if(s.empty()){
+            s.insert(0);
             return 0;
         }
-        int dist=0,res=0;
-        if(loc.find(0)==loc.end()){
-            dist=*loc.begin()-0;
+        int res=0;
+        int dist=0;
+        int pre=0;
+        if(s.find(0)==s.end()){
+            dist=(*s.begin()-0);//首、尾就不要除二了
             res=0;
         }
-        auto start=loc.begin(),end=loc.end();
-        int pre=0;
-        while(start!=end){
-            int temp=(*start-pre)/2;
-            if(temp>dist){
-                res=(*start+pre)/2;
-                dist=temp;
+        for(auto it=s.begin();it!=s.end();++it){
+            int tmp=(*it-pre)/2;//dist一定要除以二后存下来，因为根据规则，两个座位距离5和两个座位距离4，是一样的
+            if(tmp>dist){//（因为在新人插入后，距离最近的考生，其间距都是1)
+                res=(*it+pre)/2;//也就是说： 0(*) 1 2 3 4(*) 5 6 7 8 9(*)这种情况，放在2、6、7，距离最近的考生，距离都是1
+                dist=tmp;
             }
-            pre=*start;
-            ++start;
+            pre=*it;
         }
-        if(loc.find(n-1)==loc.end()){
-            auto pLast=--loc.end();
-            int temp=n-1-*pLast;
-            if(temp>dist){
-                dist=temp;
-                res=n-1;
+        if(s.find(vol-1)==s.end()){
+            int tmp=vol-1-*(--s.end());
+            if(tmp>dist){
+                res=vol-1;
             }
         }
-        loc.insert(res);
+        s.insert(res);
         return res;
     }
     
     void leave(int p) {
-        loc.erase(loc.find(p));
+        s.erase(p);
     }
 private:
-    set<int> loc;
-    int n;
+    int vol;
+    set<int> s;
 };
 
+/**
+ * Your ExamRoom object will be instantiated and called as such:
+ * ExamRoom* obj = new ExamRoom(n);
+ * int param_1 = obj->seat();
+ * obj->leave(p);
+ */
 /**
  * Your ExamRoom object will be instantiated and called as such:
  * ExamRoom obj = new ExamRoom(N);
