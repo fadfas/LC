@@ -39,49 +39,51 @@ public:
 };
 
 
-class UF{//并查集还是定义一个变量吧，这样用的方便，也更加的规范，也最好定义一下析构函数
-private://逻辑还是参考labuladong P405的吧，但是类的定义，可以参考本题写法
-    vector<int> id;
-    vector<int> rank;
-    int count;
+class UF{//并查集还是定义一个类吧，这样用的方便，也更加的规范，也最好定义一下析构函数
 public:
     UF(int size){
-        id=vector<int>(size,0);
-        rank=vector<int>(size,0);
-        count=size;
+        cnt=size;
+        rank=vector<int>(size,1);
+        u=vector<int>(size,0);
         for(int i=0;i<size;++i){
-            id[i]=i;
+            u[i]=i;
         }
     }
     ~UF(){
         
     }
-    int find(int p){
-        while(p!=id[p]){
-            id[p]=id[id[p]];//路径压缩
-            p=id[p];
-        }
-        return p;
-    }
     void connect(int a,int b){
-        int aParent=find(a);
-        int bParent=find(b);
-        if(aParent==bParent){
+        int parentA=find(a);
+        int parentB=find(b);
+        if(parentA==parentB){
             return;
         }
-        if(rank[aParent]<rank[bParent]){
-            id[aParent]=bParent;
-        }else if(rank[aParent]>rank[bParent]){
-            id[bParent]=aParent;
+        if(rank[parentA]<rank[parentB]){//小树接大树上面
+            u[parentA]=parentB;
+            rank[parentB]+=rank[parentA];
         }else{
-            id[aParent]=bParent;
-            ++rank[aParent];
+            u[parentB]=parentA;
+            rank[parentA]+=rank[parentB];
         }
-        --count;//别忘了合并后，count要减一
+        --cnt;//别忘了合并后，count要减一
     }
-    bool connected(int a,int b){
-        return find(a)==find(b);
+    int find(int a){
+        while(u[a]!=a){
+            int parent=u[a];
+            u[a]=u[parent];//路径压缩
+            a=u[a];
+        }
+        return a;
     }
+    bool isConnected(int a,int b){
+        int parentA=find(a);
+        int parentB=find(b);
+        return parentA==parentB;
+    }
+private:
+    int cnt;
+    vector<int> rank;
+    vector<int> u;
 };
 
 class Solution {
