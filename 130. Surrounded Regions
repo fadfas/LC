@@ -40,7 +40,7 @@ public:
 
 
 class UF{//并查集还是定义一个变量吧，这样用的方便，也更加的规范，也最好定义一下析构函数
-private://逻辑还是参考labuladong的吧，但是类的定义，可以参考本题写法
+private://逻辑还是参考labuladong P405的吧，但是类的定义，可以参考本题写法
     vector<int> id;
     vector<int> rank;
     int count;
