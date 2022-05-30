@@ -14,7 +14,7 @@ public:
 		return {};
 	}
 private:
-	unordered_map<int, int> uf; //并查集写法写法参考labuladong P405
+	unordered_map<int, int> uf; //并查集写法写法参考LC 130
 	void init(int x) {
 		if (uf.find(x) == uf.end()) {
 			uf[x] = x;
