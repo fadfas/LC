@@ -1,0 +1,70 @@
+class UF {
+private:
+    int cnt;
+    vector<int> u;
+    vector<int> rank;
+public:
+    UF(int size){
+        cnt=size;
+        u=vector<int>(size,0);
+        rank=vector<int>(size,1);
+        for(int i=0;i<size;++i){
+            u[i]=i;
+        }
+    }
+    ~UF(){
+        
+    }
+    int find(int a){
+        while(u[a]!=a){
+            u[a]=u[u[a]];
+            a=u[a];
+        }
+        return a;
+    }
+    void connect(int a,int b){
+        int pA=find(a);
+        int pB=find(b);
+        if(pA==pB){
+            return;
+        }
+        if(rank[pA]<rank[pB]){
+            u[pA]=pB;
+            rank[pB]+=rank[pA];
+        }else{
+            u[pB]=pA;
+            rank[pA]+=rank[pB];
+        }
+        --cnt;
+    }
+    bool isConnected(int a,int b){
+        int pA=find(a);
+        int pB=find(b);
+        return pA==pB;
+    }
+};
+
+class Solution {
+public:
+    bool equationsPossible(vector<string>& equations) {
+        UF uf(26);
+        for(string s:equations){
+            if(s[1]=='='){
+                uf.connect(s[0]-'a',s[3]-'a');
+            }
+        }
+        for(string s:equations){
+            if(s[1]=='!'){
+                if(uf.isConnected(s[0]-'a',s[3]-'a')){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+};
+=====================================================================
+990. Satisfiability of Equality Equations
+You are given an array of strings equations that represent relationships between variables where each string equations[i] is of length 4 and takes one of two different forms: "xi==yi" or "xi!=yi".Here, xi and yi are lowercase letters (not necessarily different) that represent one-letter variable names.
+
+Return true if it is possible to assign integers to variable names so as to satisfy all the given equations, or false otherwise.
