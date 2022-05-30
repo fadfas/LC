@@ -11,7 +11,7 @@ public:
     }
 private:
     unordered_map<int,int> uf;//union-find set这个就是并查集
-    int islands=0;//并查集写法写法参考labuladong P405
+    int islands=0;//并查集写法写法参考LC 130
    // int find(int x) {  //这个是递归版的带压缩路径功能的find函数，写起来更简单
    //     if (!uf.count(x)) uf[x] = x, islands++;
    //     if (x != uf[x]) uf[x] = find(uf[x]);
