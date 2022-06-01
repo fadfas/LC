@@ -7,7 +7,7 @@ public:
 private:
     vector<vector<int>> memo;
     bool dp(string s,int i,string p,int j){
-        if(i==s.size()){
+        if(i==s.size()){//base case的逻辑，还是看labuladong page 160 的写法吧
             if(j==p.size()){
                 return true;
             }else{
