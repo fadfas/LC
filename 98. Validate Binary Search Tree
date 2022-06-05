@@ -43,32 +43,20 @@ public:
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
-class Solution {  //递归的方法！！
+class Solution {
 public:
     bool isValidBST(TreeNode* root) {
-        if(root==nullptr){
-            return true;
-        }
-        TreeNode* pPre=nullptr;//当被调用函数的后两个参数是引用类型时
-        bool isValid=true;   //不可以不定义pPre和isValid，然后下一行调用参数时，(root,nullptr,true)
-        return isValidBSTRecursively(root,pPre,isValid);  
+        return helper(root,LONG_MIN,LONG_MAX);
     }
 private:
-    bool isValidBSTRecursively(TreeNode* pNode,TreeNode*& pPre,bool& isValid){
+    bool helper(TreeNode* pNode,long long min,long long max){
         if(pNode==nullptr){
             return true;
         }
-        
-        isValid=isValidBSTRecursively(pNode->left,pPre,isValid);
-        if(pPre&&pPre->val>=pNode->val){
-            isValid=false;
+        if(pNode->val<=min || pNode->val>=max){
+            return false;
         }
-        pPre=pNode;
-        if(isValid){
-            isValid=isValidBSTRecursively(pNode->right,pPre,isValid);
-        }
-        
-        return isValid;
+        return helper(pNode->left,min,pNode->val) && helper(pNode->right,pNode->val,max);
     }
 };
 =================================================
