@@ -37,16 +37,16 @@ public:
         if(size==cap){//如果容量满了，先删除一个cache
             int delKey=freq_keys[minFreq].back();
             
-            int freq=key_valueFreq[delKey].second;
-            key_valueFreq.erase(delKey);
-            
             list<int>::iterator it=key_iter[delKey];
-            key_iter.erase(delKey);
-            
-            freq_keys[freq].erase(it);
-            if(freq_keys[freq].size()==0){
+            freq_keys[minFreq].erase(it);
+            if(freq_keys[minFreq].size()==0){
                 minFreq++;
             }
+            
+            key_iter.erase(delKey);
+            
+            key_valueFreq.erase(delKey);
+            
             --size;
         }
         
@@ -64,13 +64,6 @@ private:
     unordered_map<int,list<int>> freq_keys;
     unordered_map<int,list<int>::iterator> key_iter;
 };
-
-/**
- * Your LFUCache object will be instantiated and called as such:
- * LFUCache* obj = new LFUCache(capacity);
- * int param_1 = obj->get(key);
- * obj->put(key,value);
- */
  =====================================================================
  460. LFU Cache
 Design and implement a data structure for a Least Frequently Used (LFU) cache.
