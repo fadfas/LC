@@ -11,16 +11,18 @@ public:
     }
 private:
     void subsetsRecursively(vector<int>& nums,vector<vector<int>>& result,vector<int>& temp,int start){
-        result.push_back(temp);
-        for(int i=start;i<nums.size();++i){  //要搞明白这一块儿的逻辑顺序
-            temp.push_back(nums[i]);
-            subsetsRecursively(nums,result,temp,i+1);
-            temp.pop_back();
+        if(start==nums.size()){
+            result.push_back(temp);
+            return;
         }
+            
+        temp.push_back(nums[start]);
+        subsetsRecursively(nums,result,temp,start+1);
+        temp.pop_back();
+        subsetsRecursively(nums,result,temp,start+1);
     }
     
 };
-
 
 class Solution {
 public:
