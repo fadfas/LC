@@ -37,6 +37,24 @@ public:
         return true;
     }
 };
+class Solution {
+public:
+    bool isPalindrome(ListNode* head) {
+        left=head;
+        return helper(head);
+    }
+private:
+    ListNode* left;
+    bool helper(ListNode* right){
+        if(right==nullptr){
+            return true;
+        }
+        bool res=helper(right->next);
+        res=res&&(left->val==right->val);
+        left=left->next;
+        return res;
+    }
+};
 ==============================================
 这道题一定要画图，分别是5个节点和4个节点的情况即可！！！
 234. Palindrome Linked List
