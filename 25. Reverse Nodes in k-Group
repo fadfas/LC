@@ -15,6 +15,35 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
+ class Solution {
+public:
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        int i=0;
+        ListNode* e=head;
+        for(;i<k&&e;++i){
+            e=e->next;
+        }
+        
+        if(i<k){
+            return head;
+        }
+        ListNode* newHead=reverse(head,e);
+        head->next=reverseKGroup(e,k);
+        return newHead;
+           
+    }
+private:
+    ListNode* reverse(ListNode* s,ListNode* e){//左闭右开
+        ListNode* pCur=s,*pPre=nullptr;
+        while(pCur!=e){
+            ListNode* pNext=pCur->next;
+            pCur->next=pPre;
+            pPre=pCur;
+            pCur=pNext;
+        }
+        return pPre;
+    }
+};
 class Solution {
 public:
     ListNode* reverseKGroup(ListNode* head, int k) {
