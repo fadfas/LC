@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int superPow(int a, vector<int>& b) {
+        if(b.empty()){
+            return 1;
+        }
+        int last=b.back();
+        b.pop_back();
+        int first=myQuickPow(a,last);
+        int second=myQuickPow(superPow(a,b),10);
+        return (first*second)%base;
+    }
+private:
+    int myPow(int a,int last){
+        int res=1;
+        int a_base=a%base;
+        for(int i=0;i<last;++i){
+            res*=a_base;
+            res%=base;
+        }
+        return res;
+    };
+    int myQuickPow(int a,int last){
+        int res=1;
+        while(last){
+            if(last&1){
+                res=res*a%base;
+            }
+            a=(a%base)*(a%base)%base;
+            last>>=1;
+        }
+        return res;
+    }
+
+    int base=1337;
+};
+=====================================================================
+372. Super Pow
+Your task is to calculate ab mod 1337 where a is a positive integer and b is an extremely large positive integer given in the form of an array.
