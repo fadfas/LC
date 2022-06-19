@@ -51,6 +51,46 @@ private:
         return res;
     }
 };
+class Solution {
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        vector<vector<int>> solutions;
+        vector<int> queens;
+        
+        backtrack(solutions,queens,n,0,0,0,0);
+        return generate(solutions,n);
+    }
+private:
+    void backtrack(vector<vector<int>>& solutions,vector<int>& queens,int n,int line,int col,int lr,int rl){
+        if(line==n){
+            solutions.push_back(queens);
+            return;
+        }
+        int avail=((1<<n)-1)&(~(col|lr|rl));//哪一位是1，代表这一列，现在可以放棋子
+        while(avail){
+            int pos=avail&(-avail);//标识出最低位1，其他的都置0
+            avail=avail&(avail-1);//删掉最低位的1
+            int i=__builtin_ctz(pos);//计算出最低位1在第几位（即1后面几个0）
+            queens.push_back(i);
+            backtrack(solutions,queens,n,line+1,col|pos,(lr|pos)<<1,(rl|pos)>>1);
+            queens.pop_back();
+        }
+    }
+    vector<vector<string>> generate(vector<vector<int>>& solutions,int n){
+        vector<vector<string>> res;
+       
+        for(vector<int>& sol:solutions){
+            vector<string> one;
+            for(int i:sol){
+                string tmp(n,'.');
+                tmp[i]='Q';
+                one.push_back(tmp);
+            }
+            res.push_back(one);
+        }
+        return res;
+    }
+};
 =====================================================================
 51. N-Queens
 The n-queens puzzle is the problem of placing n queens on an n x n chessboard such that no two queens attack each other.
