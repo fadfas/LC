@@ -1,6 +1,47 @@
 class Solution {
 public:
     string minWindow(string s, string t) {
+        unordered_map<char,int> window,need;
+        for(char c:t){
+            need[c]++;
+        }
+        int len=INT_MAX,idx=-1;
+        int left=0,right=0;
+        int valid=0;
+        while(right<s.size()){
+            char c=s[right];
+            right++;
+            if(need.count(c)){
+                window[c]++;
+                if(window[c]==need[c]){
+                    valid++;
+                }
+            }
+            
+            while(valid==need.size()){
+                if(right-left<len){
+                    len=right-left;
+                    idx=left;
+                }
+                char c=s[left];
+                left++;
+                if(need.count(c)){
+                    if(window[c]==need[c]){
+                        valid--;
+                    }
+                    window[c]--;
+                }
+            }
+        }
+        if(idx==-1){
+            return "";
+        }
+        return s.substr(idx,len);
+    }
+};
+class Solution {
+public:
+    string minWindow(string s, string t) {
         if(t.size()>s.size())
             return "";
         unordered_map<char,int> hm;
