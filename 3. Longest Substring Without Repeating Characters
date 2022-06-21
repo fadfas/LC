@@ -1,32 +1,35 @@
+/*
+ * @lc app=leetcode id=3 lang=cpp
+ *
+ * [3] Longest Substring Without Repeating Characters
+ */
+
+// @lc code=start
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
-        if(s.size()==0){
+        if(s.empty()){//边界条件还是要记得判断一下
             return 0;
         }
-        int* index=new int[256];
-        for(int i=0;i<256;++i){
-            index[i]=-1;
-        }
-        int maxLength=0x80000000;
-        int cur=0;
-        for(int i=0;i<s.size();++i){
-            int preIndex=index[s[i]];  //不用写成index[s[i]-'a']
-            if(preIndex==-1||cur<(i-preIndex)){
-                ++cur;
-            }else if(cur>=(i-preIndex)){
-                maxLength=max(maxLength,cur);//下一句在舍弃掉旧的cur值前，一定要别忘了判断是否需要留存！！！
-                cur=i-preIndex;
+        unordered_map<char, int> window;
+        int left=0,right=0;
+        int res = 1;
+        while (right < s.size())
+        {
+            char c = s[right];
+            ++right;
+            window[c]++;
+            while(window[c]>1){
+                char d = s[left];
+                left++;
+                window[d]--;
             }
-            index[s[i]]=i;
-
+            res = max(res, right - left);//每一次循环都要更新res，而不是等window[c]>1的时候，才更新res
         }
-        if(cur>maxLength){
-            maxLength=cur;
-        }
-        return maxLength;
+        return res;
     }
 };
+// @lc code=end
 ============================================
 3. Longest Substring Without Repeating Characters
 Given a string, find the length of the longest substring without repeating characters.
