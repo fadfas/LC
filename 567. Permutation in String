@@ -1,0 +1,48 @@
+/*
+ * @lc app=leetcode id=567 lang=cpp
+ *
+ * [567] Permutation in String
+ */
+
+// @lc code=start
+class Solution {
+public:
+    bool checkInclusion(string s1, string s2) {
+        unordered_map<char, int> need, window;
+        for(char c:s1){
+            need[c]++;
+        }
+        int valid = 0;
+        int left = 0, right = 0;
+        while(right<s2.size()){
+            char c = s2[right];
+            right++;
+            if(need.count(c)){
+                window[c]++;
+                if(window[c]==need[c]){
+                    valid++;
+                    if(valid==need.size()){
+                        return true;
+                    }
+                }
+            }
+            if(right-left==s1.size()){
+                char c = s2[left];
+                left++;
+                if(need.count(c)){
+                    if(window[c]==need[c]){
+                        valid--;
+                    }
+                    window[c]--;
+                }
+            }
+        }
+        return false;
+    }
+};
+// @lc code=end
+=====================================================================
+567. Permutation in String
+Given two strings s1 and s2, return true if s2 contains a permutation of s1, or false otherwise.
+
+In other words, return true if one of s1's permutations is the substring of s2.
