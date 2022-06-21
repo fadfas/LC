@@ -1,76 +1,47 @@
+/*
+ * @lc app=leetcode id=438 lang=cpp
+ *
+ * [438] Find All Anagrams in a String
+ */
+
+// @lc code=start
 class Solution {
 public:
     vector<int> findAnagrams(string s, string p) {
-        int sLen=s.size();
-        int pLen=p.size();
-        if(!sLen||!pLen)
-            return {};
-        vector<int> res;
-        int dict[256]={0};
-        for(auto e:p){
-            dict[e]++;
+        unordered_map<char, int> need, window;
+        for(char c:p){
+            need[c]++;
         }
-        int start=0,end=0,count=pLen;
-        while(end<sLen){
-            if(dict[s[end]])
-                --count;
-            dict[s[end]]--;
-            end++;
-            if(count==0)
-                res.push_back(start);
-            if(end-start==pLen){
-                if(dict[s[start]]>=0)
-                    ++count;
-                dict[s[start]]++;
-                start++;
+        vector<int> res;
+        int valid = 0;
+        int left = 0, right = 0;
+        while(right<s.size()){
+            char c = s[right];
+            right++;
+            if(need.count(c)){
+                window[c]++;
+                if(window[c]==need[c]){
+                    valid++;
+                    if(valid==need.size()){
+                        res.push_back(left);
+                    }
+                }
+            }
+            if(right-left==p.size()){
+                char c = s[left];
+                left++;
+                if(need.count(c)){
+                    if(need[c]==window[c]){
+                        valid--;
+                    }
+                    window[c]--;
+                }
             }
         }
         return res;
     }
 };
-
-public class Solution {  //更容易理解的方法
-    public List<Integer> findAnagrams(String s, String t) {
-        List<Integer> result = new LinkedList<>();
-        if(t.length()> s.length()) return result;
-        Map<Character, Integer> map = new HashMap<>();
-        for(char c : t.toCharArray()){
-            map.put(c, map.getOrDefault(c, 0) + 1);
-        }
-        int counter = map.size();
-        
-        int begin = 0, end = 0;
-        int head = 0;
-        int len = Integer.MAX_VALUE;
-        
-        
-        while(end < s.length()){
-            char c = s.charAt(end);
-            if( map.containsKey(c) ){
-                map.put(c, map.get(c)-1);
-                if(map.get(c) == 0) counter--;
-            }
-            end++;
-            
-            while(counter == 0){
-                char tempc = s.charAt(begin);
-                if(map.containsKey(tempc)){
-                    map.put(tempc, map.get(tempc) + 1);
-                    if(map.get(tempc) > 0){
-                        counter++;
-                    }
-                }
-                if(end-begin == t.length()){
-                    result.add(begin);
-                }
-                begin++;
-            }
-            
-        }
-        return result;
-    }
-}
-
+// @lc code=end
 ============================================
 438. Find All Anagrams in a String
 Given a string s and a non-empty string p, find all the start indices of p's anagrams in s.
