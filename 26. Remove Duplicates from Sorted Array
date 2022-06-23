@@ -1,6 +1,21 @@
 class Solution {
 public:
     int removeDuplicates(vector<int>& nums) {
+        int left = 0, right = 0;
+        while(right<nums.size()){
+            nums[left]= nums[right];//不是swap
+            while (right<nums.size() && nums[left] == nums[right])
+            {//类似的语句中，都要提前判断right是否合法
+                right++;
+            }
+            left++;
+        }
+        return left;
+    }
+};
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
         if(nums.size()<=1){
             return nums.size();
         }
