@@ -2,36 +2,26 @@ class Solution {
 public:
     vector<int> searchRange(vector<int>& nums, int target) {
         if(nums.empty()){
-            return {-1,-1};
+            return {-1, -1};
         }
-        vector<int> result={};
-        
-        int left=0,right=nums.size()-1;
-        while(left<right){
-            int mid=left+((right-left)>>1);
-            if(nums[mid]<target){
-                left=mid+1;
+        int left = 0, right = nums.size() - 1;
+        while(left<=right){
+            int mid = left + (right - left) / 2;
+            if(nums[mid]>=target){
+                right = mid - 1;
             }else{
-                right=mid;
+                left = mid + 1;
             }
         }
-        if(nums[left]!=target){
-            return {-1,-1};
-        }else{
-            result.push_back(left);
+        if(left==nums.size()||nums[left]!=target){ //left==nums.size() 先判断这个，否则第二个判断项先判断的话，可能越界了
+            return {-1, -1};
         }
-        
-        right=nums.size()-1;  //left保持不变就可以了
-        while(left<right){
-            int mid=left+((right-left)>>1)+1; //背下来这个写法
-            if(nums[mid]>target){
-                right=mid-1;
-            }else{
-                left=mid;
+        for (right = left; right < nums.size();++right){
+            if(nums[left]!=nums[right]){
+                break;
             }
         }
-        result.push_back(right);
-        return result;
+        return {left, right - 1};
     }
 };
 ==================================================
