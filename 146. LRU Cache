@@ -9,8 +9,8 @@ public:
         if(it!=um.end()){
             int value=it->second->second;
             l.erase(um[key]);//不能erase(it)因为那个是unordered_map的iterator
-            l.push_front({key,value});
-            um[key]=l.begin();
+            l.push_front({key,value});//还是插入头部吧，不要插入尾部，否则um[key]=--l.end();这样会超时的
+            um[key]=l.begin();//另外，um[key]=l.rbegin();会报类型错误的，这个要注意
             return value;
         }
         return -1;
