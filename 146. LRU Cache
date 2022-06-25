@@ -17,16 +17,17 @@ public:
     }
     
     void put(int key, int value) {
-        if(um.find(key)!=um.end()){
-            l.erase(um[key]);
+        if(get(key)!=-1){
+            um[key]->second=value;
+            return;
+        }
+        if(l.size()==size){
+            int del_key=l.back().first;
+            l.pop_back();
+            um.erase(del_key);
         }
         l.push_front({key,value});
         um[key]=l.begin();
-        if(l.size()>size){
-            int delKey=l.rbegin()->first;//rbegin()的用法！！！
-            um.erase(delKey);
-            l.pop_back();
-        }
     }
 private:
     list<pair<int,int>> l;
