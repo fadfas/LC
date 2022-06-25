@@ -2,8 +2,8 @@ class LFUCache {
 public:
     LFUCache(int capacity) {
         cap=capacity;
-        size=0;
-        minFreq=0;
+        size=0;//这两个还是要初始化一下，因为不同的编译器，可能初始化的值不一样，导致结果错误
+        minFreq=0;//以后还是别省事儿，所有的变量，明确的进行初始化定义
     }
     
     int get(int key) {
