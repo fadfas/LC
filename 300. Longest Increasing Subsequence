@@ -1,4 +1,4 @@
-class Solution {
+class Solution { //忽略这种二分的方法
 public:
     int lengthOfLIS(vector<int>& nums) {
         int n=nums.size();
