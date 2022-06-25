@@ -8,9 +8,14 @@ public:
         int* dp=new int[n+1]; //注意是n+1，因为每个字符串，还有一个空串的状态
         memset(dp,0,sizeof(dp));
         dp[0]=0;
-        for(int j=1;j<=n;++j){
+        for(int j=1;j<=n;++j){ 
             dp[j]=j;
         }
+        //如果是未进行状态压缩的dp，注意不要这样初始化，否则可能数组越界
+        //for(int i=0;i<s2+1;++i){
+        //    dp[0][i]=i;
+        //    dp[i][0]=i;
+        //}
         for(int i=1;i<=m;++i){
             int upLeft=dp[0];  //学会如何保存左上角的那个数
             dp[0]=i;
