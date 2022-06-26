@@ -7,51 +7,44 @@ public:
     }
     
     int get(int key) {
-        auto it=key_iter.find(key);
-        if(it==key_iter.end()){
+        auto it=key_valueFreq.find(key);
+        if(it==key_valueFreq.end()){
             return -1;
         }
-        int value=key_valueFreq[key].first;//获取key对应的value以及旧的freq
         int freq=key_valueFreq[key].second;
+        int value=key_valueFreq[key].first;
         
-        key_valueFreq[key]=make_pair(value,freq+1);//更新key_valueFreq中数据
+        key_valueFreq[key].second=freq+1;
         
-        list<int>::iterator it_freq_keys=it->second;//这个iter是list<int>用的
-        
-        freq_keys[freq].erase(it_freq_keys);//freq_keys删除旧数据
-        if(freq_keys[minFreq].size()==0){//不是freq_keys[freq].size()==0 !!!!
-            minFreq++;//如果当前freq中没有cache了，则minFreq增加1
+        auto iter=key_iter[key];
+        freq_keys[freq].erase(iter);
+        if(freq_keys[minFreq].size()==0){
+            ++minFreq;
         }
         freq_keys[freq+1].push_front(key);
         
-        key_iter[key]=freq_keys[freq+1].begin();//更新key_iter数据
-        return value;       
-    }
+        key_iter[key]=freq_keys[freq+1].begin();
+        
+        return value;
+    } 
     
-    void put(int key, int value) {
-        if(cap==0) return;
-        if(get(key)!=-1){//如果key已经存在了
+   void put(int key, int value) {
+        if(cap==0){
+            return;
+        }
+        if(get(key)!=-1){
             key_valueFreq[key].first=value;
             return;
         }
-        if(size==cap){//如果容量满了，先删除一个cache
-            int delKey=freq_keys[minFreq].back();
-            
-            list<int>::iterator it=key_iter[delKey];
-            freq_keys[minFreq].erase(it);
-            if(freq_keys[minFreq].size()==0){
-                minFreq++;
-            }
-            
-            key_iter.erase(delKey);
-            
-            key_valueFreq.erase(delKey);
-            
+        if(size==cap){
+            int del_key=freq_keys[minFreq].back();
+            freq_keys[minFreq].pop_back();
+            key_valueFreq.erase(del_key);
+            key_iter.erase(del_key);
             --size;
         }
-        
-        minFreq=1;
         ++size;
+        minFreq=1;
         key_valueFreq[key]={value,1};
         freq_keys[1].push_front(key);
         key_iter[key]=freq_keys[1].begin();
