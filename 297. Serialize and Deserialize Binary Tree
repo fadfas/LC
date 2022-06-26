@@ -73,6 +73,10 @@ private:
         
     }
 };
+
+
+
+
 class Codec {//前序遍历的方法
 public:
 
@@ -113,6 +117,90 @@ private:
         string res=data.substr(0,pos);//左闭右开！！！
         data=data.substr(pos+1);
         return res;
+    }
+};
+
+
+
+class Codec {//层序遍历
+public:
+
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        vector<string> res=levelSer(root);
+        string res_str="";
+        for(string s:res){
+            res_str+=(s+" ");
+        }
+        return res_str.substr(0,res_str.size()-1);
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        vector<string> input=con_str(data);
+        return levelDeser(input);
+        
+    }
+private:
+    vector<string> con_str(string s){
+        vector<string> res;
+        int idx=s.find(' ');
+        while(idx!=-1){
+            res.push_back(s.substr(0,idx));
+            s=s.substr(idx+1);
+            idx=s.find(' ');
+        }
+        if(!s.empty()) res.push_back(s);
+        return res;
+    }
+    
+    vector<string> levelSer(TreeNode* p){
+        queue<TreeNode*> s;
+        vector<string> res;
+        s.push(p);
+        while(!s.empty()){
+            for(int i=0;i<s.size();++i){
+                TreeNode* pCur=s.front();
+                s.pop();
+                if(pCur==nullptr){
+                    res.push_back("#");
+                }else{
+                    s.push(pCur->left);
+                    s.push(pCur->right);
+                    res.push_back(to_string(pCur->val));
+                }
+            }
+        }
+        return res;
+    }
+    TreeNode* levelDeser(vector<string> input){
+        queue<TreeNode *> q;
+        if(input.empty()||input[0]=="#"){
+            return nullptr;
+        }
+        TreeNode *pRoot=new TreeNode(stoi(input[0]));
+        q.push(pRoot);
+        int idx=1;
+        while(!q.empty()){
+            TreeNode *pCur=q.front();
+            q.pop();
+            if(input[idx]=="#"){
+                pCur->left=nullptr;
+            }else{
+                pCur->left=new TreeNode(stoi(input[idx]));
+                q.push(pCur->left);
+            }
+            ++idx;
+            if(input[idx]=="#"){
+                pCur->right=nullptr;
+            }else{
+                pCur->right=new TreeNode(stoi(input[idx]));
+                q.push(pCur->right);
+            }
+            ++idx;
+        }
+        return pRoot;
+        
     }
 };
 =============================================
