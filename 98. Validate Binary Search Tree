@@ -59,6 +59,45 @@ private:
         return helper(pNode->left,min,pNode->val) && helper(pNode->right,pNode->val,max);
     }
 };
+class Solution {
+public:
+    bool isValidBST(TreeNode* root) {
+        TreeNode *pPre=nullptr;
+        bool res=false;
+        res=helper(root,pPre);
+        return res;
+    }
+private:
+    void helper1(TreeNode* pNode,TreeNode* &pPre,bool& res){
+        if(pNode==nullptr){
+            res=true;
+            return;
+        }
+        helper1(pNode->left,pPre,res);
+        if(pPre&&pNode->val<=pPre->val){
+            res=false;
+            return;
+        }
+        pPre=pNode;
+        if(res){
+            helper1(pNode->right,pPre,res);
+        }
+    }
+    bool helper(TreeNode* pNode,TreeNode* &pPre){
+        if(pNode==nullptr){
+            return true;
+        }
+        bool res=helper(pNode->left,pPre);
+        if(pPre&&pNode->val<=pPre->val){
+            res=false;
+        }
+        pPre=pNode;
+        if(res){
+            res = helper(pNode->right,pPre);
+        }
+        return res;
+    }
+};
 =================================================
 98. Validate Binary Search Tree
 Given a binary tree, determine if it is a valid binary search tree (BST).
