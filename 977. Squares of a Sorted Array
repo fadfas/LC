@@ -1,0 +1,21 @@
+class Solution {
+public:
+    vector<int> sortedSquares(vector<int>& nums) {
+        int n=nums.size();
+        vector<int> ans(n);
+        int l=0,r=nums.size()-1;
+        for(int i=n-1;i>=0;--i){
+            if(nums[l]*nums[l]<nums[r]*nums[r]){
+                ans[i]=nums[r]*nums[r];
+                --r;
+            }else{
+                ans[i]=nums[l]*nums[l];
+                ++l;
+            }
+        }
+        return ans;
+    }
+};
+==================================
+977. Squares of a Sorted Array
+Given an integer array nums sorted in non-decreasing order, return an array of the squares of each number sorted in non-decreasing order.
