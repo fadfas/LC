@@ -1,33 +1,26 @@
 class Solution {
 public:
     vector<int> spiralOrder(vector<vector<int>>& matrix) {
-        if(matrix.empty()||matrix[0].empty()){
-            return {};
-        } 
-        int m=matrix.size(),n=matrix[0].size();
-        int startRow=0,endRow=m-1,startCol=0,endCol=n-1;
+        int left = 0, right = matrix[0].size()-1, top = 0, bottom = matrix.size()-1;
         vector<int> res;
-        while(startRow<=endRow&&startCol<=endCol){
-            for(int i=startCol;i<=endCol;++i){
-                res.push_back(matrix[startRow][i]);
-            }//从左至右，不用额外检测是否startRow<=endRow，因为while循环已经检测过了
-            ++startRow;//此处自增的变量，和上面matrix[][]中一直固定的那个维度是一致的
-            for(int i=startRow;i<=endRow;++i){
-                res.push_back(matrix[i][endCol]);
-            }//从上至下，不用额外检测是否startcol<=endCol，因为while循环已经检测过了
-            --endCol;
-            if(startRow<=endRow){
-                for(int i=endCol;i>=startCol;--i){
-                    res.push_back(matrix[endRow][i]);
-                }
-                --endRow;//但是这两种情况，就要检测了，因为之前startRow已经自增一了，需要检测是否合格
+        int total = (right + 1) * (bottom + 1);
+        while(res.size()<total){
+            for (int i = left;i<=right&&res.size()<total;++i){//&&res.size()<total别忘了这个，否则扁长的输入，会导致输出结果错误
+                res.push_back(matrix[top][i]);
             }
-            if(startCol<=endCol){
-                for(int i=endRow;i>=startRow;--i){
-                    res.push_back(matrix[i][startCol]);
-                }
-                ++startCol;
+            ++top;
+            for (int i = top; i <= bottom&&res.size()<total;++i){
+                res.push_back(matrix[i][right]);
             }
+            --right;
+            for (int i = right; i >= left&&res.size()<total;--i){
+                res.push_back(matrix[bottom][i]);
+            }
+            --bottom;
+            for (int i = bottom; i >= top&&res.size()<total;--i){
+                res.push_back(matrix[i][left]);
+            }
+            ++left;
         }
         return res;
     }
