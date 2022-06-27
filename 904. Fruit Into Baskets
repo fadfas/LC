@@ -1,24 +1,30 @@
 class Solution {
 public:
-    int totalFruit(vector<int>& tree) {
-        int size=tree.size();
-        int dict[size];
-        fill_n(dict,size,0);
-        int start=0,end=0,count=0,amount=0;
-        while(end<size){
-            dict[tree[end]]++;
-            if(dict[tree[end]]==1)
-                ++count;
-            end++;
-            while(count>2){
-                dict[tree[start]]--;
-                if(dict[tree[start]]==0)
-                    --count;
-                ++start;
+    int totalFruit(vector<int>& fruits) {
+        int target = 2;
+        int l = 0, r = 0;
+        int res = -1;
+        unordered_map<int, int> window;
+        int cnt = 0;
+        while (r < fruits.size())
+        {
+            int n = fruits[r];
+            r++;
+            window[n]++;
+            if(window[n]==1){
+                ++cnt;
             }
-            amount=max(amount,end-start);
+            while(cnt>target){
+                int m = fruits[l];
+                ++l;//别忘了移动窗口；窗口指针都是加加
+                window[m]--;
+                if(window[m]==0){
+                    --cnt;
+                }
+            }
+            res = max(res, r - l);//不要放在上面的while循环里
         }
-        return amount;
+        return res;
     }
 };
 =========================================================
