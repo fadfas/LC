@@ -1,0 +1,89 @@
+class MyLinkedList {
+public:
+    MyLinkedList() {
+        size = 0;
+        pDummy = new ListNode(-1);
+    }
+
+    int get(int index) {
+        if(index>=size){
+            return -1;
+        }
+        ListNode *pCur = pDummy->next;
+        for (int i = 0; i < index;++i){
+            pCur = pCur->next;
+        }
+        return pCur->val;
+    }
+
+    void addAtHead(int val) {
+        ListNode *pNew = new ListNode(val);
+        pNew->next = pDummy->next;
+        pDummy->next = pNew;
+        ++size;
+    }
+
+    void addAtTail(int val) {
+        ListNode *pPre = pDummy;
+        for (int i = 0; i < size;++i){
+            pPre = pPre->next;
+        }
+        ListNode *pNew = new ListNode(val);
+        pPre->next = pNew;
+        ++size;
+    }
+=====================================================================
+707. Design Linked List
+Design your implementation of the linked list. You can choose to use a singly or doubly linked list.
+A node in a singly linked list should have two attributes: val and next. val is the value of the current node, and next is a pointer/reference to the next node.
+If you want to use the doubly linked list, you will need one more attribute prev to indicate the previous node in the linked list. Assume all nodes in the linked list are 0-indexed.
+
+Implement the MyLinkedList class:
+
+MyLinkedList() Initializes the MyLinkedList object.
+int get(int index) Get the value of the indexth node in the linked list. If the index is invalid, return -1.
+void addAtHead(int val) Add a node of value val before the first element of the linked list. After the insertion, the new node will be the first node of the linked list.
+void addAtTail(int val) Append a node of value val as the last element of the linked list.
+void addAtIndex(int index, int val) Add a node of value val before the indexth node in the linked list. If index equals the length of the linked list, the node will be appended to the end of the linked list. If index is greater than the length, the node will not be inserted.
+void deleteAtIndex(int index) Delete the indexth node in the linked list, if the index is valid.
+    void addAtIndex(int index, int val) {
+        if(index>size){
+            return;
+        }
+        if(index==size){
+            addAtTail(val);
+            return;
+        }
+        ListNode *pPre = pDummy;
+        for (int i = 0; i < index;++i){
+            pPre = pPre->next;
+        }
+        ListNode *pNew = new ListNode(val);
+        pNew->next = pPre->next;
+        pPre->next = pNew;
+        ++size;
+    }
+
+    void deleteAtIndex(int index) {
+        if(index>=size){
+            return;
+        }
+        ListNode *pPre = pDummy;
+        for (int i = 0; i < index;++i){
+            pPre = pPre->next;
+        }
+        ListNode *pDel = pPre->next;
+        pPre->next = pDel->next;
+        delete pDel;
+        --size;
+    }
+
+private:
+    struct ListNode{
+        int val;
+        ListNode *next;
+        ListNode(int _val):val(_val){}
+    };
+    int size;
+    ListNode *pDummy;
+};
