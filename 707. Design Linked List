@@ -32,6 +32,48 @@ public:
         pPre->next = pNew;
         ++size;
     }
+
+    void addAtIndex(int index, int val) {
+        if(index>size){
+            return;
+        }
+        if(index==size){
+            addAtTail(val);
+            return;
+        }
+        ListNode *pPre = pDummy;
+        for (int i = 0; i < index;++i){
+            pPre = pPre->next;
+        }
+        ListNode *pNew = new ListNode(val);
+        pNew->next = pPre->next;
+        pPre->next = pNew;
+        ++size;
+    }
+
+    void deleteAtIndex(int index) {
+        if(index>=size){
+            return;
+        }
+        ListNode *pPre = pDummy;
+        for (int i = 0; i < index;++i){
+            pPre = pPre->next;
+        }
+        ListNode *pDel = pPre->next;
+        pPre->next = pDel->next;
+        delete pDel;//养成删除无用listnode的好习惯
+        --size;
+    }
+
+private:
+    struct ListNode{//定义在这个地方
+        int val;
+        ListNode *next;
+        ListNode(int _val):val(_val),next(nullptr){}//next指针也要初始化
+    };
+    int size;
+    ListNode *pDummy;
+};
 =====================================================================
 707. Design Linked List
 Design your implementation of the linked list. You can choose to use a singly or doubly linked list.
