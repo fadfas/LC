@@ -1,0 +1,41 @@
+class Solution//其实就是LC25的解法
+{
+public:
+    ListNode *swapPairs(ListNode *head)
+    {
+        return kReverseList(head, 2);
+    }
+
+private:
+    ListNode *kReverseList(ListNode *p, int k)
+    {
+        ListNode *s = p, *e = p;
+        for (int i = 0; i < k - 1 && e != nullptr; ++i)
+        {
+            e = e->next;
+        }
+        if (e == nullptr)
+        {
+            return p;
+        }
+        ListNode *tmp = kReverseList(e->next, k);
+        ListNode *newHead = reversePart(s, e);
+        s->next = tmp;
+        return newHead;
+    }
+    ListNode *reversePart(ListNode *s, ListNode *e)
+    {
+        ListNode *pre = nullptr, *cur = s;
+        while (pre == nullptr || pre != e)
+        {
+            ListNode *next = cur->next;
+            cur->next = pre;
+            pre = cur;
+            cur = next;
+        }
+        return pre;
+    }
+};
+=====================================================================
+24. Swap Nodes in Pairs
+Given a linked list, swap every two adjacent nodes and return its head. You must solve the problem without modifying the values in the list's nodes (i.e., only nodes themselves may be changed.)
