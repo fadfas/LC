@@ -1,6 +1,34 @@
 class Solution {
 public:
     vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        vector<int> res;
+        sort(nums1.begin(), nums1.end());
+        sort(nums2.begin(), nums2.end());
+
+        int first = 0, second = 0;
+        while (first < nums1.size() && second < nums2.size())
+        {
+            int n1 = nums1[first], n2 = nums2[second];
+            if(n1<n2){
+                ++first;
+            }else if(n1>n2){
+                ++second;
+            }else{
+                res.push_back(n1);
+                while(first < nums1.size()&&nums1[first]==n1){
+                    ++first;
+                }
+                while(second < nums2.size()&&nums2[second]==n1){
+                    ++second;
+                }
+            }
+        }
+        return res;
+    }
+};
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
         set<int> temp(nums1.begin(),nums1.end());
         set<int> res;
         for(auto e:nums2){
