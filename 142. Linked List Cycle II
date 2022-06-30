@@ -28,6 +28,7 @@ public:
     }
 };
 =======================================
+讲的很好！！！：https://www.programmercarl.com/0142.%E7%8E%AF%E5%BD%A2%E9%93%BE%E8%A1%A8II.html
 参考链接：http://www.cnblogs.com/hiddenfox/p/3408931.html
 第一次相遇时slow走过的距离：a+b，fast走过的距离：a+b+c+b。
 因为fast的速度是slow的两倍，所以fast走的距离是slow的两倍，有 2(a+b) = a+b+c+b，可以得到a=c
