@@ -1,0 +1,41 @@
+class Solution {
+public:
+    string reverseStr(string s, int k) {
+        int n=s.size();
+        for (int i = 0; i < n;i+=2*k){
+            reverse(s.begin() + i, s.begin() + min(i + k,n));
+        }
+        return s;
+    }
+string reverseStr2(string s, int k) {
+        string input = s;
+        helper(input, 0, k);
+        return input;
+    }
+private:
+    void helper(string& s,int i,int k){
+        if(s.size()-1-i+1<k){
+            myReverse(s, i, s.size() - 1);
+            return;
+        }
+        if(s.size()-1-i+1<2*k){
+            myReverse(s, i, i + k - 1);
+            return;
+        }
+        helper(s, i + 2*k, k);
+        myReverse(s, i, i + k - 1);
+    }
+    void myReverse(string& s,int i,int j){
+        while(i<j){
+            char tmp = s[i];
+            s[i] = s[j];
+            s[j] = tmp;
+            i++, j--;
+        }
+    }
+};
+=====================================================================
+541. Reverse String II
+Given a string s and an integer k, reverse the first k characters for every 2k characters counting from the start of the string.
+
+If there are fewer than k characters left, reverse all of them. If there are less than 2k but greater than or equal to k characters, then reverse the first k characters and leave the other as original.
