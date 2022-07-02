@@ -1,49 +1,51 @@
 class Solution {
 public:
     int slidingPuzzle(vector<vector<int>>& board) {
-        vector<vector<int>> adj={
-            {1,3},{0,4,2},{1,5},{0,4},{3,1,5},{2,4}
-        }; //vector的二维数组，可以这样定义
-        string target="123450";
-        string cur="";
-        for(int i=0;i<board.size();++i){
-            for(int j=0;j<board[i].size();++j){
-                cur+=(board[i][j]+'0');
-            }
-        }
-        
+        vector<vector<int>> p={{1,3},{0,2,4},{1,5},{0,4},{3,1,5},{2,4}};
+         //vector的二维数组，可以这样定义
         unordered_set<string> us;
         queue<string> q;
-        
-        q.push(cur);
-        us.insert(cur);
+        string start="";
+        for(int i=0;i<2;++i){
+            for(int j=0;j<3;++j){
+                start.push_back(('0'+board[i][j]));
+            }
+        }
+        q.push(start);
         
         int step=0;
         while(!q.empty()){
-            int remain=q.size();
-            for(int i=0;i<remain;++i){
-                string tmp=q.front();q.pop();
-                if(target==tmp){
+            int size=q.size();
+            for(int i=0;i<size;++i){
+                string cur=q.front();
+                q.pop();
+                if(cur=="123450"){
                     return step;
                 }
-                us.insert(tmp);
-                int idx=0;
-                for(;idx<6;++idx){
-                    if(tmp[idx]=='0'){
-                        break;
+                us.insert(cur);
+                int idx=cur.find('0');
+                vector<int> all_idx=p[idx];
+                // for(int idx_next:all_idx){ //还是用这种方式吧，否则下面那种，还有在两个地方swap回去
+                //     string next=cur;
+                //     swap(next[idx],next[idx_next]);
+                //     if(us.find(next)!=us.end()){
+                //         continue;
+                //     }
+                //     q.push(next);
+                // }
+                for(int idx_next:all_idx){//对于循环，始终别忘了保持：循环不变量，即每次循环的开始，待交换的字符串，都
+                     //是同一个
+                    swap(cur[idx],cur[idx_next]); //字符串也可以swap
+                    if(us.find(cur)!=us.end()){
+                        swap(cur[idx],cur[idx_next]);//这个地方别忘了
+                        continue;
                     }
-                }
-                vector<int> nei=adj[idx];
-                for(int nei_idx: nei){
-                    string next=tmp;
-                    swap(next[nei_idx],next[idx]);//字符串也可以swap
-                    if(us.find(next)==us.end()){
-                        //us.insert(tmp); 不能在这，这个地方tmp字符串，还没有进行处理（即判断是否达到目标）
-                        q.push(next);
-                    }
+                    q.push(cur);
+                    us.insert(cur);//这个地方写不写都可以
+                    swap(cur[idx],cur[idx_next]);
                 }
             }
-            step++;
+            ++step;
         }
         return -1;
     }
