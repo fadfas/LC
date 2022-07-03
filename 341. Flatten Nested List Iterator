@@ -26,7 +26,25 @@ public:
     int next() {
         return (b.top()++)->getInteger();//先调用get函数，再++
     }
-    
+    bool hasNext2() {
+        while(!s.empty()){
+            if(s.top()==e.top()){
+                s.pop(),e.pop();
+            }else{
+                NestedInteger &ni=*s.top();//这个地方必须声明为引用类型
+                //NestedInteger ni=*s.top();//如果这样的话，就会复制生成一份新的对象了，当前作用于结束后，对象就销毁了
+                if(ni.isInteger()){
+                    return true;
+                }
+                s.top()++;
+                vector<NestedInteger> &ni_vec=ni.getList();//同理，这个地方也要引用类型
+                s.push(ni_vec.begin());//const vector<NestedInteger> &getList() const; 这个地方感觉有点儿问题
+                //感觉实际的函数类型应该是： vector<NestedInteger> &getList() const
+                e.push(ni_vec.end());//否则 vector<NestedInteger> &ni_vec=ni.getList() 应该会报错的
+            }
+        }
+        return false;
+    }
     bool hasNext() {
         while(!b.empty()){
             if(b.top()==e.top()){
