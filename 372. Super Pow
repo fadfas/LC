@@ -33,6 +33,21 @@ private:
     }
 
     int base=1337;
+    
+    int quickPow(int a,int b){//这个是错误的，比如2^1,2^6，结果就不对
+		int res = 1;
+		if(b==0){
+			return res;
+		}
+		if(b%2!=0){
+			res *= a;
+		}
+		while(b>1){
+			a = (a * a)%1337;
+			b /= 2;
+		}
+		return (res * a)%1337;
+	}
 };
 =====================================================================
 372. Super Pow
