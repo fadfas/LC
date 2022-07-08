@@ -1,0 +1,55 @@
+class Solution {
+public:
+    string reverseWords(string s) {
+        if(s.empty()){
+            return s;
+        }
+        int i = 0, j = 0;
+        while(j<s.size()&&s[j]==' '){
+            ++j;
+        }
+        if(j==s.size()){
+            return "";
+        }
+        int cnt = 0;
+        // j目前指向第一个非空格位置
+        while(j<s.size()){
+            if(s[j]!=' '){
+                s[i] = s[j];
+                ++i;
+                cnt = 0;
+            }
+            else
+            {
+                ++cnt;
+                if(cnt==1){
+                    s[i] = s[j];
+                    ++i;
+                }
+            }
+            ++j;
+        }
+        --i;//一开始忘了这个，始终要记得判断（当前循环前、当前循环后、整个循环结束后），当前i\j所指的位置，是否是有效数据；
+        if (s[i] == ' ')
+        {
+            --i;
+        }
+        s.resize(i + 1);
+        reverse(s.begin(), s.end());//revers接受iterator，另外是左闭右开
+        i = 0, j = 0;
+        while(j<s.size()){
+            while(j<s.size() && s[j]!=' '){
+                ++j;
+            }
+            reverse(s.begin()+i, s.begin()+j-1+1);
+            i = j + 1, j = i;
+        }
+        return s;
+    }
+};
+=====================================================================
+151. Reverse Words in a String
+Given an input string s, reverse the order of the words.
+A word is defined as a sequence of non-space characters. The words in s will be separated by at least one space.
+Return a string of the words in reverse order concatenated by a single space.
+Note that s may contain leading or trailing spaces or multiple spaces between two words. The returned string should only have a single space separating the words. Do not include any extra spaces.
