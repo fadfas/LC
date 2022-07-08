@@ -1,0 +1,29 @@
+class Solution {
+public:
+    string replaceSpace(string s) {
+    	int cnt=0;
+    	for(char c:s){
+    		if(c==' '){
+    			++cnt;
+    		}
+    	}
+    	int n=s.size();
+    	s.resize(n+2*cnt);
+    	int i=n-1,j=s.size()-1;
+    	while(j>=0){
+    		if(s[i]==' '){
+    			s[j--]='0';
+    			s[j--]='2';
+    			s[j--]='%';
+    		}else{
+    			s[j--]=s[i];
+    		}
+    		--i;
+    	}
+    	return s;
+
+    }
+};
+=====================================================================
+剑指 Offer 05. 替换空格
+请实现一个函数，把字符串 s 中的每个空格替换成"%20"。
