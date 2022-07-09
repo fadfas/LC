@@ -27,6 +27,16 @@ private:
                 next[i++]=++len;
             }else if(len){
                 len=next[len-1];
+                //  0 1 2 3 4 5
+                //以a b a b a c 为例，假设目前i=5指向c，此时len=3.（记住这个例子行可以写出这个逻辑了）
+                //因为needle[5]不等于needle[3]
+                //但是前缀前缀aba(needle[0-2])和后缀aba(needle[2-4])是相等的
+                //此时next[3-1]就可以得到aba这个字符串，的最长相等前后缀的长度=1
+                //此时令len=1
+                //
+                //因为aba的最长相等前后缀，是前缀a和后缀a
+                //就对应到aba(needle[0-2])的第一个a，和，aba(needle[2-4])的最后一个a
+                //这种情况下，下一次for循环，就判断needle[5]和needle[1]是否相等，就可以了
             }else{
                 next[i++]=0;
             }
