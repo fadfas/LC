@@ -26,7 +26,7 @@ private:
             if(needle[i]==needle[len]){
                 next[i++]=++len;
             }else if(len){
-                len=next[len-1];
+                len=next[len-1];//不是len=next[j-1];注意这块
                 //  0 1 2 3 4 5
                 //以a b a b a c 为例，假设目前i=5指向c，此时len=3.（记住这个例子行可以写出这个逻辑了）
                 //因为needle[5]不等于needle[3]
