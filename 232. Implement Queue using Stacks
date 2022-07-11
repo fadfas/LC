@@ -1,0 +1,63 @@
+class MyQueue {
+public:
+    MyQueue() {
+        
+    }
+    
+    void push(int x) {
+        if(a.empty()){
+            front = x;
+        }
+        a.push(x);
+    }
+
+    int pop() {
+        if(!b.empty()){
+            int res = b.top();
+            b.pop();
+            return res;
+        }
+        while(!a.empty()){
+            b.push(a.top());
+            a.pop();
+        }
+        int res = b.top();
+        b.pop();
+        return res;
+    }
+
+    int peek() {
+        if(!b.empty()){
+            return b.top();
+        }
+        return front;
+    }
+
+    bool empty() {
+        return a.empty() && b.empty();
+    }
+
+private:
+    stack<int> a, b;
+    int front;
+};
+摊还分析给出了所有操作的平均性能。摊还分析的核心在于，最坏情况下的操作一旦发生了一次，那么在未来很长一段时间都不会再次发生，这样就会均摊每次操作的代价。
+单次 出队 操作最坏情况下的时间复杂度为 O(n)。考虑到我们要做 n 次出队操作，如果我们用最坏情况下的时间复杂度来计算的话，那么所有操作的时间复杂度为 O(n^2)
+然而，在一系列的操作中，最坏情况不可能每次都发生，可能一些操作代价很小，另一些代价很高。因此，如果用传统的最坏情况分析，那么给出的时间复杂度是远远大于实际的复杂度的。
+如下操作：push,push,push,push,pop,pop,pop,pop
+在上面的例子中，出队 操作最多可以执行的次数跟它之前执行过 入队 操作的次数有关。虽然一次 出队 操作代价可能很大，但是每 n 次 入队 才能产生这么一次代价为 n 的 出队 操作。因此所有操作的总时间复杂度为：n(所有的入队操作产生） + 2 * n(第一次出队操作产生） + n - 1(剩下的出队操作产生）
+所以实际时间复杂度为 O(2*n)。于是我们可以得到每次操作的平均时间复杂度为 O(2n/2n)=O(1)。(是指这n个数字，全部入队，再出队的全部操作)
+=====================================================================
+232. Implement Queue using Stacks
+Implement a first in first out (FIFO) queue using only two stacks. The implemented queue should support all the functions of a normal queue (push, peek, pop, and empty).
+
+Implement the MyQueue class:
+
+void push(int x) Pushes element x to the back of the queue.
+int pop() Removes the element from the front of the queue and returns it.
+int peek() Returns the element at the front of the queue.
+boolean empty() Returns true if the queue is empty, false otherwise.
+Notes:
+
+You must use only standard operations of a stack, which means only push to top, peek/pop from top, size, and is empty operations are valid.
+Depending on your language, the stack may not be supported natively. You may simulate a stack using a list or deque (double-ended queue) as long as you use only a stack's standard operations.
