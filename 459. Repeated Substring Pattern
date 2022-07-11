@@ -1,0 +1,47 @@
+class Solution {
+public:
+    bool repeatedSubstringPattern(string s) {
+        int n = s.size();
+        vector<int> next(n, 0);
+        int len = 0;
+        for (int i = 1; i < n; )
+        {
+            if(s[i]==s[len]){
+                next[i] = ++len;
+                ++i;
+            }else if(len){
+                len = next[len - 1];
+            }else{
+                next[i] = 0;
+                ++i;
+            }
+        }
+        return next[n - 1] != 0 && n % (n - next[n - 1]) == 0;
+    }
+};
+参考链接：https://leetcode.com/problems/repeated-substring-pattern/discuss/94397/C%2B%2B-O(n)-using-KMP-32ms-8-lines-of-code-with-brief-explanation.
+My p[i] stands for longest common string length of prefix string and the string ended with position i.
+
+The important point is the last one: len % (len - p[len - 1]) == 0
+
+for a string like below, if p[len-1] = 15, len=20:
+
+#####~~~~~^^^^^$$$$$
+#####~~~~~^^^^^$$$$$
+
+by p[len-1] = 15, we know the strings colored red are the same.
+
+so you can infer that:
+
+##### == ~~~~~
+
+~~~~~ == ^^^^^
+
+^^^^^ == $$$$$
+
+The whole is repeating as #####
+
+the length of it is 5, which can be completely divided by len.
+=====================================================================
+459. Repeated Substring Pattern
+Given a string s, check if it can be constructed by taking a substring of it and appending multiple copies of the substring together.
