@@ -1,26 +1,33 @@
 class Solution {
 public:
     bool isValid(string s) {
-        if(s.size()&1==1){
-            return false;
-        }
-        stack<char> charStack;
-        for(auto each: s){
-            if(each=='('){
-                charStack.push(')');
-            }else if(each=='{'){
-                charStack.push('}');
-            }else if(each=='['){
-                charStack.push(']');
+        stack<char> st;
+        for(const char &c: s){
+            if(c=='('||c=='['||c=='{'){
+                st.push(c);
             }else{
-                if(charStack.empty()||charStack.top()!=each){
-                    return false;
-                }else if(charStack.top()==each){
-                    charStack.pop();
+                if(c==')'){
+                    if(!st.empty()&&st.top()=='('){
+                        st.pop();
+                    }else{
+                        return false;
+                    }
+                }else if(c==']'){
+                    if(!st.empty()&&st.top()=='['){
+                        st.pop();
+                    }else{
+                        return false;
+                    }
+                }else{
+                    if(!st.empty()&&st.top()=='{'){
+                        st.pop();
+                    }else{
+                        return false;
+                    }
                 }
             }
         }
-        return charStack.empty();
+        return st.empty();
     }
 };
 =========================================
