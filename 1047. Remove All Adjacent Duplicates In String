@@ -1,6 +1,20 @@
 class Solution {
 public:
     string removeDuplicates(string s) {
+        string res = "";
+        for(const char &c:s){
+            if(!res.empty()&&res.back()==c){
+                res.pop_back();
+            }else{
+                res.push_back(c);
+            }
+        }
+        return res;
+    }
+};
+class Solution {
+public:
+    string removeDuplicates(string s) {
         stack<char> st;
         for(const char &c:s){
             if(!st.empty()&&st.top()==c){
