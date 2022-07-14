@@ -1,0 +1,33 @@
+class Solution {
+public:
+    vector<int> rightSideView(TreeNode* root) {
+        vector<int> res;
+        if(root==nullptr){
+            return res;
+        }
+        queue<TreeNode *> q;
+        TreeNode *pCur = nullptr;
+        q.push(root);
+        while (!q.empty())
+        {
+            int size = q.size();
+            for (int i = 0; i < size;++i){
+                pCur = q.front();
+                q.pop();
+                if(pCur->left){
+                    q.push(pCur->left);
+                }
+                if(pCur->right){
+                    q.push(pCur->right);
+                }
+                if(i==size-1){
+                    res.push_back(pCur->val);
+                }
+            }
+        }
+        return res;
+    }
+};
+=====================================================================
+199. Binary Tree Right Side View
+Given the root of a binary tree, imagine yourself standing on the right side of it, return the values of the nodes you can see ordered from top to bottom.
