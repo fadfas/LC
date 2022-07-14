@@ -7,27 +7,26 @@
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
-class Solution {//此程序用的循环的方法去中序遍历二叉树
+class Solution {
 public:
     vector<int> inorderTraversal(TreeNode* root) {
-        vector<int> result={};
-        if(!root){
-            return result;
+        vector<int> res;
+        if(root==nullptr){
+            return res;
         }
-        stack<TreeNode*> nodeStack;
-        TreeNode* pCurrent=root;
-        while(!nodeStack.empty()||pCurrent){
-            if(pCurrent){
-                nodeStack.push(pCurrent);//学习stack的成员函数push()
-                pCurrent=pCurrent->left;
-            }else{
-                pCurrent=nodeStack.top();
-                result.push_back(pCurrent->val);
-                nodeStack.pop();
-                pCurrent=pCurrent->right;
+        TreeNode *pCur = root;
+        stack<TreeNode *> s;
+        while(pCur||!s.empty()){
+            while(pCur){
+                s.push(pCur);
+                pCur = pCur->left;
             }
+            pCur = s.top();
+            s.pop();
+            res.push_back(pCur->val);
+            pCur = pCur->right;
         }
-        return result;
+        return res;
     }
 };
 ========================================================
