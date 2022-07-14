@@ -7,24 +7,25 @@
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
-class Solution { //用循环的方法前序遍历二叉树
+class Solution {
 public:
     vector<int> preorderTraversal(TreeNode* root) {
-        vector<int> result={};
-        if(!root){
-            return result;
+        stack<TreeNode*> stack;
+        vector<int> result;
+        if(root==nullptr){
+            return result; 
         }
-        stack<TreeNode*> nodeStack;
-        nodeStack.push(root);
-        TreeNode* pCurrent=nullptr;
-        while(!nodeStack.empty()){
-            pCurrent=nodeStack.top();
-            result.push_back(pCurrent->val);
-            nodeStack.pop();
-            if(pCurrent->right)
-                nodeStack.push(pCurrent->right);
-            if(pCurrent->left)
-                nodeStack.push(pCurrent->left);
+        stack.push(root);
+        while(!stack.empty()){
+            TreeNode *p = stack.top();
+            stack.pop();
+            result.push_back(p->val);
+            if(p->right){
+                stack.push(p->right);
+            }
+            if(p->left){
+                stack.push(p->left);
+            }
         }
         return result;
     }
