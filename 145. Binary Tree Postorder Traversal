@@ -11,30 +11,30 @@ class Solution {
 public:
     vector<int> postorderTraversal(TreeNode* root) {
         vector<int> res;
-        if(!root){
+        if(root==nullptr){
             return res;
         }
-        stack<TreeNode*> s;
-        s.push(root);
-        TreeNode* pPre=nullptr;
-        while(!s.empty()){
-            TreeNode* pCur=s.top();
-            if((pCur->left==nullptr&&pCur->right==nullptr)||
-              (pPre&&(pPre==pCur->left||pPre==pCur->right))){
-                res.push_back(pCur->val);
-                s.pop();
-                pPre=pCur;
-            }else{
-                if(pCur->right){//注意先右再左，另外别忘了判断是否右子树为空
-                    s.push(pCur->right);
-                }
-                if(pCur->left){
-                    s.push(pCur->left);
-                }
-            }
-        }
-        return res;
-    }
+        stack<TreeNode *> s;
+		TreeNode *pCur = root, *prev = nullptr;
+		while (pCur || !s.empty())
+		{
+			while(pCur){
+				s.push(pCur);
+				pCur = pCur->left;
+			}
+			pCur=s.top();
+			s.pop();
+			if(pCur->right==nullptr||pCur->right==prev){
+				res.push_back(pCur->val);
+				prev=pCur;
+				pCur = nullptr;
+			}else{
+				s.push(pCur);
+				pCur = pCur->right;
+			}
+		}
+		return res;
+	}
 };
 ===========================================
 145. Binary Tree Postorder Traversal
