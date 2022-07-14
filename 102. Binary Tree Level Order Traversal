@@ -37,6 +37,33 @@ public:
         return res;
     }
 };
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int> > res;
+        if(root==nullptr){
+            return res;
+        }
+        helper(root, 0, res);
+        return res;
+    }
+private:
+    void helper(TreeNode* p,int level,vector<vector<int>>& res){
+        if(p==nullptr){
+            return;
+        }
+        if(level==res.size()){
+            res.push_back({});
+        }
+        res[level].push_back(p->val);
+        if(p->left){
+            helper(p->left, level + 1, res);
+        }
+        if(p->right){
+            helper(p->right, level + 1, res);
+        }
+    }
+};
 ====================================
 102. Binary Tree Level Order Traversal
 Given a binary tree, return the level order traversal of its nodes' values. (ie, from left to right, level by level).
