@@ -1,0 +1,32 @@
+class Solution {
+public:
+    vector<double> averageOfLevels(TreeNode* root) {
+        vector<double> result;
+        if(root==nullptr){
+            return result;
+        }
+        queue<TreeNode *> q;
+        q.push(root);
+        TreeNode *pCur = nullptr;
+        while(!q.empty()){
+            int size = q.size();
+            double sum = 0;
+            for (int i = 0; i < size;++i){
+                pCur = q.front();
+                q.pop();
+                if(pCur->left){
+                    q.push(pCur->left);
+                }
+                if(pCur->right){
+                    q.push(pCur->right);
+                }
+                sum += pCur->val;
+            }
+            result.push_back(sum / size);
+        }
+        return result;
+    }
+};
+=====================================================================
+637. Average of Levels in Binary Tree
+Given the root of a binary tree, return the average value of the nodes on each level in the form of an array. Answers within 10-5 of the actual answer will be accepted.
