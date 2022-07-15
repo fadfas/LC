@@ -1,0 +1,32 @@
+class Solution {
+public:
+    vector<vector<int>> levelOrder(Node* root) {
+        vector<vector<int> > res;
+        if(root==nullptr){
+            return res;
+        }
+        queue<Node *> q;
+        q.push(root);
+        while(!q.empty()){
+            int size = q.size();
+            vector<int> tmp;
+            for (int i = 0; i < size; ++i)
+            {
+                Node *pCur = q.front();
+                q.pop();
+                tmp.push_back(pCur->val);
+                // for(const Node* const n:pCur->children){
+                for(Node* n:pCur->children){
+                    q.push(n);
+                }
+            }
+            res.push_back(tmp);
+        }
+        return res;
+    }
+};
+=====================================================================
+429. N-ary Tree Level Order Traversal
+Given an n-ary tree, return the level order traversal of its nodes' values.
+
+Nary-Tree input serialization is represented in their level order traversal, each group of children is separated by the null value (See examples).
