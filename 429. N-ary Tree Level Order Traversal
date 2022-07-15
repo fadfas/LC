@@ -13,7 +13,7 @@ public:
             vector<int> tmp;
             for (int i = 0; i < size; ++i)
             {
-                //const Node *pCur = q.front();
+                //const Node *pCur = q.front();  //承接的时候，也要const
                 Node *pCur = q.front();
                 q.pop();
                 tmp.push_back(pCur->val);
