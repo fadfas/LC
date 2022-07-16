@@ -1,35 +1,24 @@
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
 class Solution {
 public:
     bool isSymmetric(TreeNode* root) {
-        if (!root) { //还是要检测一下的，要不后面的root->left就会有错
+        if(root==nullptr){
             return true;
         }
-        return isSymmertricRecursively(root->left, root->right);
+        return helper(root->left,root->right);
     }
 private:
-    bool isSymmertricRecursively(TreeNode* pLeft, TreeNode* pRight) {
-    // if(p==nullptr&&q==nullptr){
-   //         return true;
-    // }else if((p&&!q)||(!p&&q)){
-    //        return false;
-   //  }
-	if (!pLeft || !pRight) {  //这种写法比上面的要简洁一些
-		return pLeft == pRight;
-	}
-	if (pLeft->val != pRight->val) {
-		return false;
-	}
-	return isSymmertricRecursively(pLeft->left, pRight->right) && isSymmertricRecursively(pLeft->right, pRight->left);
-};
+    bool helper(TreeNode *l,TreeNode* r){
+        if(l==nullptr&&r==nullptr){
+            return true;
+        }
+        if(l==nullptr || r==nullptr){
+            return false;
+        }
+        if(l->val!=r->val){
+            return false;
+        }
+        return helper(l->left,r->right) && helper(l->right,r->left);
+    }
 };
 ==========================================================
 101. Symmetric Tree
