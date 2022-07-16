@@ -4,6 +4,33 @@ public:
         if(root==nullptr){
             return true;
         }
+        queue<TreeNode*> q;
+        q.push(root->left);
+        q.push(root->right);
+        while(!q.empty()){
+            TreeNode* l=q.front();q.pop();
+            TreeNode* r=q.front();q.pop();
+            if(l==nullptr&&r==nullptr){
+                continue;
+            }
+            if(l==nullptr||r==nullptr){
+                return false;
+            }
+            if(l->val!=r->val){
+                return false;
+            }
+            q.push(l->left);q.push(r->right);//即使l->left等是nullptr，也要push进去
+            q.push(l->right);q.push(r->left);
+        }
+        return true;
+    }
+};
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        if(root==nullptr){
+            return true;
+        }
         return helper(root->left,root->right);
     }
 private:
