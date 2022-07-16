@@ -1,0 +1,30 @@
+class Solution {
+public:
+    vector<int> postorder(Node* root) {
+        vector<int> res;
+        if(root==nullptr){
+            return res;
+        }
+        stack<Node*> s;
+        s.push(root);
+        Node *pCur=nullptr;
+        unordered_set<Node*> us;
+        while(!s.empty()){
+            pCur=s.top();
+            if(pCur->children.empty()||us.count(pCur)){
+                res.push_back(pCur->val);
+                s.pop();
+                continue;
+            }
+            for(auto it=pCur->children.rbegin();it!=pCur->children.rend();++it){
+                s.push(*it);
+            }
+            us.insert(pCur);
+        }
+        return res;
+    }
+};
+=====================================================================
+590. N-ary Tree Postorder Traversal
+Given the root of an n-ary tree, return the postorder traversal of its nodes' values.
+Nary-Tree input serialization is represented in their level order traversal. Each group of children is separated by the null value (See examples)
