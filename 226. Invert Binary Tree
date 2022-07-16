@@ -1,0 +1,18 @@
+class Solution {
+public:
+    TreeNode* invertTree(TreeNode* root) {
+        if(root==nullptr){
+            return nullptr;
+        }
+        TreeNode *pLeft=invertTree(root->left);
+        TreeNode *pRight=invertTree(root->right);
+        
+        root->left=pRight;
+        root->right=pLeft;
+        
+        return root;
+    }
+};
+=====================================================================
+226. Invert Binary Tree
+Given the root of a binary tree, invert the tree, and return its root.
