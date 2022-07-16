@@ -1,0 +1,43 @@
+class Solution {
+public:
+    vector<int> preorder(Node* root) {
+        vector<int> res;
+        if(root==nullptr){
+            return res;
+        }
+        stack<Node*> s;
+        s.push(root);
+        while(!s.empty()){
+            Node* pN=s.top();
+            s.pop();
+            res.push_back(pN->val);
+            for(auto it=pN->children.rbegin();it!=pN->children.rend();++i){
+                s.push(*it);
+            }
+        }
+        return res;
+    }
+};
+class Solution {
+public:
+    vector<int> preorder(Node* root) {
+        vector<int> res;
+        helper(root,res);
+        return res;
+    }
+private:
+    void helper(Node* p,vector<int> &res){
+        if(p==nullptr){
+            return;
+        }
+        res.push_back(p->val);
+        for(Node *& c:p->children){
+            helper(c,res);
+        }
+    }
+};
+=====================================================================
+589. N-ary Tree Preorder Traversal
+Given the root of an n-ary tree, return the preorder traversal of its nodes' values.
+
+Nary-Tree input serialization is represented in their level order traversal. Each group of children is separated by the null value (See examples)
