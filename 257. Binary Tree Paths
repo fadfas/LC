@@ -1,0 +1,56 @@
+class Solution {//对比这两种在字符串尾部添加的方式
+public:
+    vector<string> binaryTreePaths(TreeNode* root) {
+        vector<string> res;
+        helper(root, "", res);
+        return res;
+    }
+
+private:
+    void helper(TreeNode* p,string cur,vector<string> &res){
+        cur += to_string(p->val);
+        if (p->left == nullptr && p->right == nullptr)
+        {
+            res.emplace_back(cur);
+            return;
+        }
+        if(p->left){
+            helper(p->left, cur+"->",res);
+        }
+        if(p->right){
+            helper(p->right, cur+"->",res);
+        }
+    }
+};
+
+class Solution {
+public:
+    vector<string> binaryTreePaths(TreeNode* root) {
+        vector<string> res;
+        helper(root, "", res);
+        return res;
+    }
+
+private:
+    void helper(TreeNode* p,string cur,vector<string> &res){
+        if(p->left==nullptr&&p->right==nullptr){
+            if(cur.size()==0){
+                cur = to_string(p->val);
+            }else{
+                cur += ("->" + to_string(p->val));
+            }
+            res.emplace_back(cur);
+            return;
+        }
+        if(p->left){
+            helper(p->left, cur.empty() ? to_string(p->val) : cur + "->" + to_string(p->val),res);
+        }
+        if(p->right){
+            helper(p->right, cur.empty() ? to_string(p->val) : cur + "->" + to_string(p->val),res);
+        }
+    }
+};
+=====================================================================
+257. Binary Tree Paths
+Given the root of a binary tree, return all root-to-leaf paths in any order.
+A leaf is a node with no children.
