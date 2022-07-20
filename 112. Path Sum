@@ -1,26 +1,67 @@
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
 class Solution {
 public:
-    bool hasPathSum(TreeNode* root, int sum) {
-        if(!root)
+    bool hasPathSum(TreeNode* root, int targetSum) {
+        if(root==nullptr){
             return false;
-        if(root->val==sum&&!root->left&&!root->right){
-            return true;
         }
-        bool has=false;
-        has=hasPathSum(root->left,sum-root->val);
-        if(!has){
-            has=hasPathSum(root->right,sum-root->val);
+        queue<TreeNode *> q;
+        queue<int> sum;
+        q.push(root);
+        sum.push(root->val);
+        TreeNode *cur = nullptr;
+        while (!q.empty())
+        {
+            int size = q.size();
+            for (int i = 0; i < size;++i){
+                cur = q.front();
+                q.pop();
+                int curSum = sum.front();
+                sum.pop();
+                if(cur->left==nullptr&&cur->right==nullptr&&curSum==targetSum){
+                    return true;
+                }
+                if(cur->left){
+                    q.push(cur->left);
+                    sum.push(curSum + cur->left->val);
+                }
+                if(cur->right){
+                    q.push(cur->right);
+                    sum.push(curSum + cur->right->val);
+                }
+            }
         }
-        return has;
+        return false;
+    }
+};
+class Solution {
+public:
+    bool hasPathSum(TreeNode* root, int targetSum) {
+        if(root==nullptr){
+            return false;
+        }
+        return helper(root, 0,targetSum);
+    }
+
+private:
+    bool helper(TreeNode* p,int sum,int target){
+        sum += p->val;
+        if (p->left == nullptr && p->right == nullptr)
+        {
+            if(sum==target){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        bool res = false;
+        if (p->left)
+        {
+            res = helper(p->left, sum, target);
+        }
+        if(p->right&&!res){
+            res = helper(p->right, sum, target);
+        }
+        return res;
     }
 };
 ==========================================
