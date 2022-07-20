@@ -1,35 +1,32 @@
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
 class Solution {
 public:
-    vector<vector<int>> pathSum(TreeNode* root, int sum) {
-        vector<vector<int>> result={};
-        if(!root){
-            return result;
+    vector<vector<int>> pathSum(TreeNode* root, int targetSum) {
+        vector<vector<int> > res;
+        if(root==nullptr){
+            return res;
         }
-        vector<int> current={};
-        pathSumCore(root,sum,result,current);
-        return result;
+        vector<int> tmp;
+        helper(root, targetSum, res, tmp);
+        return res;
     }
+
 private:
-    void pathSumCore(TreeNode* pNode,int sum,vector<vector<int>>& result,vector<int>& current){
-        if(!pNode){
+    void helper(TreeNode* p,int targetSum,vector<vector<int>> &res,vector<int> tmp){
+        tmp.emplace_back(p->val);
+        targetSum -= p->val;
+        if (p->left == nullptr && p->right == nullptr)
+        {
+            if(targetSum==0){
+                res.emplace_back(tmp);
+            }
             return;
         }
-        current.push_back(pNode->val);
-        if(pNode->val==sum&&!pNode->left&&!pNode->right){
-            result.push_back(current);
+        if(p->left){
+            helper(p->left, targetSum, res, tmp);
         }
-        pathSumCore(pNode->left,sum-pNode->val,result,current);
-        pathSumCore(pNode->right,sum-pNode->val,result,current);
-        current.pop_back();
+        if(p->right){
+            helper(p->right, targetSum, res, tmp);
+        }
     }
 };
 ==================================================
