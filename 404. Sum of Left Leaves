@@ -5,6 +5,38 @@ public:
         if(root==nullptr){
             return sum;
         }
+        dfs(root, sum);
+        return sum;
+    }
+
+private:
+    bool isLeaf(TreeNode* p){
+        if(p->left==nullptr&&p->right==nullptr){
+            return true;
+        }
+        return false;
+    }
+    void dfs(TreeNode *p, int& res){
+
+        if(p->left){
+            if(isLeaf(p->left)){
+                res += p->left->val;
+            }else{
+                dfs(p->left, res);
+            }
+        }
+        if(p->right){
+            dfs(p->right, res);
+        }
+    }
+};
+class Solution {
+public:
+    int sumOfLeftLeaves(TreeNode* root) {
+        int sum = 0;
+        if(root==nullptr){
+            return sum;
+        }
         queue<TreeNode *> l, r;
         r.push(root);
         TreeNode *p = nullptr;
