@@ -1,0 +1,48 @@
+class Solution {
+public:
+    int sumOfLeftLeaves(TreeNode* root) {
+        int sum = 0;
+        if(root==nullptr){
+            return sum;
+        }
+        queue<TreeNode *> l, r;
+        r.push(root);
+        TreeNode *p = nullptr;
+        while (!l.empty() || !r.empty())
+        {
+            int l_size = l.size();
+            int r_size = r.size();
+            for (int i = 0; i < l_size; ++i)
+            {
+                p = l.front();
+                l.pop();
+                if (p->left == nullptr && p->right == nullptr)
+                {
+                    sum += p->val;
+                }
+                if(p->left){
+                    l.push(p->left);
+                }
+                if(p->right){
+                    r.push(p->right);
+                }
+            }
+            for (int i = 0; i < r_size; ++i)
+            {
+                p = r.front();
+                r.pop();
+                if(p->left){
+                    l.push(p->left);
+                }
+                if(p->right){
+                    r.push(p->right);
+                }
+            }
+        }
+        return sum;
+    }
+};
+=====================================================================
+404. Sum of Left Leaves
+Given the root of a binary tree, return the sum of all left leaves.
+A leaf is a node with no children. A left leaf is a leaf that is the left child of another node.
