@@ -1,0 +1,65 @@
+class Solution {
+public:
+    int findBottomLeftValue(TreeNode* root) {
+        int res = -1;
+        if(root==nullptr){
+            return res;
+        }
+        int maxDepth = -1;
+        helper(root, 0, maxDepth, res);
+        return res;
+    }
+
+private:
+    void helper(TreeNode *p,int curDepth,int &maxDepth,int &res){
+        if(p->left==nullptr&&p->right==nullptr){
+            if(curDepth>maxDepth){
+                maxDepth = curDepth;
+                res = p->val;
+            }
+            return;
+        }
+        if(p->left){
+            helper(p->left, curDepth + 1, maxDepth, res);
+        }
+        if(p->right){
+            helper(p->right, curDepth + 1, maxDepth, res);
+        }
+    }
+};
+class Solution {
+public:
+    int findBottomLeftValue(TreeNode* root) {
+        int res = -1;
+        if(root==nullptr){
+            return res;
+        }
+        queue<TreeNode *> q;
+        q.push(root);
+        TreeNode *p = nullptr;
+        while (!q.empty())
+        {
+            int size = q.size();
+            bool isFirst = true;
+            for (int i = 0; i < size; ++i)
+            {
+                p = q.front();
+                q.pop();
+                if(isFirst){
+                    res = p->val;
+                    isFirst = false;
+                }
+                if(p->left){
+                    q.push(p->left);
+                }
+                if(p->right){
+                    q.push(p->right);
+                }
+            }
+        }
+        return res;
+    }
+};
+=====================================================================
+513. Find Bottom Left Tree Value
+Given the root of a binary tree, return the leftmost value in the last row of the tree.
