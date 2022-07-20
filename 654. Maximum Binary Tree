@@ -1,0 +1,30 @@
+class Solution {
+public:
+    TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
+        if(nums.empty()){
+            return nullptr;
+        }
+        return helper(nums, nums.begin(), nums.end());
+    }
+
+private:
+    TreeNode* helper(vector<int> &nums,vector<int>::iterator s,vector<int>::iterator e){
+        vector<int>::iterator it = max_element(s, e);
+        TreeNode *root = new TreeNode(*it);
+        if(s!=it){
+            root->left = helper(nums, s, it);
+        }
+        if(it+1!=e){
+            root->right = helper(nums, it + 1, e);
+        }
+        return root;
+    }
+};
+=====================================================================
+654. Maximum Binary Tree
+You are given an integer array nums with no duplicates. A maximum binary tree can be built recursively from nums using the following algorithm:
+
+Create a root node whose value is the maximum value in nums.
+Recursively build the left subtree on the subarray prefix to the left of the maximum value.
+Recursively build the right subtree on the subarray suffix to the right of the maximum value.
+Return the maximum binary tree built from nums.
