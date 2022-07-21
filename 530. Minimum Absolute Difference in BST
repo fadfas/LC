@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int getMinimumDifference(TreeNode* root) {
+        TreeNode *pre = nullptr;
+        int res = INT_MAX;
+        helper(root, pre,res);
+        return res;
+    }
+
+private:
+    void helper(TreeNode* cur,TreeNode* &pre,int &res){
+        if(cur==nullptr){
+            return;
+        }
+        helper(cur->left, pre,res);
+        if(pre){
+            res= min(res,abs(pre->val - cur->val));
+        }
+        pre = cur;
+        helper(cur->right, pre,res);
+    }
+};
+=====================================================================
+530. Minimum Absolute Difference in BST
+Given the root of a Binary Search Tree (BST), return the minimum absolute difference between the values of any two different nodes in the tree.
