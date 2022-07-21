@@ -1,0 +1,29 @@
+class Solution {
+public:
+    TreeNode* mergeTrees(TreeNode* root1, TreeNode* root2) {
+        return helper(root1, root2);
+    }
+
+private:
+    TreeNode* helper(TreeNode* p1,TreeNode* p2){
+        TreeNode *cur = new TreeNode(0);
+        if (p1 == nullptr && p2 == nullptr)
+        {
+            return nullptr;
+        }
+        if(p1==nullptr||p2==nullptr){
+            cur->val = p1 ? p1->val : p2->val;
+        }else{
+            cur->val = p1->val + p2->val;
+        }
+        cur->left = helper(p1 ? p1->left : nullptr, p2 ? p2->left : nullptr);
+        cur->right = helper(p1 ? p1->right : nullptr, p2 ? p2->right : nullptr);
+        return cur;
+    }
+};
+=====================================================================
+617. Merge Two Binary Trees
+You are given two binary trees root1 and root2.
+Imagine that when you put one of them to cover the other, some nodes of the two trees are overlapped while the others are not. You need to merge the two trees into a new binary tree. The merge rule is that if two nodes overlap, then sum node values up as the new value of the merged node. Otherwise, the NOT null node will be used as the node of the new tree.
+Return the merged tree.
+Note: The merging process must start from the root nodes of both trees.
