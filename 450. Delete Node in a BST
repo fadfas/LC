@@ -28,10 +28,12 @@ public:
             if(root->left==nullptr || root->right==nullptr){
                 return root->left?root->left:root->right;
             }
-            TreeNode* pSucc=findSuccessor(root);
-            root->val=pSucc->val;
+            TreeNode* pSucc=findSuccessor(root);//使用这种用后继替换root的方法吧，不要直接覆盖val值了
             root->right=deleteNode(root->right,pSucc->val);
-            return root;
+            pSucc->left = root->left;
+            pSucc->right = root->right;
+            delete root;
+            return pSucc;
         }
     }
     TreeNode* findSuccessor(TreeNode* pNode){ //找到后继节点
