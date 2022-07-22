@@ -1,0 +1,79 @@
+class Solution {
+public:
+    vector<int> findMode(TreeNode* root) {
+        vector<int> res;
+        if(root==nullptr){
+            return res;
+        }
+        int maxLen = 0, curLen = 0;
+        int pre = 0;
+        helper1(root, maxLen, curLen,pre, res);
+        // if(curLen<maxLen){//如果使用helper()函数，则需要执行
+        //     res.pop_back();//这些被注释掉的代码
+        // }else if(curLen>maxLen){//因为在中序遍历的过程中
+        //     int tmp = res.back();//最后一个节点，运行完后
+        //     res.clear();//并没有将可能存在的新结果更新
+        //     res.emplace_back(tmp);
+        //     maxLen = curLen;
+        // }
+        return res;
+    }
+
+private:
+    void helper(TreeNode* p,int &maxLen,int &curLen,vector<int> &res){
+        if(p==nullptr){
+            return;
+        }
+        helper(p->left, maxLen, curLen,res);
+        if(!res.empty()){
+            if(res.back()==p->val){
+                curLen++;
+                
+            }else{//这部分代码，只有在遇到res.back()！=p->val
+                if(curLen<maxLen){//才会执行，也就是说，如果最后几个节点，数值都一样，那么可能存在的新结果，就不会更新至结果集中
+                    res.pop_back();
+                }else if(curLen>maxLen){
+                    int tmp = res.back();
+                    res.clear();
+                    res.emplace_back(tmp);
+                    maxLen = curLen;
+                }
+                curLen = 1;
+                res.emplace_back(p->val);
+            }
+        }else{
+            res.emplace_back(p->val);
+            curLen = 1;
+        }
+        helper(p->right, maxLen, curLen, res);
+    }
+void helper1(TreeNode* p,int &maxLen,int &curLen,int &pre,vector<int> &res){
+        if(p==nullptr){
+            return;
+        }
+        helper1(p->left, maxLen, curLen,pre,res);
+        if(pre==p->val){
+            curLen++;//把pre初始化为0，如果第一个元素，也是0；
+        }else{//不用担心，在初始化curLen的时候，赋值为0就行了。
+            curLen = 1;
+            pre = p->val;
+        }
+        if(curLen==maxLen){
+            res.emplace_back(p->val);
+        }
+        if(curLen>maxLen){
+            res.clear();
+            res.emplace_back(p->val);
+            maxLen = curLen;
+        }
+        helper1(p->right, maxLen, curLen,pre, res);
+    }
+};
+=====================================================================
+501. Find Mode in Binary Search Tree
+Given the root of a binary search tree (BST) with duplicates, return all the mode(s) (i.e., the most frequently occurred element) in it.
+If the tree has more than one mode, return them in any order.
+Assume a BST is defined as follows:
+The left subtree of a node contains only nodes with keys less than or equal to the node's key.
+The right subtree of a node contains only nodes with keys greater than or equal to the node's key.
+Both the left and right subtrees must also be binary search trees.
