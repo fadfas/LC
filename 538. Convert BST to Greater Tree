@@ -1,3 +1,26 @@
+class Solution {//迭代法！
+public:
+    TreeNode* convertBST(TreeNode* root) {
+        if(root==nullptr){
+            return nullptr;
+        }
+        stack<TreeNode*> q;
+        TreeNode* cur=root;
+        int sum=0;
+        while(cur||!q.empty()){
+            while(cur){
+                q.push(cur);
+                cur=cur->right;
+            }
+            cur=q.top();
+            q.pop();
+            cur->val+=sum;
+            sum=cur->val;
+            cur=cur->left;
+        }
+        return root;
+    }
+};
 class Solution {
 public:
     TreeNode* convertBST(TreeNode* root) {
