@@ -1,0 +1,85 @@
+class Solution {
+public:
+    vector<string> restoreIpAddresses(string s) {
+        vector<string> res;
+        if(s.size()<4||s.size()>12){
+            return res;
+        }
+        backtrack(s, 0, 0, "", res);
+        return res;
+    }
+
+private:
+    void backtrack(string &s,int cnt,int start,string cur,vector<string> &res){
+        // if(cnt==4){
+        //     if(start==s.size()){
+        //         cur.pop_back();
+        //         res.push_back(cur);
+        //     }
+        //     return;
+        // }
+
+        // if(start>=s.size()){
+        //     if(cnt==4){
+        //         cur.pop_back();
+        //         res.push_back(cur);
+        //     }
+        //     return;//另外，这种双层拦截的方式要学会
+        // }//即当start>=s.size()后，无论如何程序要终止；但是此时有些情况是符合答案的，因此要判断cnt==4
+        //但是注意上面注释掉的判断方式，是错的。
+        //要分清哪种条件，是程序无论如何要终止的；
+        //同时又符合某些特征，才最终能添加至答案集合。
+
+        if(start>=s.size()&&cnt==4){//如果用start==s.size()拦截，会有问题：例如上一轮start+i直接跳过了s.size()
+            cur.pop_back();
+            res.push_back(cur);
+            return;
+        }
+        if(start>=s.size()||cnt==4){
+            return;
+        }
+        //注意，这道题，上面拦截的方式，是最高效的。
+        if(s[start]=='0'){
+            cur.push_back(s[start]);
+            cur.push_back('.');
+            backtrack(s, cnt + 1, start + 1, cur, res);
+            cur.pop_back();
+            cur.pop_back();
+        }else if(s[start]=='1'){
+            string tmp = cur;
+            for (int i = 1; i <= 3&& (start+i)<=s.size(); ++i)
+            {
+                cur = tmp;
+                cur += s.substr(start, i);
+                cur.push_back('.');
+                backtrack(s, cnt + 1, start + i, cur, res);
+            }
+        }else if(s[start]=='2'){
+            string tmp = cur;
+            for (int i = 1; i <= 3&& (start+i)<=s.size();++i){
+                cur = tmp;
+                int num = stoi(s.substr(start, i));
+                if(num>255){
+                    continue;
+                }
+                cur += s.substr(start, i);
+                cur.push_back('.');
+                backtrack(s, cnt + 1, start + i, cur, res);
+            }
+        }else{
+            string tmp = cur;
+            for (int i = 1; i <= 2&& (start+i)<=s.size();++i){
+                cur = tmp;
+                cur += s.substr(start, i);
+                cur.push_back('.');
+                backtrack(s, cnt + 1, start + i, cur, res);
+            }
+        }
+    }
+};
+=====================================================================
+93. Restore IP Addresses
+A valid IP address consists of exactly four integers separated by single dots. Each integer is between 0 and 255 (inclusive) and cannot have leading zeros.
+
+For example, "0.1.2.201" and "192.168.1.1" are valid IP addresses, but "0.011.255.245", "192.168.1.312" and "192.168@1.1" are invalid IP addresses.
+Given a string s containing only digits, return all possible valid IP addresses that can be formed by inserting dots into s. You are not allowed to reorder or remove any digits in s. You may return the valid IP addresses in any order.
