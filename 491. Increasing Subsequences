@@ -1,0 +1,46 @@
+class Solution {
+public:
+    vector<vector<int>> findSubsequences(vector<int>& nums) {
+        vector<vector<int> > res;
+        vector<int> cur;
+        backtrack(nums, res, cur, 0);
+        return res;
+    }
+
+private:
+    void backtrack(vector<int> &nums,vector<vector<int>> &res,vector<int> &cur,int start){
+        if(cur.size()>=2){
+            res.emplace_back(cur);
+        }
+        if(start>=nums.size()){
+            return;
+        }
+        int mask[201];//注意是201个数字，不是200
+        memset(mask, 0, sizeof(mask));
+        for (int i = start; i < nums.size(); ++i)
+        {
+            //下面这种防止连续的方式，只能用在整个数组都排好序的情况下
+            // if(i>start&&nums[i]==nums[i-1]){
+            //     continue;
+            // }
+
+            //若数组不连续，还是得用一个unordered_set记录一下
+            //如果数量不多，可以用个数组，更高效。
+            if(mask[nums[i]+100]==1){
+                continue;
+            }
+
+            if(cur.empty()||(!cur.empty()&&cur.back()<=nums[i])){
+                mask[nums[i] + 100] = 1;
+                cur.emplace_back(nums[i]);
+                backtrack(nums, res, cur, i + 1);
+                cur.pop_back();
+            }
+        }
+    }
+};
+=====================================================================
+491. Increasing Subsequences
+Given an integer array nums, return all the different possible increasing subsequences of the given array with at least two elements. You may return the answer in any order.
+
+The given array may contain duplicates, and two equal integers should also be considered a special case of increasing sequence.
