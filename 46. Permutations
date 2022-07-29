@@ -24,6 +24,34 @@ private:
         }
     }
 };
+class Solution {//这个方法，为了和lc47进行统一
+public:
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int> > res;
+        vector<int> cur;
+        vector<bool> used(nums.size(), false);
+        backtrack(nums, res, cur,used);
+        return res;
+    }
+
+private:
+    void backtrack(vector<int> &nums,vector<vector<int>> &res,vector<int> &cur,vector<bool> &used){
+        if(cur.size()==nums.size()){
+            res.emplace_back(cur);
+            return;
+        }
+        for (int i = 0; i < nums.size();++i){
+            if(used[i]==true){
+                continue;
+            }
+            used[i] = true;
+            cur.emplace_back(nums[i]);
+            backtrack(nums, res, cur, used);
+            used[i]=false;
+            cur.pop_back();
+        }
+    }
+};
 =========================================================
 46. Permutations
 Given a collection of distinct integers, return all possible permutations.
