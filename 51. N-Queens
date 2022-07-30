@@ -132,6 +132,43 @@ private:
         return res;
     }
 };
+lass Solution {
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        vector<vector<string>> res;
+        vector<int> cur;
+        int col=0,ld=0,rd=0;
+        backtrack(n,0,col,rd,ld,res,cur);
+        return res;
+        
+    }
+private:
+    void backtrack(int n,int l,int col,int rd,int ld,vector<vector<string>> &res,vector<int> &cur){
+        if(l==n){
+            string base(n,'.');
+            res.emplace_back(generate(cur,base));
+            return;
+        }
+        for(int j=0;j<n;++j){
+            if(col&(1<<(n-j-1))||rd&(1<<(n-j-1))||ld&(1<<(n-j-1))){//注意不是1<<j，因为col的高位，对应棋盘的左侧
+                continue;
+            }
+            cur.emplace_back(j);
+            backtrack(n,l+1,col|(1<<(n-j-1)),(rd|(1<<(n-j-1)))>>1,(ld|(1<<(n-j-1)))<<1,res,cur);
+            cur.pop_back();
+        }
+    }
+    
+    vector<string> generate(vector<int> cur,string base){
+        vector<string> res;
+        for(int col:cur){
+            string tmp=base;
+            tmp[col]='Q';
+            res.emplace_back(tmp);
+        }
+        return res;
+    }
+};
 =====================================================================
 51. N-Queens
 The n-queens puzzle is the problem of placing n queens on an n x n chessboard such that no two queens attack each other.
