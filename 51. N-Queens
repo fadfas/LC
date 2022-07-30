@@ -1,3 +1,44 @@
+lass Solution {
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        vector<vector<string>> res;
+        vector<int> cur;
+        vector<bool> col(n,false);
+        vector<bool> ld(2*n,false);
+        vector<bool> rd(2*n,false);
+        backtrack(n,0,col,rd,ld,res,cur);
+        return res;
+        
+    }
+private:
+    void backtrack(int n,int l,vector<bool> &col,vector<bool> &rd,vector<bool> &ld,vector<vector<string>> &res,vector<int> &cur){
+        if(l==n){
+            string base(n,'.');
+            res.emplace_back(generate(cur,base));
+            return;
+        }
+        for(int i=0;i<n;++i){
+            if(col[i]==true||ld[i+l]||rd[i-l+n]){
+                continue;
+            }
+            col[i]=true;ld[i+l]=true;rd[i-l+n]=true;
+            cur.emplace_back(i);
+            backtrack(n,l+1,col,rd,ld,res,cur);
+            col[i]=false;ld[i+l]=false;rd[i-l+n]=false;
+            cur.pop_back();
+        }
+    }
+    
+    vector<string> generate(vector<int> cur,string base){
+        vector<string> res;
+        for(int col:cur){
+            string tmp=base;
+            tmp[col]='Q';
+            res.emplace_back(tmp);
+        }
+        return res;
+    }
+};
 class Solution {
 public:
     vector<vector<string>> solveNQueens(int n) {
