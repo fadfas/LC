@@ -1,0 +1,96 @@
+class Solution {
+public:
+    vector<string> findItinerary(vector<vector<string>>& tickets) {
+        vector<string> res;
+        vector<bool> used(tickets.size(), false);
+        string first = "JFK";
+        res.emplace_back(first);
+        backtrack(tickets, used, res, first);
+        return res;
+    }
+
+private:
+    bool backtrack(vector<vector<string>>& ti,vector<bool> &used,vector<string> &res,string pre){//这种答案只找一个结果的，回溯函数可以返回结果
+        if(res.size()==ti.size()+1){
+            return true;//学习这种返回方式：如果到叶节点，发现正确结果了，就返回true；
+        }
+        map<string,int> m;
+        for (int i = 0; i < ti.size(); ++i)
+        {
+            if(used[i]==true){
+                continue;
+            }
+            vector<string> &t = ti[i];
+            string start = t[0], end = t[1];
+            if(start==pre){
+                m[end] = i;
+            }
+        }
+        for (auto it = m.begin(); it != m.end();++it){
+            string end = it->first;
+            int idx = it->second;
+            used[idx] = true;
+            res.emplace_back(end);
+            bool found=backtrack(ti, used, res, end);
+            if(found){
+                return true;//学习这种返回方式：如果在当前节点出发的路径，存在可行解。那么久赶紧返回true，不用再找了。
+            }
+            used[idx] = false;
+            res.pop_back();
+        }
+        return false;//学习这种返回方式：执行到这里，说明在当前节点，所有的可能都尝试过了，但是没有找到正确答案，说明这条路行不通，那么返回false。
+    }
+};
+
+class Solution {
+public:
+    vector<string> findItinerary(vector<vector<string>>& tickets) {
+        vector<string> res;
+        vector<bool> used(tickets.size(), false);
+        string first = "JFK";
+        bool found = false;
+        res.emplace_back(first);
+        backtrack(tickets, used, res, first,found);
+        return res;
+    }
+
+private:
+    void backtrack(vector<vector<string>>& ti,vector<bool> &used,vector<string> &res,string pre,bool &found){
+        if(res.size()==ti.size()+1){
+            found = true;
+            return;
+        }
+        map<string,int> m;
+        for (int i = 0; i < ti.size(); ++i)
+        {
+            if(used[i]==true){
+                continue;
+            }
+            vector<string> &t = ti[i];
+            string start = t[0], end = t[1];
+            if(start==pre){
+                m[end] = i;
+            }
+        }
+        for (auto it = m.begin(); it != m.end()&&found==false;++it){
+            string end = it->first;
+            int idx = it->second;
+            used[idx] = true;
+            res.emplace_back(end);
+            backtrack(ti, used, res, end,found);
+            if(found==false){//这个地方别忘了，如果找到了答案，就别再执行还原操作了
+                used[idx] = false;
+                res.pop_back();
+            }
+            
+        }
+    }
+};
+=====================================================================
+332. Reconstruct Itinerary
+You are given a list of airline tickets where tickets[i] = [fromi, toi] represent the departure and the arrival airports of one flight. Reconstruct the itinerary in order and return it.
+
+All of the tickets belong to a man who departs from "JFK", thus, the itinerary must begin with "JFK". If there are multiple valid itineraries, you should return the itinerary that has the smallest lexical order when read as a single string.
+
+For example, the itinerary ["JFK", "LGA"] has a smaller lexical order than ["JFK", "LGB"].
+You may assume all tickets form at least one valid itinerary. You must use all the tickets once and only once.
