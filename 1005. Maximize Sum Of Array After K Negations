@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int largestSumAfterKNegations(vector<int>& nums, int k) {
+        int res = 0;
+        int i = 0;
+        sort(nums.begin(), nums.end());
+        while (k > 0 &&i<nums.size()&& nums[i] < 0)
+        {
+            nums[i] = -nums[i];
+            ++i;
+            --k;
+        }
+        if(i==nums.size()){
+            --i;
+        }
+        if(k>0){
+            if(i>0&&nums[i-1]<nums[i]){
+                i = i - 1;
+            }
+            if(k%2!=0){
+                nums[i] = -nums[i];
+            }
+        }
+        for(int num:nums){
+            res += num;
+        }
+        return res;
+    }
+};
+=====================================================================
+1005. Maximize Sum Of Array After K Negations
+Given an integer array nums and an integer k, modify the array in the following way:
+
+choose an index i and replace nums[i] with -nums[i].
+You should apply this process exactly k times. You may choose the same index i multiple times.
+
+Return the largest possible sum of the array after modifying it in this way.
