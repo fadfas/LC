@@ -1,16 +1,54 @@
 class Solution {
 public:
     int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
-        int total=0,sum=0,start=0;
-        for(int i=0;i<gas.size();++i){
-            total+=gas[i]-cost[i];
-            sum+=gas[i]-cost[i];
-            if(sum<0){
-                start=i+1;
-                sum=0;
+        int cur = 0, total = 0, start = 0;
+        for (int i = 0; i < gas.size();++i){
+            cur += (gas[i] - cost[i]);
+            total += (gas[i] - cost[i]);
+            if(cur<0){
+                cur = 0;
+                start = i + 1;
             }
         }
-        return total>=0?start:-1;//只要total大于0，那么必然存在解
+        if(total<0){
+            return -1;
+        }
+        return start;
+    }
+};
+class Solution {//双层遍历，会超市
+public:
+    int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+        int n = gas.size();
+        for (int i = 0; i <n;++i){
+            int rest = gas[i] - cost[i];
+            int next = (i + 1) % n;
+            if (rest < 0)
+            {
+                continue;
+            }
+            while(rest>=0&&next!=i){
+                rest += (gas[next] - cost[next]);
+                next = (next + 1) % n;
+                //要明白，假设某一次rest小于0，此时第二条语句
+                //依然会执行，但其实汽车是去不了next的
+            }
+            if(rest>=0&&next==i){
+                return i;
+            }
+            // while(rest>=0&&next!=i){
+            //     rest += (gas[next] - cost[next]);
+            //     if(rest>=0){
+            //         next = (next + 1) % n;
+            //     }
+            // }
+            // if(next==i){
+            //     return i;
+            // }
+            //以上两种写法，都可以；关键在于逻辑要清晰，即rest大于
+            //0，才意味着可以跳到next位置
+        }
+        return -1;
     }
 };
 ================================================
