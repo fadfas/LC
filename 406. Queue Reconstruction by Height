@@ -1,0 +1,50 @@
+class Solution {
+public:
+    static bool cmp(const vector<int>& lhs,const vector<int>& rhs){
+        return lhs[0] == rhs[0] ? lhs[1] < rhs[1] : lhs[0] > rhs[0];
+    }
+    vector<vector<int>> reconstructQueue(vector<vector<int>>& people) {
+
+        sort(people.begin(), people.end(), cmp);
+        vector<vector<int> > res;
+        list<vector<int> > tmp;
+        tmp.push_front(people[0]);
+        for (int i = 1; i < people.size(); ++i)
+        {
+            int before = people[i][1];
+            list<vector<int>>::iterator it = tmp.begin();
+            // it = it + before;//list的iterator不能用这一行的写法，只能像下面那样it++
+            while(before){
+                it++;
+                --before;
+            }
+            tmp.insert(it, people[i]);
+        }
+        return vector<vector<int> >(tmp.begin(),tmp.end());
+    }
+};
+
+class Solution {
+public:
+    static bool cmp(const vector<int>& lhs,const vector<int>& rhs){
+        return lhs[0] == rhs[0] ? lhs[1] < rhs[1] : lhs[0] > rhs[0];
+    }//注意这个放置的位置！！！不要放在成员函数内
+    vector<vector<int>> reconstructQueue(vector<vector<int>>& people) {
+
+        sort(people.begin(), people.end(), cmp);
+        vector<vector<int> > res;
+        res.push_back(people[0]);
+        for (int i = 1; i < people.size();++i){
+            int before = people[i][1];
+            vector<vector<int> >::iterator it = res.begin();
+            it = it + before;
+            res.insert(it, people[i]);
+        }
+        return res;
+    }
+};
+=====================================================================
+406. Queue Reconstruction by Height
+You are given an array of people, people, which are the attributes of some people in a queue (not necessarily in order). Each people[i] = [hi, ki] represents the ith person of height hi with exactly ki other people in front who have a height greater than or equal to hi.
+
+Reconstruct and return the queue that is represented by the input array people. The returned queue should be formatted as an array queue, where queue[j] = [hj, kj] is the attributes of the jth person in the queue (queue[0] is the person at the front of the queue).
