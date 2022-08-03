@@ -1,21 +1,21 @@
 class Solution {
 public:
     int candy(vector<int>& ratings) {
-        if(ratings.empty())
-            return 0;
-        int size=ratings.size();
-        int res=0;
-        vector<int> num(size,1);//不是初始化为0个糖果！！！
-        for(int i=1;i<size;++i){
-            if(ratings[i]>ratings[i-1])
-                num[i]=num[i-1]+1;
+        int n = ratings.size();
+        vector<int> cnt(n, 1);
+        for (int i = 1; i < n;++i){
+            if(ratings[i]>ratings[i-1]){
+                cnt[i] = cnt[i - 1] + 1;
+            }
         }
-        for(int i=size-1;i>0;--i){
-            if(ratings[i-1]>ratings[i])
-                num[i-1]=max(num[i-1],num[i]+1);
+        for (int i = n - 2; i >= 0;--i){
+            if(ratings[i]>ratings[i+1]){
+                cnt[i] = max(cnt[i], cnt[i + 1] + 1);
+            }
         }
-        for(auto e:num){
-            res+=e;
+        int res = 0;
+        for(int c:cnt){
+            res += c;
         }
         return res;
     }
