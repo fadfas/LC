@@ -1,0 +1,49 @@
+//按照右边界排序，就要从左向右遍历，因为右边界越小越好，只要右边界越小，留给下一个区间的空间就越大，所以从左向右遍历，优先选右边界小的。
+//右边界排序之后，局部最优：优先选右边界小的区间，所以从左向右遍历，留给下一个区间的空间大一些，从而尽量避免交叉。全局最优：选取最多的非交叉区间。
+class Solution {
+public:
+    int eraseOverlapIntervals(vector<vector<int>>& intervals) {
+        if(intervals.size()<=1){
+            return 0;
+        }
+        sort(intervals.begin(), intervals.end(), [](const vector<int> &lhs, const vector<int> &rhs)
+             { return lhs[1] < rhs[1]; });
+        int res = 0;
+        int cur_end = intervals[0][1];
+        for (int i = 1; i < intervals.size();++i){
+            if(intervals[i][0]>=cur_end){
+                cur_end = intervals[i][1];
+            }else{
+                ++res;
+            }
+        }
+        return res;
+    }
+};
+
+//以下是dp方法，会超市，但是要体会到和贪心算法的差别。
+//其实，dp方法还是一种遍历，只不过将纯粹的暴力遍历方法中的一些重复计算，省略掉了。
+class Solution {
+public:
+    int eraseOverlapIntervals(vector<vector<int>>& intervals) {
+        int n = intervals.size();
+        if (n <= 1)
+        {
+            return 0;
+        }
+        sort(intervals.begin(), intervals.end(), [](const vector<int> &lhs, const vector<int> &rhs)
+             { return lhs[0] < rhs[0]; });
+        vector<int> dp(n, 1);//表示「以区间 i为最后一个区间，可以选出的不重叠区间数量的最大值」
+        for (int i = 1; i < n;++i){
+            for (int j = 0; j < i;++j){
+                if(intervals[j][1]<=intervals[i][0]){
+                    dp[i] = max(dp[i], dp[j] + 1);
+                }
+            }
+        }
+        return n - *max_element(dp.begin(), dp.end());
+    }
+};
+=====================================================================
+435. Non-overlapping Intervals
+Given an array of intervals intervals where intervals[i] = [starti, endi], return the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping.
