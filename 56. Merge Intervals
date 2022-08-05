@@ -1,31 +1,25 @@
-/**
- * Definition for an interval.
- * struct Interval {
- *     int start;
- *     int end;
- *     Interval() : start(0), end(0) {}
- *     Interval(int s, int e) : start(s), end(e) {}
- * };
- */
 class Solution {
 public:
-    vector<Interval> merge(vector<Interval>& intervals) {
-        for(auto &e:intervals){
-            times[e.start]++,times[e.end]--;
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        vector<vector<int> > res;
+        if(intervals.empty()){
+            return res;
         }
-        int count=0,start=0;
-        vector<Interval> res;
-        for(auto &e:times){
-            if(count==0)
-                start=e.first;
-            count+=e.second;
-            if(count==0)
-                res.push_back({start,e.first});
+        sort(intervals.begin(), intervals.end(), [](const vector<int> &lhs, const vector<int> &rhs)
+             { return lhs[0] < rhs[0]; });
+        int start = intervals[0][0], cur_end = intervals[0][1];
+        for (int i = 1; i < intervals.size();++i){
+            if(intervals[i][0]<=cur_end){
+                cur_end = max(cur_end, intervals[i][1]);
+            }else{
+                res.push_back({start, cur_end});
+                start = intervals[i][0];
+                cur_end = intervals[i][1];
+            }
         }
+        res.push_back({start, cur_end});
         return res;
     }
-private:
-    map<int,int> times;
 };
 ================================================
 56. Merge Intervals
