@@ -1,0 +1,35 @@
+class Solution {
+public:
+    int monotoneIncreasingDigits(int n) {
+        string num = to_string(n);
+        int i = 0;
+        for (; i <num.size()-1; ++i)
+        {
+            if(num[i]>num[i+1]){
+                break;
+            }
+        }
+        if(i==num.size()-1){
+            return stoi(num);
+        }
+        while(i>0&&num[i-1]==num[i]){
+            --i;
+        }
+        num[i] = num[i] - 1;
+        ++i;
+        for (; i < num.size(); ++i)
+        {
+            num[i] = '9';
+        }
+        return stoi(num);
+    }
+};
+=====================================================================
+【思路】
+从左往右遍历各位数字，找到第一个开始下降的数字[i]，将[i]减1，然后将[i+1 ...]各位数字全部置为9即可
+例如：1232123，从左往右遍历，找到第一个开始下降的数字3，将3改为2，然后将后面所有数字全部置为9，最后为：1229999 即为答案
+【需要注意一点】：如果第一个开始下降的数字[i]，前面还有与其相等的数字，需要找到最前面的一个数字作为上面所说的[i]
+例如：13332，从左往右遍历，找到第一个开始下降的数字3，往前再看下，是否还有等于3的数字，找到最前面那个3，将3改为2，然后将后面的各个数字置为9，最后为：12999
+738. Monotone Increasing Digits
+An integer has monotone increasing digits if and only if each pair of adjacent digits x and y satisfy x <= y.
+Given an integer n, return the largest number that is less than or equal to n with monotone increasing digits.
