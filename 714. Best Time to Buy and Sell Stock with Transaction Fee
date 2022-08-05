@@ -1,0 +1,31 @@
+//这道题还是看后面的动态规划解法吧。贪心就了解一下
+class Solution {
+public:
+    int maxProfit(vector<int>& prices, int fee) {
+        if(prices.size()<2){
+            return 0;
+        }
+        int minPrice = prices[0];
+        int res = 0;
+        for (int i = 1; i < prices.size(); ++i)
+        {
+            if(prices[i]<minPrice){
+                minPrice = prices[i];
+            }
+            if(prices[i]-minPrice<=fee){
+                continue;
+            }
+            if(prices[i]-minPrice>fee){
+                res += (prices[i] - minPrice - fee);
+                minPrice = prices[i] - fee;
+            }
+        }
+        return res;
+    }
+};
+=====================================================================
+参考链接：https://www.programmercarl.com/0714.%E4%B9%B0%E5%8D%96%E8%82%A1%E7%A5%A8%E7%9A%84%E6%9C%80%E4%BD%B3%E6%97%B6%E6%9C%BA%E5%90%AB%E6%89%8B%E7%BB%AD%E8%B4%B9.html#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92
+714. Best Time to Buy and Sell Stock with Transaction Fee
+You are given an array prices where prices[i] is the price of a given stock on the ith day, and an integer fee representing a transaction fee.
+Find the maximum profit you can achieve. You may complete as many transactions as you like, but you need to pay the transaction fee for each transaction.
+Note: You may not engage in multiple transactions simultaneously (i.e., you must sell the stock before you buy again).
