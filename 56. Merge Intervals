@@ -6,7 +6,7 @@ public:
             return res;
         }
         sort(intervals.begin(), intervals.end());
-        //, [](const vector<int> &lhs, const vector<int> &rhs){ return lhs[0] < rhs[0]; }   可以不用自定义比较器，默认按照第一个元素排序
+        //, [](const vector<int> &lhs, const vector<int> &rhs){ return lhs[0] < rhs[0]; }   可以不用自定义比较器，默认按照第一个元素排序(不论子元素是几维的)
         int start = intervals[0][0], cur_end = intervals[0][1];
         for (int i = 1; i < intervals.size();++i){
             if(intervals[i][0]<=cur_end){
