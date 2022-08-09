@@ -1,0 +1,44 @@
+class Solution
+{
+public:
+    int minCameraCover(TreeNode *root)
+    {
+        vector<int> res = helper(root);
+        return res[1];
+    }
+
+private:
+    vector<int> helper(TreeNode* p){
+        if(p==nullptr){
+            return {INT_MAX / 2, 0, 0};
+            //第一个维度，之所以设置成这样
+            //一个角度考虑，是因为当前节点本来就是空，怎么着也没法安装监控了，所以设置一个异常值表示；
+            //另外一个角度，可以考虑，上一层调用p是叶节点，当再一次调用的时候，如何返回p为空的结果，才能够让上一层正确计算出ans来。即：如果第一个维度还是返回0，那么上一层调用，计算第二个维度的时候，最终结果是0，也就不符合实际情况了。
+        }
+        vector<int> left=helper(p->left);
+        vector<int> right = helper(p->right);
+
+        vector<int> ans;
+        //0:当前节点安装，监控当前树所需要的监控数量
+        //1:监控当前树所需要的监控数量（不论当前节点安装与否）
+        //2:监控当前节点的两棵子树，所需要监控数量（不论当前节点能否监控）
+        ans.emplace_back(1 + left[2] + right[2]);
+        ans.emplace_back(min(ans[0],min(left[0]+right[1],left[1]+right[0])));
+        // ans.emplace_back(left[1] + right[1]);
+        //为什么上面这个不行？最简单的情况，三个节点、两层。
+        //想要监控根节点的两颗字数，只需要在根节点安装一个监控即可。
+        ans.emplace_back(min(ans[0],left[1] + right[1]));
+
+        return ans;
+    }
+};
+这种树形的动态规划题目，感觉套路都是这种递归函数返回一个vector，每个维度分别表示不同的情况。
+
+例如LC 337. House Robber II 就是这种情况
+
+其实这种返回一个vector，就是在分情况讨论各种情况。如果不返回这种多个维度的vector，就需要在调用递归函数的时候，各种判断当前节点的左右孩子是否存在了：
+=====================================================================
+968. Binary Tree Cameras
+You are given the root of a binary tree. We install cameras on the tree nodes where each camera at a node can monitor its parent, itself, and its immediate children.
+
+Return the minimum number of cameras needed to monitor all nodes of the tree.
