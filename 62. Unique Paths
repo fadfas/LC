@@ -1,25 +1,15 @@
-class Solution {  //和剑指offerP47很相似，可以参考
+class Solution {
 public:
     int uniquePaths(int m, int n) {
-        if(m<1||n<1){
-            return 0;
-        }
-        if(m>n)
-            return uniquePaths(n,m);//仅仅为了降低空间复杂度的一种手法，实验证明如果没有此行程序，但是交换
-                                    //mn，结果相同
-        int count[m];//这种写法在vs会提示错误，因此最好携程int* count=new int[m];
-        for(int i=0;i<m;++i){
-            count[i]=1;
-        }
-        for(int j=1;j<n;++j){
-            for(int i=1;i<m;++i){
-                count[i]=count[i-1]+count[i];//等号右侧count[j-1]代表从左面一格过来,count[j]代表从上面一格
-                                            //过来
+        vector<int> dp(n, 1);
+        // vector<vector<int> > dp(m, vector<int>(n, 1));
+        for (int i = 1; i < m;++i){
+            for (int j = 1; j < n;++j){
+                dp[j] = dp[j] + dp[j - 1];
             }
         }
-        return count[m-1];
+        return dp[n - 1];
     }
- 
 };
 ============================================
 此解答分析过程很好，可以参考
