@@ -14,6 +14,34 @@ public:
         }//这个不能删掉，否则会报错
         int pos_sum = tmp / 2;
         int n = nums.size();
+        vector<int> dp(pos_sum + 1, 0);
+
+        dp[0] = 1;
+        for (int i = 1; i <= n; ++i)
+        {
+            for (int j = pos_sum; j >= nums[i - 1];--j){
+                dp[j] += dp[j - nums[i - 1]];
+            }
+        }
+        return dp[pos_sum];
+    }
+};
+class Solution {
+public:
+    int findTargetSumWays(vector<int>& nums, int target) {
+        int sum=0;
+        for(int num:nums){
+            sum += num;
+        }
+        if(sum<target||sum<(-1*target)){
+            return 0;
+        }//别忘了特殊情况
+        int tmp = sum + target;
+        if((tmp&1)==1){
+            return 0;
+        }//这个不能删掉，否则会报错
+        int pos_sum = tmp / 2;
+        int n = nums.size();
         vector<vector<int> > dp(n+1,vector<int>(pos_sum+1,0));
 
         dp[0][0] = 1;
