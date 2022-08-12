@@ -1,0 +1,73 @@
+class Solution {
+public:
+    int findMaxForm(vector<string>& strs, int m, int n) {
+        int cnt=strs.size();
+        vector<int> zero_cnt, one_cnt;
+        for (int i = 0; i < cnt; ++i)
+        {
+            int zeros = 0, ones = 0;
+            for(char c:strs[i]){
+                if(c=='0'){
+                    ++zeros;
+                }else{
+                    ++ones;
+                }
+            }
+            zero_cnt.emplace_back(zeros);
+            one_cnt.emplace_back(ones);
+        }
+        vector<vector<int> > dp(m + 1, vector<int>(n + 1, 0));
+        for (int i = 1; i <= cnt; ++i)
+        {
+            for (int j = m; j >=0;--j){
+                for (int k = n; k >=0;--k){
+                    if(zero_cnt[i-1]<=j && one_cnt[i-1]<=k){
+                        dp[j][k] = max(dp[j][k] ,dp[j - zero_cnt[i - 1]][k - one_cnt[i - 1]]+1);
+                    }else{
+                        dp[j][k] = dp[j][k];
+                    }
+                }
+            }
+        }
+        return dp[m][n];
+    }
+};
+
+class Solution {
+public:
+    int findMaxForm(vector<string>& strs, int m, int n) {
+        int cnt=strs.size();
+        vector<int> zero_cnt, one_cnt;
+        for (int i = 0; i < cnt; ++i)
+        {
+            int zeros = 0, ones = 0;
+            for(char c:strs[i]){
+                if(c=='0'){
+                    ++zeros;
+                }else{
+                    ++ones;
+                }
+            }
+            zero_cnt.emplace_back(zeros);
+            one_cnt.emplace_back(ones);
+        }
+        vector<vector<vector<int> > > dp(cnt + 1, vector<vector<int> >(m + 1, vector<int>(n + 1, 0)));
+        for (int i = 1; i <= cnt;++i){
+            for (int j = 0; j <= m;++j){//第0列是否需要提前初始化，就到时候分析一下吧
+                for (int k = 0; k <= n;++k){
+                    if(zero_cnt[i-1]<=j && one_cnt[i-1]<=k){
+                        dp[i][j][k] = max(dp[i - 1][j][k] ,dp[i - 1][j - zero_cnt[i - 1]][k - one_cnt[i - 1]]+1);
+                    }else{
+                        dp[i][j][k] = dp[i - 1][j][k];
+                    }
+                }
+            }
+        }
+        return dp[cnt][m][n];
+    }
+};
+=====================================================================
+474. Ones and Zeroes
+You are given an array of binary strings strs and two integers m and n.
+Return the size of the largest subset of strs such that there are at most m 0's and n 1's in the subset.
+A set x is a subset of a set y if all elements of x are also elements of y.
