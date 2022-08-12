@@ -1,0 +1,42 @@
+class Solution {
+public:
+    int lastStoneWeightII(vector<int>& stones) {
+        int n = stones.size();
+        int sum = 0;
+        for(int stone:stones){
+            sum += stone;
+        }
+        int target = sum / 2;
+        vector<vector<int> > dp(n + 1, vector<int>(target + 1, 0));
+        for (int i = 0; i <= target;++i){
+            dp[0][i] = 0;
+        }
+        for (int i = 0; i <= n;++i){
+            dp[i][0] = 0;
+        }
+        for (int i = 1; i <= n;++i){
+            for (int j = 1; j <= target;++j){
+                if(j<stones[i-1]){
+                    dp[i][j] = dp[i - 1][j];
+                }else{
+                    dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - stones[i - 1]]+stones[i-1]);//别忘了加上stones[i-1]
+                }
+            }
+        }
+        return sum - 2 * dp[n][target];
+    }
+};
+=====================================================================
+这种从一个数组中，任意选两个，然后最终怎么样怎么样操作的。最终的解决方案，很多都是将整个数组分成尽量相等的两堆，然后算个差值啥的。这个技巧可以记下来，碰到不会的题目时，试一试往这块靠。
+
+另外，类似如何尽量装满一个制定容量的背包的问题，也可以用答案中的解法。
+1049. Last Stone Weight II
+You are given an array of integers stones where stones[i] is the weight of the ith stone.
+
+We are playing a game with the stones. On each turn, we choose any two stones and smash them together. Suppose the stones have weights x and y with x <= y. The result of this smash is:
+
+If x == y, both stones are destroyed, and
+If x != y, the stone of weight x is destroyed, and the stone of weight y has new weight y - x.
+At the end of the game, there is at most one stone left.
+
+Return the smallest possible weight of the left stone. If there are no stones left, return 0.
