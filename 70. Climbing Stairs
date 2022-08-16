@@ -11,6 +11,23 @@ public:
         return dp[n];
     }
 };
+
+class Solution {//用完全背包的想法去求解，并且考虑放入物品的顺序；参考[377] Combination Sum IV
+public:
+    int climbStairs(int n) {
+        vector<int> dp(n + 1, 0);
+        dp[0] = 1;
+        for (int i = 1; i <= n;++i){
+            if(i>=1){
+                dp[i] += dp[i - 1];
+            }
+            if(i>=2){
+                dp[i] += dp[i - 2];
+            }
+        }
+            return dp[n];
+    }
+};
 ==================================
 70. Climbing Stairs
 You are climbing a stair case. It takes n steps to reach to the top.
