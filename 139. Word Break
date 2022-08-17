@@ -1,3 +1,24 @@
+class Solution
+{
+public:
+    bool wordBreak(string s, vector<string> &wordDict)
+    {
+        unordered_set<string> us(wordDict.begin(), wordDict.end());
+        int n = wordDict.size();
+        int len = s.size();
+        vector<bool> dp(len + 1, false);//这种dp数组声明的时候，就有+1的偏移，所以操作的时候
+        dp[0] = true;//一旦涉及到原始字符串的真实索引，就要减掉对应的偏移值
+        for (int i = 1; i <= len; ++i)
+        {
+            for (int j = 0; (j < i) && (dp[i]==false); ++j)
+            {
+                dp[i] = dp[j] && (us.find(s.substr(j-1 + 1, i - j)) != us.end());
+            }//s.substr(j-1 + 1, i - j) 注意j索引，也是有+1的偏移的，所以便忘了j-1后才对应s的真实索引
+        }
+        return dp[len];
+    }
+};
+
 class Solution//完全背包思想；计算排列数的遍历顺序
 {
 public:
