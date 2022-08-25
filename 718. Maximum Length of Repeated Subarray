@@ -1,0 +1,96 @@
+class Solution {//动态规划解法
+public:
+    int findLength(vector<int>& nums1, vector<int>& nums2) {
+        int m=nums1.size(),n=nums2.size();
+        int res=0;
+        vector<vector<int>> dp(m+1,vector<int>(n+1,0));
+        for(int i=1;i<=m;++i){
+        	for(int j=1;j<=n;++j){
+        		if(nums1[i-1]==nums2[j-1]){
+        			dp[i][j]=dp[i-1][j-1]+1;
+        			res=max(res,dp[i][j]);
+        		}
+        	}
+        }
+        return res;
+    }
+};
+
+
+//将一个字符串/数 哈希/转换为10进制：有两种方法
+方法一：
+long long hashA = 0;
+for (int i = 0; i < len; i++) {
+  hashA = (hashA * base + A[i]) % mod;
+}
+方法二：
+对应位乘上base^(len-i-1)
+  
+以432为例：
+方法一：(4*10+3)*10+2
+方法二：4*(10^2)+3*(10^1)+2*(10^0)
+
+  
+//以下解法，可以看看，其中的快速幂计算可以当做模板记下来、将一个字符串/数字转换为10进制的数值（构造哈希值）的方法，也可以学习一下。以及在线性时间内，扫描生成哈希值的方法
+class Solution {
+public:
+    const int mod = 1000000009;
+    const int base = 113;
+    
+    // 使用快速幂计算 x^n % mod 的值
+    long long qPow(long long x, long long n) {
+        long long ret = 1;
+        while (n) {
+            if (n & 1) {
+                ret = ret * x % mod;
+            }
+            x = x * x % mod;
+            n >>= 1;
+        }
+        return ret;
+    }
+
+    bool check(vector<int>& A, vector<int>& B, int len) {
+        long long hashA = 0;
+        for (int i = 0; i < len; i++) {
+            hashA = (hashA * base + A[i]) % mod;
+        }
+        unordered_set<long long> bucketA;
+        bucketA.insert(hashA);
+        long long mult = qPow(base, len - 1);
+        for (int i = len; i < A.size(); i++) {
+            hashA = ((hashA - A[i - len] * mult % mod + mod) % mod * base + A[i]) % mod;
+            bucketA.insert(hashA);
+        }
+        long long hashB = 0;
+        for (int i = 0; i < len; i++) {
+            hashB = (hashB * base + B[i]) % mod;
+        }
+        if (bucketA.count(hashB)) {
+            return true;
+        }
+        for (int i = len; i < B.size(); i++) {
+            hashB = ((hashB - B[i - len] * mult % mod + mod) % mod * base + B[i]) % mod;
+            if (bucketA.count(hashB)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    int findLength(vector<int>& A, vector<int>& B) {
+        int left = 1, right = min(A.size(), B.size()) + 1;
+        while (left < right) {
+            int mid = (left + right) >> 1;
+            if (check(A, B, mid)) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        return left - 1;
+    }
+};
+=====================================================================
+718. Maximum Length of Repeated Subarray
+Given two integer arrays nums1 and nums2, return the maximum length of a subarray that appears in both arrays.
