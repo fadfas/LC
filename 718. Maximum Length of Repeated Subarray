@@ -32,6 +32,7 @@ for (int i = 0; i < len; i++) {
 
   
 //以下解法，可以看看，其中的快速幂计算可以当做模板记下来、将一个字符串/数字转换为10进制的数值（构造哈希值）的方法，也可以学习一下。以及在线性时间内，扫描生成哈希值的方法
+//https://leetcode.cn/problems/maximum-length-of-repeated-subarray/solution/zui-chang-zhong-fu-zi-shu-zu-by-leetcode-solution/
 class Solution {
 public:
     const int mod = 1000000009;
