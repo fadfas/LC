@@ -19,7 +19,7 @@ public:
     }
 };
 
-class Solution {//贪心
+class Solution {//双指针
 public:
     bool isSubsequence(string s, string t) {
         int m = s.size(), n = t.size();
