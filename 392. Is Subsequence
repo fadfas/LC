@@ -1,0 +1,41 @@
+class Solution {
+public:
+    bool isSubsequence(string s, string t) {
+        int m = s.size(), n = t.size();
+        vector<vector<bool> > dp(m + 1, vector<bool>(n + 1, true));
+        for (int i = 1; i <= m;++i){
+            dp[i][0] = false;
+        }
+        for (int i = 1; i <= m;++i){
+            for (int j = 1; j <= n;++j){
+                if(s[i-1]==t[j-1]){
+                    dp[i][j] = (dp[i - 1][j - 1]);
+                }else{
+                    dp[i][j] = dp[i][j - 1];
+                }
+            }
+        }
+        return dp.back().back();
+    }
+};
+
+class Solution {//贪心
+public:
+    bool isSubsequence(string s, string t) {
+        int m = s.size(), n = t.size();
+        int i = 0, j = 0;
+        while(i<m&&j<n){
+            if(s[i]==t[j]){
+                ++i, ++j;
+            }else{
+                ++j;
+            }
+        }
+        return i == m;
+    }
+};
+=====================================================================
+392. Is Subsequence
+Given two strings s and t, return true if s is a subsequence of t, or false otherwise.
+
+A subsequence of a string is a new string that is formed from the original string by deleting some (can be none) of the characters without disturbing the relative positions of the remaining characters. (i.e., "ace" is a subsequence of "abcde" while "aec" is not).
