@@ -1,22 +1,18 @@
-class Solution {//用栈也行，参考LC496
+class Solution {
 public:
     vector<int> dailyTemperatures(vector<int>& temperatures) {
         int n = temperatures.size();
-        deque<int> dq;//用栈也行
-        vector<int> res(n,0);
+        stack<int> st;
+        vector<int> res(n, 0);
 
-        for (int i = temperatures.size() - 1; i >= 0;--i)
+        for (int i = n - 1; i >= 0;--i)
         {
             int cur=temperatures[i];
-            while(!dq.empty()&&temperatures[dq.front()]<=cur){
-                dq.pop_front();
+            while(!st.empty()&&temperatures[st.top()]<=cur){
+                st.pop();
             }
-            if(dq.empty()){
-                res[i]=0;
-            }else{
-                res[i]=(dq.front() - i);
-            }
-            dq.push_front(i);
+            res[i] = st.empty() ? 0 : st.top() - i;
+            st.push(i);
         }
         return res;
     }
