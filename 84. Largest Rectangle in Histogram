@@ -1,3 +1,36 @@
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        int res = 0;
+        int n = heights.size();
+        vector<int> right_first_lower(n, n);//当前元素右侧，第一个比他矮的元素的索引；若取值为n，则说明当前元素最矮
+        vector<int> left_first_lower(n, -1);//当前元素左侧，第一个比他矮的元素的索引；若取值为-1，则说明当前元素最矮
+        stack<int> st;
+        for (int i = n - 1; i >= 0; --i)
+        {
+            while(!st.empty()&&heights[st.top()]>=heights[i]){
+                st.pop();
+            }
+            right_first_lower[i] = st.empty() ? n : st.top();
+            st.push(i);
+        }
+        st = stack<int>();
+        for (int i = 0; i < n; ++i)
+        {
+            while(!st.empty()&&heights[st.top()]>=heights[i]){
+                st.pop();
+            }
+            left_first_lower[i] = st.empty() ? -1 : st.top();
+            st.push(i);
+        }
+        for (int i = 0; i < n;++i){
+            int tmp = ((right_first_lower[i] - left_first_lower[i]) - 1) * heights[i];
+            res = max(res, tmp);
+        }
+        return res;
+    }
+};
+
 class Solution {//网上很多讲解都是错误的，详细过程见附纸
 public:
     int largestRectangleArea(vector<int>& heights) {
