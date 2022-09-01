@@ -18,18 +18,24 @@ public:
     }
 private:
     bool canFinish(vector<int>& weights,int days,int cap){
-        int need=0;
-        int cur_sum=0;
-        for(int i=0;i<weights.size();++i){
-            cur_sum+=weights[i];
-            if(cur_sum>cap){
-                --i;
-                cur_sum=0;
-                ++need;
+        int res = 0;
+        int n = weights.size();
+        int i = 0;
+        int cur = 0;
+        while (i < n)
+        {
+            cur += weights[i];
+            if(cur<=cap){
+                ++i;
+            }else{
+                ++res;
+                cur = 0;
             }
         }
-        ++need;//最后一次运输，在上面的for训练内，不会被统计进去
-        return need<=days;
+        if(cur>0){
+            ++res;
+        }
+        return res<=days;
     }
 };
 =====================================================================
