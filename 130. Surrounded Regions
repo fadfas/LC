@@ -60,7 +60,7 @@ public:
         }
         if(rank[parentA]<rank[parentB]){//小树接大树上面
             u[parentA]=parentB;
-            rank[parentB]+=rank[parentA];
+            rank[parentB]+=rank[parentA];//小树的rank肯定是不变的，因为没有东西接到小树上
         }else{
             u[parentB]=parentA;
             rank[parentA]+=rank[parentB];
