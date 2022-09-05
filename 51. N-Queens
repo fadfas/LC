@@ -1,4 +1,38 @@
-lass Solution {
+class Solution {
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        vector<vector<string> > res;
+        vector<string> cur;
+        int col = 0, lr = 0, rl = 0;
+        helper(res, cur, n, col, lr, rl);
+        return res;
+    }
+
+private:
+    void helper(vector<vector<string>>& res,vector<string>& cur,int n,int col,int lr,int rl){
+        if(cur.size()==n){
+            res.push_back(cur);
+            return;
+        }
+        int avail = ((1 << n) - 1) & (~(col | lr | rl));
+        while(avail){
+          //可以直接使用buildin_ctz，计算出最后一位1后，有多少个0。
+          //不用先计算avail&(-avail)(仅保留最后一个1)，之后再调用builtin_ctz
+            int last = __builtin_ctz(avail);
+            avail = avail & (avail - 1);
+            cur.push_back(build_str(n,last));
+            helper(res, cur, n, col | (1 << last), (lr | (1 << last)) >> 1, (rl | (1 << last)) << 1);
+            cur.pop_back();
+        }
+    }
+    string build_str(int n,int idx){
+        string res(n, '.');
+        res[n-idx-1] = 'Q';
+        return res;
+    }
+};
+
+class Solution {
 public:
     vector<vector<string>> solveNQueens(int n) {
         vector<vector<string>> res;
