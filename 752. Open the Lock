@@ -1,8 +1,54 @@
-
-//这个写法，会超时，原因见代码中注释
 class Solution {
 public:
     int openLock(vector<string>& deadends, string target) {
+        if(target=="0000"){
+            return 0;
+        }
+        unordered_set<string> forbid;
+        for(string each: deadends){
+            forbid.insert(each);
+        }
+        if(forbid.count(target)||forbid.count("0000")){
+            return -1;
+        }
+        queue<string> q;//一定要搞清楚、明确清楚，queue里面的元素
+        //就只差生成新的密码这一步了（判断是否target、是否判断已访问
+        //是否插入已访问，都完成了）
+        //否则就会像openLock1函数那样，写的有点儿乱（不知道哪里需要
+        //判断已访问、哪里需要插入已访问）
+        q.push("0000");
+        forbid.insert("0000");
+        int res = 0;
+        while(!q.empty()){
+            int cnt = q.size();
+            ++res;
+            for (int i = 0; i < cnt;++i){
+                string cur = q.front();
+                q.pop();
+                for (int i = 0; i < 4; ++i)
+                {
+                    string tmp = up(cur, i);
+                    if(tmp==target){
+                        return res;
+                    }
+                    if(forbid.count(tmp)==0){
+                        q.push(tmp);
+                        forbid.insert(tmp);
+                    }
+                    tmp = down(cur, i);
+                    if(tmp==target){
+                        return res;
+                    }
+                    if(forbid.count(tmp)==0){
+                        q.push(tmp);
+                        forbid.insert(tmp);
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+    int openLock1(vector<string>& deadends, string target) {
         unordered_set<string> forbid;
         for(string each: deadends){
             forbid.insert(each);
@@ -24,19 +70,18 @@ public:
                 // if(forbid.count(cur)){
                 //     continue;
                 // }
-                // 如果在上方的代码被注释掉，就会导致重复处理的情况。
                 forbid.insert(cur);
                 for (int i = 0; i < 4; ++i)
                 {
                     string tmp = up(cur, i);
                     if(forbid.count(tmp)==0){
                         q.push(tmp);
-                        // 8888 这个数字，可以由8个数字转换而来:"8887","8889","8878","8898","8788","8988","7888","9888"
-                        // 在这个位置，可能在一轮中，插入了多个8888 ，这样就会导致8888被处理多次
+                        forbid.insert(tmp);
                     }
                     tmp = down(cur, i);
                     if(forbid.count(tmp)==0){
                         q.push(tmp);
+                        forbid.insert(tmp);
                     }
                 }
             }
@@ -61,69 +106,6 @@ public:
         return s;
     }
 };
-
-//这个代码可行，a b 处的代码，二选其一；不可以都写上，否则即使答案有解，也会返回-1.
-class Solution {
-public:
-    int openLock(vector<string>& deadends, string target) {
-        unordered_set<string> forbid;
-        for(string each: deadends){
-            forbid.insert(each);
-        }
-        if(forbid.count(target)||forbid.count("0000")){
-            return -1;
-        }
-        queue<string> q;
-        q.push("0000");
-        int res = 0;
-        while(!q.empty()){
-            int cnt = q.size();
-            for (int i = 0; i < cnt;++i){
-                string cur = q.front();
-                q.pop();
-                if(cur==target){
-                    return res;
-                }
-                if(forbid.count(cur)){ //a
-                    continue;
-                }
-                forbid.insert(cur); //a  b
-                for (int i = 0; i < 4; ++i)
-                {
-                    string tmp = up(cur, i);
-                    if(forbid.count(tmp)==0){ //a b 
-                        q.push(tmp);
-                        // forbid.insert(tmp); //b  这个地方的代码，目的是防止在同一轮扩张中，同一个数字，被多次插入
-                    }
-                    tmp = down(cur, i);
-                    if(forbid.count(tmp)==0){ //a b
-                        q.push(tmp);
-                        // forbid.insert(tmp); //b
-                    }
-                }
-            }
-            ++res;
-        }
-        return -1;
-    }
-    string up(string s,int idx){
-        if(s[idx]=='9'){
-            s[idx] = '0';
-        }else{
-            s[idx] = s[idx] + 1;
-        }
-        return s;
-    }
-    string down(string s,int idx){
-        if(s[idx]=='0'){
-            s[idx] = '9';
-        }else{
-            s[idx] = s[idx] - 1;
-        }
-        return s;
-    }
-};
-
 
 class Solution {
 public:
