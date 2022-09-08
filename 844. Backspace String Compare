@@ -1,41 +1,49 @@
-class Solution
-{
+class Solution {
 public:
-    bool backspaceCompare(string s, string t)
-    {
-        int l = s.size() - 1, r = t.size() - 1;
-        int cnt_s = 0, cnt_t = 0;
-        while (true)
-        {
-            while (l >= 0 && (s[l]=='#'||cnt_s>0))
-            {
-                if (s[l] == '#')
-                {
-                    ++cnt_s;
-                }else{
-                    --cnt_s;
+    bool backspaceCompare(string s, string t) {
+        int ss = 0, se = 0;
+        while(se<s.size()){
+            if(s[se]=='#'){
+                if(ss>0){
+                    --ss;
                 }
-                --l;
-
-            }
-           while (r>= 0 && (t[r]=='#'||cnt_t>0))
-            {
-                if (t[r] == '#')
-                {
-                    ++cnt_t;
-                }else{
-                    --cnt_t;
-                }
-                --r;
-            }
-            if (l>=0 && r>=0 && s[l]==t[r])
-            {
-                --l, --r;
+                
             }else{
-                return l == -1 && r == -1;
+                s[ss] = s[se];
+                ++ss;
+            }
+            ++se;
+        }
+        int ts = 0, te = 0;
+        while(te<t.size()){
+            if(t[te]=='#'){  //  AAA
+                if(ts>0){
+                    --ts;
+                }
+            }else{
+                t[ts] = t[te];
+                ++ts;
+            }
+            ++te;
+        }
+        // while(te<t.size()){  
+        //     if(t[te]=='#'&&ts>0){ 注意这个地方和上方AAA处是不等价的！！！
+        //         --ts;//AAA处是只要te是#，那么肯定就会进入到当前block
+        //     }else{//但是这种写法，只有当ts大于0时，才进入；否则会进入else，也就是把#字移动到ts
+        //         t[ts] = t[te];
+        //         ++ts;
+        //     }
+        //     ++te;
+        // }
+        if(ss!=ts){
+            return false;
+        }
+        for (int i = 0; i < ss;++i){
+            if(s[i]!=t[i]){
+                return false;
             }
         }
-        
+        return true;
     }
 };
 ===========================================
