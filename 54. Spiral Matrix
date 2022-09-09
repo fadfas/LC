@@ -1,26 +1,38 @@
 class Solution {
 public:
     vector<int> spiralOrder(vector<vector<int>>& matrix) {
-        int left = 0, right = matrix[0].size()-1, top = 0, bottom = matrix.size()-1;
+        int m = matrix.size(), n = matrix[0].size();
+        int cs = 0, ce = n - 1, rs = 0, re = m - 1;
         vector<int> res;
-        int total = (right + 1) * (bottom + 1);
-        while(res.size()<total){
-            for (int i = left;i<=right&&res.size()<total;++i){//&&res.size()<total别忘了这个，否则扁长的输入，会导致输出结果错误
-                res.push_back(matrix[top][i]);
+        while (cs <= ce && rs <= re)
+        {
+            for (int j = cs; j <= ce;++j){
+                res.emplace_back(matrix[rs][j]);
             }
-            ++top;
-            for (int i = top; i <= bottom&&res.size()<total;++i){
-                res.push_back(matrix[i][right]);
+            ++rs;
+            if(rs>re)//不是正方形的矩阵，就要判断这个
+                break;//lc 59就是正方形的，就不用担心这一点
+            for (int i = rs; i <= re; ++i)
+            {
+                res.emplace_back(matrix[i][ce]);
             }
-            --right;
-            for (int i = right; i >= left&&res.size()<total;--i){
-                res.push_back(matrix[bottom][i]);
+            --ce;
+            if(cs>ce)
+                break;
+            for (int j = ce; j >= cs; --j)
+            {
+                res.emplace_back(matrix[re][j]);
             }
-            --bottom;
-            for (int i = bottom; i >= top&&res.size()<total;--i){
-                res.push_back(matrix[i][left]);
+            --re;
+            if(rs>re)
+                break;
+            for (int i = re; i >= rs; --i)
+            {
+                res.emplace_back(matrix[i][cs]);
             }
-            ++left;
+            ++cs;
+            if(cs>ce)
+                break;
         }
         return res;
     }
