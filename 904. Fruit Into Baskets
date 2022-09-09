@@ -1,28 +1,27 @@
 class Solution {
 public:
     int totalFruit(vector<int>& fruits) {
-        int target = 2;
-        int l = 0, r = 0;
-        int res = -1;
-        unordered_map<int, int> window;
-        int cnt = 0;
-        while (r < fruits.size())
+        unordered_map<int, int> windows;
+        int start = 0, end = 0;
+        int cnt = 0, res = 0;
+        while (end < fruits.size())
         {
-            int n = fruits[r];
-            r++;
-            window[n]++;
-            if(window[n]==1){
+            windows[fruits[end]]++;
+            if(windows[fruits[end]]==1){
                 ++cnt;
             }
-            while(cnt>target){
-                int m = fruits[l];
-                ++l;//别忘了移动窗口；窗口指针都是加加
-                window[m]--;
-                if(window[m]==0){
+            // res = max(res, end - start); 放在这不行，例如【1，2,1】这种输入
+            ++end;
+            while (cnt > 2)
+            {
+                //res = max(res, end - start); 放在这不行，有些输入全部元素可能不超过两种，那么就不会更新res
+                windows[fruits[start]]--;
+                if(windows[fruits[start]]==0){
                     --cnt;
                 }
+                ++start;
             }
-            res = max(res, r - l);//不要放在上面的while循环里
+            res = max(res, end - start);//在这个地方可以，因为[end,start)的区间内，肯定是符合cnt<=2的
         }
         return res;
     }
