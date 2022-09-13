@@ -16,7 +16,9 @@ public:
 				while (low<high) {
 					if (nums[low] + nums[high] == sum) {
 						result.push_back({ nums[i],nums[low],nums[high] });
+						//++low, --high;//放在这，就错了
 						while (low<high&&nums[low] == nums[low + 1]) ++low;
+						////先判断 low<hig 再 判断 nums[low] == nums[low + 1]，颠倒就会越界
 						while (low<high&&nums[high] == nums[high - 1]) --high;
 						++low, --high; //别忘了还得各自加减一下
 					}
