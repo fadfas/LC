@@ -1,12 +1,27 @@
-class Solution {
+class Solution
+{
 public:
-    string reverseStr(string s, int k) {
-        int n=s.size();
-        for (int i = 0; i < n;i+=2*k){
-            reverse(s.begin() + i, s.begin() + min(i + k,n));
+    string reverseStr(string s, int k)
+    {
+        int n = s.size();
+        for (int i = 0; i * 2 * k < n; ++i)
+        {//这种定义方式，i表示第几轮翻转；所以for的第二个参数进行判断
+        //的时候，要复杂一点，但是第三个参数，单纯加1就可以了
+            reverse(s.begin() + 2 * k * i, s.begin() + min(2 * k * i + k, n));
         }
+        //下面这种方式，i表示每一轮翻转操作的开始索引值
+        //因此第二个参数，只需要判断这一轮开始索引是否小于n就行
+        //若小于，就说明还有需要翻转的；第三个参数就复杂一点
+        //需要计算下一次可能开始的索引值是多少
+        // for (int i = 0; i < n;i=i+2*k){
+        //     reverse(s.begin() + i, s.begin() + min(i + k, n));
+        // }
         return s;
     }
+};
+
+class Solution {
+public:
 string reverseStr2(string s, int k) {
         string input = s;
         helper(input, 0, k);
