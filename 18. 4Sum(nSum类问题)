@@ -1,6 +1,63 @@
 class Solution {
 public:
     vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        vector<vector<int> > res;
+        if(nums.size()<4){//必须有，否则下面就会报错（见下面注释）
+            return res;
+        }
+        sort(nums.begin(), nums.end());
+        vector<int> cur;
+        helper(nums, target, 4, res, cur, 0);
+        return res;
+    }
+    void helper(vector<int>& nums,long long target,int n,vector<vector<int>> &res,vector<int> &cur,int start){
+        if(n==2){
+            int l = start, r = nums.size() - 1;
+            while(l<r){
+                long long l_n = nums[l], r_n = nums[r];
+                if(l_n+r_n>target){
+                    while(l<r&&nums[r]==r_n){
+                        --r;
+                    }
+                }else if(l_n+r_n<target){
+                    while(l<r&&nums[l]==l_n){
+                        ++l;
+                    }
+                }else{
+                    vector<int> tmp = cur;
+                    tmp.push_back(l_n);
+                    tmp.push_back(r_n);
+                    res.push_back(tmp);
+                    while (l < r && nums[l] == l_n)
+                    {
+                        ++l;
+                    }
+                    while(l<r&&nums[r]==r_n){
+                        --r;
+                    }
+                }
+            }
+        }else{
+            //nums.size()-n+1   如果nums只有一个元素，n等于4
+            //这个语句执行后等于：18446744073709551614
+            //因为nums.size()返回的是：vector<int>::size_type
+            //其本质是一个unsigned int
+            while(start<nums.size()-n+1){
+                int start_n = nums[start];
+                cur.push_back(start_n);
+                helper(nums, target - start_n, n - 1, res, cur, start + 1);
+                while(start<nums.size()-n+1 && nums[start]==start_n){
+                    ++start;
+                }
+                cur.pop_back();
+            }
+        }
+    }
+};
+
+class Solution {
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
         vector<vector<int>> res;
         if(nums.size()<4){
             return res;
