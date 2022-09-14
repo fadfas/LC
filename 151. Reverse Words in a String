@@ -1,6 +1,46 @@
 class Solution {
 public:
     string reverseWords(string s) {
+        int n = s.size();
+        int i = 0, j = 0;
+        while(j<n){
+            if(j==0&&s[j]==' '){
+                //这块不一定要放在while里面判断，可以放在一开始
+                //进入while的时候，j直接指向第一个非空格字符
+                //如果发现j等于字符串长度，那就说明整个字符串都是
+                //空格，直接返回空字符串结果即可
+                //省的放在while里面显得逻辑更复杂
+                while(s[j]==' '){
+                    ++j;
+                }
+            }else{
+                if(s[j]!=' '||(s[j]==' ' &&(j<n-1 && s[j+1]!=' '))){
+                    s[i] = s[j];
+                    ++i, ++j;
+                }else{
+                    ++j;
+                }
+            }
+        }
+        s.resize(i);
+        reverse(s.begin(), s.end());
+        i = 0;
+        j = 0;
+        while(i<s.size()){
+            j = i;
+            while(j<s.size()&&s[j]!=' '){
+                ++j;
+            }
+            reverse(s.begin() + i, s.begin() + j);
+            i = j + 1;
+        }
+        return s;
+    }
+};
+
+class Solution {
+public:
+    string reverseWords(string s) {
         if(s.empty()){
             return s;
         }
