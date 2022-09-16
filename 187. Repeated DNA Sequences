@@ -36,6 +36,7 @@ public:
                     seen.insert(cur);
                 }
                 cur=cur-num[i]*rl;
+                 //cur=cur%r1;//这种也可以，效果一样,但是不要cur=cur%(num[i]*r1)因为num[i]可能为0
                 ++i;
             }
         }
