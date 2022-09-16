@@ -1,48 +1,45 @@
-class Solution { //KMP算法，可以尝试背下来。。。。。
+class Solution {
 public:
     int strStr(string haystack, string needle) {
-        if(needle.empty())
-            return 0;
-        vector<int> nextArray=nextProcess(needle);
-        int m=haystack.size(),n=needle.size();
-        for(int i=0,j=0;i<m;){//for循环不要写++i
-            if(haystack[i]==needle[j]){
-                ++i,++j;
-            }
-            if(j==n)
-                return i-j;
-            if(haystack[i]!=needle[j]){
-                j?j=nextArray[j-1]:++i; //学习这种三元表达式的用法，直接当做if语句使用
-            }
-        }
-        return -1;
+    	int m=haystack.size(),n=needle.size();
+    	int i=0,j=0;
+    	while(i<m && j<n){
+    		if(haystack[i]==needle[j]){
+    			++i,++j;
+    		}else{
+    			while(j>0 && haystack[i]!=needle[j]){
+    				j=next[j-1];
+    			}
+    			if(haystack[i]!=needle[j]){
+    				++i;
+    			}
+    		}
+    	}
+    	if(j==n){
+    		return i-n;
+    	}
+    	return -1;
     }
 private:
-    vector<int> nextProcess(string needle){
-        int n=needle.size();
-        vector<int> next(n,0);
-        int len=0;
-        for(int i=1;i<n;){
-            if(needle[i]==needle[len]){
-                next[i++]=++len;
-            }else if(len){
-                len=next[len-1];//不是len=next[j-1];注意这块
-                //  0 1 2 3 4 5
-                //以a b a b a c 为例，假设目前i=5指向c，此时len=3.（记住这个例子行可以写出这个逻辑了）
-                //因为needle[5]不等于needle[3]
-                //但是前缀前缀aba(needle[0-2])和后缀aba(needle[2-4])是相等的
-                //此时next[3-1]就可以得到aba这个字符串，的最长相等前后缀的长度=1
-                //此时令len=1
-                //
-                //因为aba的最长相等前后缀，是前缀a和后缀a
-                //就对应到aba(needle[0-2])的第一个a，和，aba(needle[2-4])的最后一个a
-                //这种情况下，下一次for循环，就判断needle[5]和needle[1]是否相等，就可以了
-            }else{
-                next[i++]=0;
-            }
-        }
-        return next;
-    }
+	vector<int> calc(string needle){
+		int n=needle.size();
+		vector<int> next(n,0);
+		int i=0,j=1;
+		while(j<n){
+			if(needle[i]==needle[j]){
+				next[j]=++i;
+				++j;
+			}else{
+				while(i>=1 && needle[i]!=needle[j]){
+					i=next[i-1]
+				}
+				if(needle[i]!=needle[j]){
+					++j;
+				}
+			}
+		}
+		return next;
+	}
 };
 =================================================
 28. Implement strStr()
