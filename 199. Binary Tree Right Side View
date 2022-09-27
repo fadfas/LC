@@ -28,6 +28,30 @@ public:
         return res;
     }
 };
+class Solution {
+public:
+    vector<int> rightSideView(TreeNode* root) {
+        vector<int> res;
+        if(root==nullptr){
+            return res;
+        }
+        helper(root, 0, res);
+        return res;
+    }
+
+private:
+    void helper(TreeNode* pNode,int level,vector<int> &res){
+        if(res.size()==level){
+            res.emplace_back(pNode->val);
+        }
+        if(pNode->right){
+            helper(pNode->right, level + 1, res);
+        }
+        if(pNode->left){
+            helper(pNode->left, level + 1, res);
+        }
+    }
+};
 =====================================================================
 199. Binary Tree Right Side View
 Given the root of a binary tree, imagine yourself standing on the right side of it, return the values of the nodes you can see ordered from top to bottom.
