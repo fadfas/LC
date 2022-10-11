@@ -2,6 +2,38 @@ class Solution {
 public:
     vector<int> findMode(TreeNode* root) {
         vector<int> res;
+        int max_len = 0;
+        int prev = INT_MIN, idx = 0, prev_idx = 0;
+        helper(root, res, max_len, prev, idx, prev_idx);
+        return res;
+    }
+
+private:
+    void helper(TreeNode* p,vector<int> &res,int &max_len,int &prev,int &idx,int &prev_idx){
+        if(p==nullptr){
+            return;
+        }
+        helper(p->left, res, max_len, prev, idx,prev_idx);
+        if(p->val!=prev){
+            prev = p->val;
+            prev_idx = idx;
+        }
+        if(idx-prev_idx==max_len){
+            res.emplace_back(prev);
+        }else if(idx-prev_idx>max_len){
+            res.clear();
+            res.emplace_back(prev);
+            max_len = idx - prev_idx;
+        }
+        idx++;
+        helper(p->right, res, max_len, prev, idx, prev_idx);
+    }
+};
+
+class Solution {
+public:
+    vector<int> findMode(TreeNode* root) {
+        vector<int> res;
         if(root==nullptr){
             return res;
         }
