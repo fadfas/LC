@@ -1,3 +1,17 @@
+class Solution {//关于这道题，还是把字符串翻倍，掐头去尾，如果原字符串在其中，那么原字符串就是周期串 。（kmp的方法，找不到严谨的证明方法）
+public:
+    bool repeatedSubstringPattern(string s) {
+        string ss = s + s;
+        int n = s.size();
+        ss = ss.substr(1, 2 * n - 2);
+        if (ss.find(s) != string::npos)
+        {
+            return true;
+        }
+        return false;
+    }
+};
+
 class Solution {
 public:
     bool repeatedSubstringPattern(string s) {
