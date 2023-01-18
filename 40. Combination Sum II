@@ -1,34 +1,29 @@
 class Solution {
 public:
     vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
-        vector<vector<int>> result={};
-        vector<int> temp={};
-        sort(candidates.begin(),candidates.end());
-        if(candidates.empty()){
-            return result;
-        }
-        combinationSum2Recursively(candidates,target,result,temp,0);
-        return result;
-        
+        vector<vector<int>> res;
+        vector<int> tmp;
+        sort(candidates.begin(), candidates.end());
+        backtrack(res, tmp, candidates, target, 0);
+        return res;
     }
+
 private:
-    void combinationSum2Recursively(vector<int>& candidates,
-                                    int target,
-                                    vector<vector<int>>& result,
-                                    vector<int>& temp,
-                                    int start
-                                   ){
+    void backtrack(vector<vector<int>> &res,vector<int> tmp,vector<int> &candidates,int target,int start){
         if(target==0){
-            result.push_back(temp);
+            res.push_back(tmp);
             return;
         }
-        for(int i=start;i<candidates.size()&&target>0;++i){
-            if(i==start||candidates[i]!=candidates[i-1]){  //另一种写法：if(i&&num[i]==num[i-1]&&i>start) 
-                                                           //continue; 注意，只要有用到i-1下标的情形，务必判断i>0
-                temp.push_back(candidates[i]);
-                combinationSum2Recursively(candidates,target-candidates[i],result,temp,i+1);
-                temp.pop_back();
+        if(target<0){
+            return;
+        }
+        for (int i = start; i < candidates.size();++i){
+            if(i!=start && candidates[i-1]==candidates[i]){// 不是if(i!=0
+                continue;
             }
+            tmp.push_back(candidates[i]);
+            backtrack(res, tmp, candidates, target - candidates[i], i + 1);
+            tmp.pop_back();
         }
     }
 };
