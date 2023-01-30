@@ -1,6 +1,63 @@
 class Solution {
 public:
     void solveSudoku(vector<vector<char>>& board) {
+        memset(row, 0, sizeof(row));
+        memset(col, 0, sizeof(col));
+        memset(block, 0, sizeof(block));
+        vector<pair<int, int>> empty;
+        for (int i = 0; i < 9; ++i)
+        {
+            for (int j = 0; j < 9;++j){
+                if(board[i][j]=='.'){
+                    empty.push_back({i, j});
+                }else{
+                    int num = board[i][j] - '1';
+                    row[i][num] = true;
+                    col[j][num] = true;
+                    block[i / 3][j / 3][num] = true;
+                }
+            }
+        }
+        bool res = backtrack(board, empty, 0);
+        return;
+    }
+
+private:
+    bool row[9][9];
+    bool col[9][9];
+    bool block[9][9][9];
+    bool backtrack(vector<vector<char>> &board,vector<pair<int,int>> &empty,int idx)
+    {
+        if(idx==empty.size()){
+            return true;
+        }
+        int i = empty[idx].first;
+        int j = empty[idx].second;
+        for (int n = 1; n < 10; ++n)
+        {
+            if(row[i][n-1]||col[j][n-1]||block[i/3][j/3][n-1]){
+                continue;
+            }
+            board[i][j] = '0' + n;
+            row[i][n - 1] = true;
+            col[j][n - 1] = true;
+            block[i / 3][j / 3][n - 1] = true;
+            bool isSuccess = backtrack(board, empty, idx + 1);
+            if(isSuccess){
+                return true;
+            }
+            board[i][j] = '.';
+            row[i][n - 1] = false;
+            col[j][n - 1] = false;
+            block[i / 3][j / 3][n - 1] = false;
+        }
+        return false;
+    }
+};
+
+class Solution {
+public:
+    void solveSudoku(vector<vector<char>>& board) {
         memset(line,false,sizeof(line));
         memset(col,false,sizeof(col));
         memset(block,false,sizeof(block));//三维的数组，也可以这样初始化
