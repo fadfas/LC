@@ -69,25 +69,22 @@ public:
     }
 };
 
-ListNode* ReverseList(ListNode* pHead) {
-	ListNode* pReverseListHead = nullptr;
-	ListNode* pNode = pHead;
-	ListNode* pPrevNode = nullptr;
-
-	while (pNode!= nullptr) {
-		
-		ListNode* pNext = pNode->next;
-		if (pNext == nullptr) {
-			pReverseListHead = pNode;
-		}
-		pNode->next = pPrevNode;
-		pPrevNode = pNode;
-		pNode = pNext;
-		
-	}
-
-	return pReverseListHead;
-}
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if(head==nullptr){
+            return nullptr;
+        }
+        ListNode *pCur = head, *pPre = nullptr, *pNext = nullptr;
+        while(pCur){
+            pNext = pCur->next;
+            pCur->next = pPre;
+            pPre = pCur;
+            pCur = pNext;
+        }
+        return pPre;
+    }
+};
 =====================================
 206. Reverse Linked List
 Reverse a singly linked list.
