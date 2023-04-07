@@ -9,6 +9,31 @@
 class Solution {
 public:
     ListNode* reverseList(ListNode* head) {
+        if(head==nullptr){
+            return head;
+        }
+        ListNode *pNewHead = nullptr;
+        helper(head, pNewHead);
+        return pNewHead;
+    }
+
+private:
+    ListNode *helper(ListNode* pCur,ListNode *&pNewHead){
+        if(pCur->next==nullptr){
+            pNewHead = pCur;
+            return pCur;
+        }
+
+        ListNode *pTail = helper(pCur->next, pNewHead);
+        pTail->next = pCur;
+        pCur->next = nullptr;//别忘了这个
+        return pCur;
+    }
+};
+ 
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
         if(!head)
             return nullptr;
         ListNode* pNewHead=nullptr;
