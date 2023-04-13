@@ -9,17 +9,17 @@
 class Solution {
 public:
     ListNode* removeNthFromEnd(ListNode* head, int n) {
-        ListNode* pDummy=new ListNode(0); //dummyNode 非常好用！！！！
-        pDummy->next=head;
-        ListNode* pFast=pDummy,*pSlow=pDummy;//注意第二个变量前面，也要带上*
-        for(int i=0;i<n+1;++i){  //直接让慢的指针最后定位在要被删除的节点之前就可以了
-            pFast=pFast->next;
+        ListNode *pDummy = new ListNode(-1);
+        pDummy->next = head;
+        ListNode *pFast = pDummy, *pSlow = pDummy;
+        for (int i = 0; i < n;++i){
+            pFast = pFast->next;
         }
-        while(pFast){//注意不是pFast->next==nullptr
-            pFast=pFast->next;
-            pSlow=pSlow->next;
+        while(pFast->next){
+            pFast = pFast->next;
+            pSlow = pSlow->next;
         }
-        pSlow->next=pSlow->next->next;
+        pSlow->next = pSlow->next->next;
         return pDummy->next;
     }
 };
