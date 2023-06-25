@@ -1,6 +1,30 @@
 class Solution {
 public:
     int getMinimumDifference(TreeNode* root) {
+        int res = INT_MAX;
+        stack<TreeNode *> st;
+        TreeNode *p = root, *prev = nullptr;
+        ;
+        while(!st.empty()||p){
+            while(p){
+                st.push(p);
+                p = p->left;
+            }
+            p = st.top();
+            st.pop();
+            if(prev){
+                res = min(res, abs(prev->val - p->val));
+            }
+            prev = p;
+            p = p->right;
+        }
+        return res;
+    }
+};
+
+class Solution {
+public:
+    int getMinimumDifference(TreeNode* root) {
         TreeNode *pre = nullptr;
         int res = INT_MAX;
         helper(root, pre,res);
