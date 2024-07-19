@@ -23,7 +23,7 @@ private:
         if(word[cur]!=board[i][j]){
             return false;
         }
-        if(cur==word.size()-1){
+        if(cur==word.size()-1){//主意不是(cur==word.size())，size-1时，就已经找到结果了
             return true;
         }
         int m=board.size(),n=board[0].size();
