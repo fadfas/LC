@@ -1,28 +1,29 @@
 class Solution {
 public:
     int search(vector<int>& nums, int target) {
-        if(nums.size()==0){
-            return -1;
-        }
-        int low=0,high=nums.size()-1;
-        while(low<=high){  //注意是<=，如何判断有没有等于号？用一个例子，例如 8 9 ,下标对应为1 2，查找9
-            int mid=(low+high)/2;
-            if(nums[mid]==target) return mid;
-            if(nums[mid]<nums[high]){
-                if(target>nums[mid]&&target<=nums[high]){
-                    low=mid+1;
+        int n=nums.size();
+        int s = 0, e = n - 1;
+        while(s<=e){
+            int mid = s + (e - s) / 2;
+            if(nums[mid]==target){
+                return mid;
+            }
+            // 这里写 <= 是因为，如果 nums 为 [3, 1] 那么当 l = 0, r = 1, mid = 0 时，使用 < 来判断，则会将 [nums[0], nums[1]] 当做有序数组
+            if(nums[s]<=nums[mid]){
+                if(nums[s]<=target && target<nums[mid]){
+                    e = mid - 1;
                 }else{
-                    high=mid-1;
+                    s = mid + 1;
                 }
             }else{
-                if(target>=nums[low]&&target<nums[mid]){
-                    high=mid-1;
+                if(nums[mid]<target && target<=nums[e]){
+                    s = mid + 1;
                 }else{
-                    low=mid+1;
+                    e = mid - 1;
                 }
             }
         }
-        return -1;  //不要遗漏
+        return -1;
     }
 };
 
