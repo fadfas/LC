@@ -1,27 +1,17 @@
-class Solution {
+class Solution {//原理见leetcodecn的官方解法
 public:
     int findMin(vector<int>& nums) {
-       if(nums.empty()){
-           return -1;
-       } 
-        int left=0,right=nums.size()-1;
-        while(left<right){
-            if(nums[left]<nums[right]){  //不可能出现 7 8 0 1 2 3 4
-                                         //          i     i     i  
-                                         //         left  mid   right
-                                         //        然后选择了mid right这段的情况
-                                         //这行代码是在套用二分查找寻找左边的的模板后，添加的一个优化点
-                return nums[left];
-            }
-            
-            int mid=left+((right-left)>>1);//务必要加上两层括号
-            if(nums[mid]>nums[right]){
-                left=mid+1;
+        int n=nums.size();
+        int s = 0, e = n - 1;
+        while(s<=e){
+            int mid = s + (e - s) / 2;
+            if(nums[mid]<nums[e]){
+                e = mid;
             }else{
-                right=mid; //为何此处不是mid-1? 解释：nums[mid]在此种情况下，有可能是最终的结果，因此不可以跳过
+                s = mid + 1;
             }
         }
-        return nums[left];
+        return nums[e];
     }
 };
 ==========================================================
