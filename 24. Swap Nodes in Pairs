@@ -1,39 +1,13 @@
-class Solution//其实就是LC25的解法
-{
+class Solution {
 public:
-    ListNode *swapPairs(ListNode *head)
-    {
-        return kReverseList(head, 2);
-    }
-
-private:
-    ListNode *kReverseList(ListNode *p, int k)
-    {
-        ListNode *s = p, *e = p;
-        for (int i = 0; i < k - 1 && e != nullptr; ++i)
-        {
-            e = e->next;
+    ListNode* swapPairs(ListNode* head) {
+        if(head==nullptr||head->next==nullptr){
+            return head;
         }
-        if (e == nullptr)
-        {
-            return p;
-        }
-        ListNode *tmp = kReverseList(e->next, k);
-        ListNode *newHead = reversePart(s, e);
-        s->next = tmp;
-        return newHead;
-    }
-    ListNode *reversePart(ListNode *s, ListNode *e)
-    {
-        ListNode *pre = nullptr, *cur = s;
-        while (pre == nullptr || pre != e)
-        {
-            ListNode *next = cur->next;
-            cur->next = pre;
-            pre = cur;
-            cur = next;
-        }
-        return pre;
+        ListNode *pNewHead = head->next;
+        head->next = swapPairs(pNewHead->next);
+        pNewHead->next = head;
+        return pNewHead;
     }
 };
 =====================================================================
