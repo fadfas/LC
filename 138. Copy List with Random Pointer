@@ -1,54 +1,20 @@
-/**
- * Definition for singly-linked list with a random pointer.
- * struct RandomListNode {
- *     int label;
- *     RandomListNode *next, *random;
- *     RandomListNode(int x) : label(x), next(NULL), random(NULL) {}
- * };
- */
 class Solution {
 public:
-    RandomListNode *copyRandomList(RandomListNode *head) {
-        if(!head){
-            return nullptr;
+    Node* copyRandomList(Node* head) {
+        Node *pCur = head;
+        unordered_map<Node *, Node *> um;
+        while(pCur){
+            Node *pNew = new Node(pCur->val);
+            um[pCur] = pNew;
+            pCur = pCur->next;
         }
-        copyNodes(head);
-        copyRandomPointer(head);
-        return reconnectNodes(head);
-    }
-private:
-    void copyNodes(RandomListNode* pHead){
-        RandomListNode* pNode=pHead;
-        while(pNode){
-            RandomListNode* pCopiedNode=new RandomListNode(pNode->label);
-            RandomListNode* pNext=pNode->next;
-            pNode->next=pCopiedNode;
-            pCopiedNode->next=pNext;
-            pNode=pNext;
+        pCur = head;
+        while(pCur){
+            um[pCur]->next = um[pCur->next];
+            um[pCur]->random = um[pCur->random];
+            pCur = pCur->next;
         }
-    }
-    void copyRandomPointer(RandomListNode* pHead){
-        RandomListNode* pNode=pHead;
-        RandomListNode* pCopiedNode=nullptr;
-        while(pNode){
-            pCopiedNode=pNode->next;
-            pCopiedNode->random=pNode->random==nullptr?nullptr:pNode->random->next;
-            pNode=pCopiedNode->next;
-        }
-    }
-    RandomListNode* reconnectNodes(RandomListNode* pHead){
-        RandomListNode* pNode=pHead;
-        RandomListNode* pCopiedHead=pHead->next;
-        while(pNode){
-            RandomListNode* pNext=pNode->next->next;
-            RandomListNode* pCopiedNode=pNode->next;
-            pCopiedNode->next=pNext==nullptr?nullptr:pNext->next;//这个地方小心，要判断pNext是不是
-                                                                 //nullptr,还是那个问题，取->之前，判是否
-                                                                 //为空！！！！
-            pNode->next=pNext;
-            pNode=pNext;
-        }
-        return pCopiedHead;
+        return um[head];
     }
 };
 ==============================================
