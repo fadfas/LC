@@ -1,61 +1,18 @@
-class Solution {//跑两边的解法
+class Solution {
 public:
     vector<int> productExceptSelf(vector<int>& nums) {
         int n = nums.size();
-        vector<int> fwd(n, 1), bwd(n, 1), res(n);
-        for (int i = 0; i < n - 1; ++i) {
-            fwd[i + 1] = fwd[i] * nums[i];
-        }
-        for (int i = n - 1; i > 0; --i) {
-            bwd[i - 1] = bwd[i] * nums[i];
-        }
-        for (int i = 0; i < n; ++i) {
-            res[i] = fwd[i] * bwd[i];
-        }
-        return res;
-    }
-};
-class Solution {//跑一遍的解法
-public:
-    vector<int> productExceptSelf(vector<int>& nums) {
-        int n=nums.size();
-        vector<int> fromBegin(n);
-        fromBegin[0]=1;
-        vector<int> fromLast(n);
-        fromLast[0]=1;
-        
-        for(int i=1;i<n;i++){
-            fromBegin[i]=fromBegin[i-1]*nums[i-1];
-            fromLast[i]=fromLast[i-1]*nums[n-i];
-        }
-        
-        vector<int> res(n);
-        for(int i=0;i<n;i++){
-            res[i]=fromBegin[i]*fromLast[n-1-i];
-        }
-        return res;
-    }
-};
-
-class Solution {//压缩空间的解法
-public:
-    vector<int> productExceptSelf(vector<int>& nums) {
-        int n=nums.size();
         vector<int> res(n,1);
-        for(int i=0;i<n-1;++i){
-            res[i+1]=res[i]*nums[i];
-        }
-        int right=1;
-        for(int i=n-1;i>=0;--i){
-            res[i]=res[i]*right;
-            right*=nums[i];
+        int before = 1, after = 1;
+        for (int i = 0, j = n - 1; i < n;++i,--j){
+            res[i] *= before;
+            res[j] *= after;
+            before *= nums[i];
+            after *= nums[j];
         }
         return res;
     }
 };
-//对于这种求每个位置的一个结果，亦或者是求全部位置的最大或者最小的问题（实际上也要求出每一个位置的结果，然后取最值，因此和前面的问题
-//差不多）  这些问题都可以尝试定义一个或者两个同输入等长的数组，然后从左往右，从右往左的求结果，保存下来。  接下来可以考虑一下是否
-//可以考虑压缩空间
 
 ==================================================
 238. Product of Array Except Self
