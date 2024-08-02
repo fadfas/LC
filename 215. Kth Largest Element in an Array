@@ -1,44 +1,37 @@
 class Solution {
 public:
     int findKthLargest(vector<int>& nums, int k) {
-        int n=nums.size();
-        int l=0,r=n-1;
-        while(true){
-            int pivort=partition(nums,l,r);
-            if(pivort==k-1){
-                return nums[pivort];
-            }
-            if(pivort<k-1){
-                l=pivort+1;
-            }else{
-                r=pivort-1;
+        int n = nums.size();
+        for (int i = n / 2 - 1; i >= 0; --i)
+        {
+            heapify(nums, n, i);
+        }
+        for (int i = n - 1; i >= 0; --i)
+        {
+            swap(nums[i], nums[0]);
+            heapify(nums, i, 0);
+            if(i==n-k){
+                break;
             }
         }
+        return nums[n - k];
     }
+
 private:
-    int RandomPivort(int start, int end) {
-	    int random = rand() % (end - start + 1) + start;
-	    return random;
-    }
-    int partition(vector<int>& nums,int l,int r){
-        int pivort=RandomPivort(l,r);//随机的pivort和开始和结束为止有关，不能直接rand()%r;
-        swap(nums[pivort],nums[r]);
-        int i=l-1,j=l;
-        while(j<r){
-            if(nums[j]<nums[r]){
-                ++j;
-            }else{
-                if(i+1==j){
-                    ++i,++j;
-                }else{
-                    ++i;
-                    swap(nums[i],nums[j]);
-                    ++j;
-                }
-            }
+    void heapify(vector<int> &nums,int n,int i){
+        int largest = i;
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+        if(left<n && nums[largest]<nums[left]){
+            largest = left;
         }
-        swap(nums[++i],nums[r]);
-        return i;
+        if(right<n && nums[largest]<nums[right]){
+            largest = right;
+        }
+        if(largest!=i){
+            swap(nums[largest], nums[i]);
+            heapify(nums, n, largest);
+        }
     }
 };
 ======================================
